@@ -1,12 +1,16 @@
 'use client';
 
 import { use } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { getFactoryAgent } from '@/lib/factory-service';
 import { ChatInterface } from '@/components/chat/chat-interface';
+import { VoiceChatInterface } from '@/components/chat/voice-chat-interface';
 
 export default function ChatPage({ params }: { params: Promise<{ agentSlug: string }> }) {
   const { agentSlug } = use(params);
+  const searchParams = useSearchParams();
+  const mode = searchParams.get('mode');
   const agent = getFactoryAgent(agentSlug);
 
   if (!agent) {
@@ -22,6 +26,13 @@ export default function ChatPage({ params }: { params: Promise<{ agentSlug: stri
         </div>
       </div>
     );
+  }
+
+  // ?mode=live → Voice chat with AI (unlimited for Carlos)
+  // ?mode=demo → Voice chat with AI (limited for visitors)
+  // No mode → Pre-set conversation tree
+  if (mode === 'live' || mode === 'demo') {
+    return <VoiceChatInterface agent={agent} isLiveMode={mode === 'live'} />;
   }
 
   return <ChatInterface agent={agent} />;

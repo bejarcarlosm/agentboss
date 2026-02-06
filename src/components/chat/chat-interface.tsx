@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { FactoryAgent, ChatMessage as ChatMessageType, SuggestedQuestion, ConversationNode } from '@/lib/factory-types';
 import { pickRandom } from '@/lib/factory-service';
+import { createConversation, saveMessage } from '@/lib/conversation-service';
 import { ChatHeader } from './chat-header';
 import { ChatMessage } from './chat-message';
 import { SuggestedChips } from './suggested-chips';
@@ -37,6 +38,7 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
   const [isTyping, setIsTyping] = useState(false);
   const [showChips, setShowChips] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const conversationIdRef = useRef<string | null>(null);
 
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) {
@@ -63,6 +65,10 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
       setCurrentNode(node);
       setIsTyping(false);
 
+      if (conversationIdRef.current) {
+        saveMessage(conversationIdRef.current, 'agent', content, node.id);
+      }
+
       setTimeout(() => {
         setShowChips(true);
       }, 200);
@@ -70,10 +76,16 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
   }, []);
 
   useEffect(() => {
-    const startNode = agent.conversationTree.nodes[agent.conversationTree.startNodeId];
-    if (startNode) {
-      addAgentMessage(startNode);
+    async function init() {
+      const convId = await createConversation(agent.slug);
+      conversationIdRef.current = convId;
+
+      const startNode = agent.conversationTree.nodes[agent.conversationTree.startNodeId];
+      if (startNode) {
+        addAgentMessage(startNode);
+      }
     }
+    init();
   }, [agent, addAgentMessage]);
 
   useEffect(() => {
@@ -95,6 +107,10 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
     setMessages(prev => [...prev, userMsg]);
     setShowChips(false);
 
+    if (conversationIdRef.current) {
+      saveMessage(conversationIdRef.current, 'user', question.label);
+    }
+
     const nextNode = agent.conversationTree.nodes[question.nextNodeId];
     if (nextNode) {
       addAgentMessage(nextNode);
@@ -110,6 +126,10 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
     };
     setMessages(prev => [...prev, userMsg]);
     setShowChips(false);
+
+    if (conversationIdRef.current) {
+      saveMessage(conversationIdRef.current, 'user', text);
+    }
 
     setIsTyping(true);
     setTimeout(() => {
