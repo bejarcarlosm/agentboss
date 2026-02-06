@@ -2,6 +2,16 @@
 // TIPOS PRINCIPALES - AgentBoss
 // ============================================
 
+// Re-export factory types
+export type {
+  FactoryAgent,
+  ConversationTree,
+  ConversationNode,
+  SuggestedQuestion,
+  ChatMessage,
+  ChatState,
+} from './factory-types';
+
 // === USUARIO ===
 export interface User {
   id: string;

@@ -32,7 +32,7 @@ export default function LoginPage() {
     localStorage.setItem('agentboss-user', JSON.stringify(user));
 
     setTimeout(() => {
-      router.push('/');
+      router.push('/factory');
     }, 500);
   };
 
@@ -43,7 +43,7 @@ export default function LoginPage() {
       name: 'Usuario Demo',
     };
     localStorage.setItem('agentboss-user', JSON.stringify(demoUser));
-    router.push('/');
+    router.push('/factory');
   };
 
   return (
@@ -55,9 +55,9 @@ export default function LoginPage() {
             <DynamicOrb agentState={null} colors={["#c8e64c", "#4a5520"]} />
           </div>
           <h1 className="text-3xl font-bold mb-2">
-            Agent<span className="text-[var(--primary)]">Boss</span>
+            Agent<span className="text-[#2dd4bf]">Boss</span>
           </h1>
-          <p className="text-[var(--muted)]">Fabrica de Agentes IA</p>
+          <p className="text-[var(--muted)]">AI Software Factory — Admin</p>
         </div>
 
         {/* Login Card */}

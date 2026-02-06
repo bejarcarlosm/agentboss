@@ -9,13 +9,13 @@ const rajdhani = Rajdhani({
 });
 
 export const metadata: Metadata = {
-  title: "AgentBoss | Fábrica de Agentes IA",
-  description: "Crea, configura y despliega agentes de voz e inteligencia artificial para tu negocio.",
-  keywords: ["agentes IA", "voice AI", "chatbot", "automatización", "inteligencia artificial"],
+  title: "AgentBoss | AI Software Factory",
+  description: "Tu equipo de agentes IA que hace discovery, diseño y desarrollo de software. Habla con Atlas, Venus y Pluto para construir tu proyecto.",
+  keywords: ["AI software factory", "agentes IA", "product owner", "UX design", "software development", "MVP"],
   authors: [{ name: "Carlos Bejar" }],
   openGraph: {
-    title: "AgentBoss | Fábrica de Agentes IA",
-    description: "Crea, configura y despliega agentes de voz e inteligencia artificial para tu negocio.",
+    title: "AgentBoss | AI Software Factory",
+    description: "Tu equipo de agentes IA que hace discovery, diseño y desarrollo de software.",
     type: "website",
     locale: "es_CL",
   },

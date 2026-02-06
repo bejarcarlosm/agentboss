@@ -284,3 +284,129 @@ body {
   margin-right: 8px;
   flex-shrink: 0;
 }
+
+/* ============================================ */
+/* AI Software Factory - Chat Animations        */
+/* ============================================ */
+
+/* Typing indicator bounce */
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-4px); }
+}
+
+.typing-bounce {
+  animation: typing-bounce 1.4s ease-in-out infinite;
+}
+
+/* Chip entrance */
+@keyframes chip-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chip-enter {
+  animation: chip-enter 0.3s ease-out both;
+}
+
+/* Message entrance */
+@keyframes message-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message-in {
+  animation: message-in 0.3s ease-out both;
+}
+
+/* Pipeline pulse */
+@keyframes pipeline-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.pipeline-pulse {
+  animation: pipeline-pulse 2s ease-in-out infinite;
+}
+
+/* Stagger animation helper */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+  animation: fade-up 0.5s ease-out both;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--foreground), var(--muted));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Wave gradient background */
+@keyframes wave-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.wave-gradient {
+  background: linear-gradient(
+    -45deg,
+    #0a0a0a,
+    #0a1a1a,
+    #0a0a1a,
+    #0a1a0f,
+    #0a0a0a
+  );
+  background-size: 400% 400%;
+  animation: wave-gradient 12s ease infinite;
+}
+
+.wave-gradient-glow {
+  background: linear-gradient(
+    -45deg,
+    rgba(45, 212, 191, 0.08),
+    rgba(168, 85, 247, 0.05),
+    rgba(34, 197, 94, 0.06),
+    rgba(6, 182, 212, 0.05),
+    rgba(45, 212, 191, 0.08)
+  );
+  background-size: 400% 400%;
+  animation: wave-gradient 8s ease infinite;
+}
+
+/* Orb glow pulse for hero */
+@keyframes orb-hero-glow {
+  0%, 100% {
+    box-shadow: 0 0 40px rgba(45, 212, 191, 0.2), 0 0 80px rgba(45, 212, 191, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 60px rgba(45, 212, 191, 0.3), 0 0 120px rgba(168, 85, 247, 0.15);
+  }
+}
+
+.orb-hero-glow {
+  animation: orb-hero-glow 4s ease-in-out infinite;
+}
+
+/* Large audio wave visualizer */
+@keyframes wave-bar {
+  0%, 100% { transform: scaleY(0.15); }
+  50% { transform: scaleY(1); }
+}
+
+.wave-bar {
+  transform-origin: bottom;
+  animation: wave-bar ease-in-out infinite;
+}
+
+/* Wave container glow */
+.wave-container {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
