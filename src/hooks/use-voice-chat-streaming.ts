@@ -222,7 +222,8 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
         try {
           const msg = JSON.parse(e.data);
           console.log('[Voice] Streaming msg:', msg);
-          if (msg.message_type === 'partial_transcript' && msg.text) {
+          const msgType = msg.type || msg.message_type;
+          if ((msgType === 'partial_transcript' || msgType === 'transcript') && msg.text) {
             setCurrentTranscript(msg.text);
           }
         } catch {
