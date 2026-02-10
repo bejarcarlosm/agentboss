@@ -101,8 +101,13 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
             break;
           case 'transcription':
             setCurrentTranscript(msg.text);
-            setMessages(prev => [...prev, { role: 'user', content: msg.text }]);
-            if (!isLiveMode) incrementMessageCount();
+            // Only add message if not already present (avoids dupe when sent via text)
+            setMessages(prev => {
+              const last = prev[prev.length - 1];
+              if (last?.role === 'user' && last?.content === msg.text) return prev;
+              if (!isLiveMode) incrementMessageCount();
+              return [...prev, { role: 'user', content: msg.text }];
+            });
             break;
           case 'ai_response':
             setMessages(prev => [...prev, { role: 'assistant', content: msg.text }]);
@@ -286,7 +291,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     try {
       setState('processing');
       setMessages(prev => [...prev, { role: 'user', content: text }]);
-      if (!isLiveMode) incrementMessageCount();
 
       const response = await fetch(`${BACKEND_URL}/api/chat/stream-text`, {
         method: 'POST',
