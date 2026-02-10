@@ -410,3 +410,22 @@ body {
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
+
+/* Planetary orbit system */
+@keyframes orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbit-counter-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.orbit-spin {
+  animation: orbit-spin 30s linear infinite;
+}
+
+.orbit-counter-spin {
+  animation: orbit-counter-spin 30s linear infinite;
+}
