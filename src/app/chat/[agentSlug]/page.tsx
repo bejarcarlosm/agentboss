@@ -4,7 +4,6 @@ import { use } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { getFactoryAgent } from '@/lib/factory-service';
-import { ChatInterface } from '@/components/chat/chat-interface';
 import { VoiceChatInterface } from '@/components/chat/voice-chat-interface';
 
 export default function ChatPage({ params }: { params: Promise<{ agentSlug: string }> }) {
@@ -29,11 +28,7 @@ export default function ChatPage({ params }: { params: Promise<{ agentSlug: stri
   }
 
   // ?mode=live → Voice chat with AI (unlimited for Carlos)
-  // ?mode=demo → Voice chat with AI (limited for visitors)
-  // No mode → Pre-set conversation tree
-  if (mode === 'live' || mode === 'demo') {
-    return <VoiceChatInterface agent={agent} isLiveMode={mode === 'live'} />;
-  }
-
-  return <ChatInterface agent={agent} />;
+  // Default → Voice chat with AI (demo, 5 msg limit)
+  const isLiveMode = mode === 'live';
+  return <VoiceChatInterface agent={agent} isLiveMode={isLiveMode} />;
 }
