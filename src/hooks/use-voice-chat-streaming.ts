@@ -117,16 +117,26 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
             setCurrentTranscript('');
             break;
           case 'speaking':
-            setState('speaking');
             if (streamingWsRef.current) {
               streamingWsRef.current.close();
               streamingWsRef.current = null;
             }
-            if (msg.audioChunk) playAudio(msg.audioChunk);
+            if (msg.audioChunk) {
+              setState('speaking');
+              playAudio(msg.audioChunk);
+            } else {
+              // TTS failed but text response was sent - go back to connected
+              setState('connected');
+            }
             break;
           case 'error':
-            setError(msg.message || 'Unknown error');
-            setState('error');
+            // Don't break session on non-critical errors (e.g. TTS failure after text was sent)
+            if (msg.message === 'processing_failed' && messages.length > 0) {
+              setState('connected');
+            } else {
+              setError(msg.message || 'Unknown error');
+              setState('error');
+            }
             break;
         }
       };
