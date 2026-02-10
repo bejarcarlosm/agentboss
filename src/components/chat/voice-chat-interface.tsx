@@ -212,36 +212,56 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
 
       {/* Bottom controls - Inspired by carlosbejar.cl */}
       <div className="mx-4 mb-4 space-y-2">
-        {/* Control bar: mic + keyboard + status */}
+        {/* Control bar: mic + send + status */}
         <div className="rounded-xl border border-[var(--border)] bg-[#0a0a0a] p-2.5">
           <div className="flex items-center gap-2">
-            {/* Mic button */}
+            {/* Mic button - start recording */}
             <button
               onClick={() => {
-                if (isRecording) {
-                  sendMessage();
-                } else if (state === 'connected' && !rateLimitReached) {
+                if (!isRecording && state === 'connected' && !rateLimitReached) {
                   startRecording();
                 }
               }}
-              disabled={state === 'processing' || state === 'speaking' || rateLimitReached || !isActive}
+              disabled={isRecording || state === 'processing' || state === 'speaking' || rateLimitReached || !isActive}
               className={cn(
                 'p-2.5 rounded-lg transition-all flex-shrink-0',
                 isRecording
-                  ? 'bg-red-500 text-white animate-pulse'
+                  ? 'bg-red-500/20 text-red-400 animate-pulse'
                   : state === 'connected' && !rateLimitReached
                   ? 'text-white hover:scale-105'
                   : 'text-[var(--muted)] opacity-50'
               )}
               style={!isRecording && state === 'connected' && !rateLimitReached ? { background: agent.color } : undefined}
             >
-              {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+              <Mic className="w-5 h-5" />
             </button>
 
             {/* Status text */}
             <p className="flex-1 text-xs text-[var(--muted)] text-center">
               {statusText}
             </p>
+
+            {/* Send button - visible during recording */}
+            {isRecording && (
+              <button
+                onClick={() => sendMessage()}
+                className="px-4 py-2 rounded-lg bg-red-500 text-white text-sm font-medium transition-all hover:bg-red-600 hover:scale-105 flex-shrink-0 flex items-center gap-1.5"
+              >
+                <ArrowUp className="w-4 h-4" />
+                Enviar
+              </button>
+            )}
+
+            {/* Stop button - visible during recording */}
+            {isRecording && (
+              <button
+                onClick={() => stopRecording()}
+                className="p-2.5 rounded-lg text-[var(--muted)] hover:text-white hover:bg-white/10 transition-all flex-shrink-0"
+                title="Cancelar grabacion"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
 

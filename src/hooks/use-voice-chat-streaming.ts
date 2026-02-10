@@ -87,10 +87,13 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       sessionIdRef.current = sessionData.sessionId;
 
       const wsUrl = BACKEND_URL.replace('https://', 'wss://').replace('http://', 'ws://');
+      console.log('[Voice] Session created:', sessionData.sessionId);
+      console.log('[Voice] Opening chat WS');
       const backendWs = new WebSocket(`${wsUrl}/api/chat/ws?sessionId=${sessionIdRef.current}`);
 
       backendWs.onmessage = (e) => {
         const msg = JSON.parse(e.data);
+        console.log('[Voice] Backend msg:', msg.type, msg);
 
         switch (msg.type) {
           case 'connected':
@@ -207,20 +210,35 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       mediaStreamRef.current = stream;
 
       const wsUrl = BACKEND_URL.replace('https://', 'wss://').replace('http://', 'ws://');
-      const streamingWs = new WebSocket(`${wsUrl}/api/streaming/ws?sessionId=${sessionIdRef.current}`);
+      const streamingWsUrl = `${wsUrl}/api/streaming/ws?sessionId=${sessionIdRef.current}`;
+      console.log('[Voice] Opening streaming WS:', streamingWsUrl);
+      const streamingWs = new WebSocket(streamingWsUrl);
+
+      streamingWs.onopen = () => {
+        console.log('[Voice] Streaming WS connected');
+      };
 
       streamingWs.onmessage = (e) => {
         try {
           const msg = JSON.parse(e.data);
+          console.log('[Voice] Streaming msg:', msg);
           if (msg.message_type === 'partial_transcript' && msg.text) {
             setCurrentTranscript(msg.text);
           }
         } catch {
-          // ignore parse errors
+          console.log('[Voice] Streaming raw data:', e.data);
         }
       };
 
-      streamingWs.onerror = () => setError('Streaming error');
+      streamingWs.onerror = (err) => {
+        console.error('[Voice] Streaming WS error:', err);
+        setError('Error en streaming de audio');
+      };
+
+      streamingWs.onclose = (ev) => {
+        console.log('[Voice] Streaming WS closed:', ev.code, ev.reason);
+      };
+
       streamingWsRef.current = streamingWs;
 
       const audioContext = new AudioContext({ sampleRate: 16000 });
@@ -233,8 +251,12 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       setAnalyser(analyserNode);
 
       const processor = audioContext.createScriptProcessor(4096, 1, 1);
+      let audioChunkCount = 0;
       processor.onaudioprocess = (e) => {
-        if (!streamingWs || streamingWs.readyState !== WebSocket.OPEN) return;
+        if (!streamingWs || streamingWs.readyState !== WebSocket.OPEN) {
+          if (audioChunkCount === 0) console.log('[Voice] WS not open, skipping audio. State:', streamingWs?.readyState);
+          return;
+        }
 
         const inputData = e.inputBuffer.getChannelData(0);
         const pcmData = new Int16Array(inputData.length);
@@ -243,6 +265,10 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
           pcmData[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
         }
         streamingWs.send(pcmData.buffer);
+        audioChunkCount++;
+        if (audioChunkCount === 1 || audioChunkCount % 50 === 0) {
+          console.log(`[Voice] Audio chunks sent: ${audioChunkCount}`);
+        }
       };
 
       source.connect(analyserNode);
