@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import type { FactoryAgent } from '@/lib/factory-types';
 import { useVoiceChatStreaming } from '@/hooks/use-voice-chat-streaming';
 import { AudioWaveform } from '@/components/ui/audio-waveform';
-import { Mic, Keyboard, ChevronDown, ArrowUp, Loader2, ArrowLeft } from 'lucide-react';
+import { Mic, MicOff, Keyboard, ArrowUp, Loader2, ArrowLeft, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Orb = dynamic(
@@ -21,8 +21,8 @@ interface VoiceChatInterfaceProps {
 
 export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProps) {
   const router = useRouter();
-  const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [textInput, setTextInput] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const {
     state,
@@ -32,6 +32,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     connect,
     disconnect,
     startRecording,
+    stopRecording,
     sendMessage,
     sendTextMessage,
     isRecording,
@@ -41,7 +42,6 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     remainingMessages,
   } = useVoiceChatStreaming(isLiveMode);
 
-  // Map agent slug to agent name for backend
   const agentNameMap: Record<string, string> = {
     'product-owner': 'Atlas',
     'ux-designer': 'Venus',
@@ -56,6 +56,10 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     return () => { disconnect(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agent.slug]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, currentTranscript]);
 
   const orbState = state === 'processing' ? 'thinking' as const
     : state === 'speaking' ? 'talking' as const
@@ -72,236 +76,201 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
   const rgb = hexToRgb(agent.color);
   const color2 = `#${Math.min(255, rgb.r + 40).toString(16).padStart(2, '0')}${Math.min(255, rgb.g + 40).toString(16).padStart(2, '0')}${Math.min(255, rgb.b + 40).toString(16).padStart(2, '0')}`;
 
+  const isActive = state === 'connected' || state === 'recording' || state === 'processing' || state === 'speaking';
+
+  const handleSendText = () => {
+    if (textInput.trim() && !rateLimitReached) {
+      sendTextMessage(textInput);
+      setTextInput('');
+    }
+  };
+
+  const statusText = rateLimitReached
+    ? 'Limite de demo alcanzado'
+    : isRecording
+    ? 'Escuchando... toca para enviar'
+    : state === 'processing'
+    ? `${agent.name} esta pensando...`
+    : state === 'speaking'
+    ? `${agent.name} esta respondiendo...`
+    : state === 'connecting'
+    ? `Conectando con ${agent.name}...`
+    : 'Click para empezar a hablar con el agente';
+
   return (
     <div className="flex flex-col h-screen bg-[var(--background)]">
-      {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--border)]">
-        <button onClick={() => router.back()} className="p-2 hover:bg-white/5 rounded-lg transition-colors">
+      {/* Header - Inspired by carlosbejar.cl: large avatar + name + role */}
+      <div className="flex items-center gap-4 px-5 py-4 border-b border-[var(--border)]">
+        <button onClick={() => router.back()} className="p-1.5 hover:bg-white/5 rounded-lg transition-colors">
           <ArrowLeft className="w-5 h-5 text-[var(--muted)]" />
         </button>
-        <div
-          className="w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold"
-          style={{ background: `${agent.color}20`, color: agent.color }}
-        >
-          {agent.avatar.includes('/') ? agent.name[0] : agent.avatar}
-        </div>
+        <img
+          src={agent.avatar}
+          alt={agent.name}
+          className="w-14 h-14 rounded-full object-cover border-2"
+          style={{ borderColor: agent.color }}
+        />
         <div className="flex-1">
-          <h1 className="font-semibold text-sm">{agent.name}</h1>
-          <p className="text-xs text-[var(--muted)]">{agent.role}</p>
+          <h1 className="font-bold text-lg">{agent.name}</h1>
+          <p className="text-sm text-[var(--muted)]">{agent.role}</p>
         </div>
         {!isLiveMode && (
-          <div className="text-xs px-2 py-1 rounded-full bg-amber-500/10 text-amber-400">
-            {remainingMessages} msgs restantes
+          <div className="text-xs px-2.5 py-1 rounded-full border font-medium" style={{ borderColor: `${agent.color}40`, color: agent.color }}>
+            {remainingMessages} msgs
           </div>
         )}
         {isLiveMode && (
-          <div className="text-xs px-2 py-1 rounded-full bg-green-500/10 text-green-400">
+          <div className="text-xs px-2.5 py-1 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 font-medium">
             LIVE
           </div>
         )}
       </div>
 
-      {/* Connection State */}
-      {state === 'connecting' && (
-        <div className="flex items-center justify-center gap-3 p-6">
-          <Loader2 className="h-5 w-5 animate-spin" style={{ color: agent.color }} />
-          <span className="text-[var(--muted)]">Conectando con {agent.name}...</span>
-        </div>
-      )}
-
-      {/* Error */}
+      {/* Alerts */}
       {error && (
-        <div className="mx-4 mt-4 rounded-lg bg-red-500/10 border border-red-500/20 p-4 text-center">
+        <div className="mx-4 mt-3 rounded-lg bg-red-500/10 border border-red-500/20 p-3 text-center">
           <p className="text-red-400 text-sm">{error}</p>
         </div>
       )}
-
-      {/* Rate Limit */}
-      {rateLimitReached && (
-        <div className="mx-4 mt-4 rounded-lg bg-amber-500/10 border border-amber-500/20 p-4 text-center">
+      {rateLimitReached && !error && (
+        <div className="mx-4 mt-3 rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 text-center">
           <p className="text-amber-400 text-sm font-medium">
             Has alcanzado el limite de la demo. Contactanos en hola@agentboss.cl para acceso completo.
           </p>
         </div>
       )}
-
-      {/* Demo Timeout */}
       {demoTimeoutReached && (
-        <div className="mx-4 mt-4 rounded-lg bg-amber-500/10 border border-amber-500/20 p-4 text-center">
+        <div className="mx-4 mt-3 rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 text-center">
           <p className="text-amber-400 text-sm">Tiempo de grabacion agotado. Presiona el microfono para grabar de nuevo.</p>
         </div>
       )}
 
-      {/* Main Content */}
-      {(state === 'connected' || state === 'recording' || state === 'processing' || state === 'speaking') && (
-        <div className="flex-1 flex flex-col">
-          {/* Live Transcript */}
+      {/* Messages area */}
+      {messages.length > 0 && (
+        <div className="flex-shrink-0 max-h-[40vh] overflow-y-auto mx-4 mt-3 space-y-2 rounded-lg bg-[#0a0a0a] border border-[var(--border)] p-3">
+          {messages.map((msg, i) => (
+            <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div className={cn(
+                'max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed',
+                msg.role === 'user'
+                  ? 'text-white'
+                  : 'bg-[#1a1a1a] text-[var(--foreground)]'
+              )} style={msg.role === 'user' ? { background: agent.color } : undefined}>
+                {msg.content}
+              </div>
+            </div>
+          ))}
           {currentTranscript && (
-            <div className="mx-4 mt-4 rounded-lg p-3 border" style={{ borderColor: `${agent.color}30`, background: `${agent.color}08` }}>
-              <p className="text-xs font-medium mb-1" style={{ color: agent.color }}>Transcripcion en vivo</p>
-              <p className="text-sm text-[var(--foreground)]">{currentTranscript}</p>
-              {isRecording && (
-                <button
-                  onClick={sendMessage}
-                  className="mt-2 text-xs px-3 py-1.5 rounded-md text-white transition-transform hover:scale-105"
-                  style={{ background: agent.color }}
-                >
-                  <ArrowUp className="w-3 h-3 inline mr-1" />
-                  Enviar mensaje
-                </button>
-              )}
+            <div className="flex justify-end">
+              <div className="max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed text-white/70 italic" style={{ background: `${agent.color}80` }}>
+                {currentTranscript}...
+              </div>
             </div>
           )}
-
-          {/* Messages */}
-          {messages.length > 0 && (
-            <div className="mx-4 mt-4 max-h-48 overflow-y-auto rounded-lg bg-[#0a0a0a] p-3 space-y-2 border border-[var(--border)]">
-              {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={cn(
-                    'max-w-[80%] rounded-lg px-3 py-2 text-sm',
-                    msg.role === 'user'
-                      ? 'text-white'
-                      : 'bg-[#1a1a1a] text-[var(--foreground)]'
-                  )} style={msg.role === 'user' ? { background: agent.color } : undefined}>
-                    {msg.content}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Orb / Waveform */}
-          <div className="flex-1 flex items-center justify-center">
-            {isRecording && analyser ? (
-              <div className="w-full max-w-md px-8">
-                <AudioWaveform analyser={analyser} color={agent.color} />
-              </div>
-            ) : (
-              <div
-                className={cn(
-                  'transition-transform duration-200',
-                  state === 'connected' && !isRecording && 'cursor-pointer hover:scale-110 active:scale-95'
-                )}
-                onClick={() => {
-                  if (state === 'connected' && !isRecording && !rateLimitReached) {
-                    startRecording();
-                  }
-                }}
-              >
-                <Orb
-                  agentState={orbState}
-                  colors={[agent.color, color2] as [string, string]}
-                  className="h-40 w-40"
-                />
-              </div>
-            )}
-          </div>
-
-          {/* Input Bar */}
-          <div className="mx-4 mb-4 rounded-xl border border-[var(--border)] bg-[#0a0a0a] overflow-hidden">
-            {/* Text Input (collapsible) */}
-            <div className={cn(
-              'overflow-hidden transition-all duration-300',
-              keyboardOpen ? 'max-h-[120px]' : 'max-h-0'
-            )}>
-              <div className="flex gap-2 p-3">
-                <textarea
-                  value={textInput}
-                  onChange={(e) => setTextInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      if (textInput.trim()) {
-                        sendTextMessage(textInput);
-                        setTextInput('');
-                      }
-                    }
-                  }}
-                  placeholder="Escribe tu mensaje..."
-                  className="flex-1 min-h-[80px] resize-none bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted)] outline-none"
-                  disabled={rateLimitReached || (state !== 'connected' && state !== 'recording')}
-                />
-                <button
-                  onClick={() => {
-                    if (textInput.trim()) {
-                      sendTextMessage(textInput);
-                      setTextInput('');
-                    }
-                  }}
-                  disabled={!textInput.trim() || rateLimitReached}
-                  className="self-end p-2 rounded-lg text-white disabled:opacity-30 transition-all hover:scale-105"
-                  style={{ background: agent.color }}
-                >
-                  <ArrowUp className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {keyboardOpen && <div className="border-t border-[var(--border)]" />}
-
-            {/* Controls */}
-            <div className="flex items-center justify-between gap-2 p-3">
-              {/* Mic Button */}
-              <button
-                onClick={startRecording}
-                disabled={state === 'processing' || state === 'speaking' || isRecording || rateLimitReached}
-                className={cn(
-                  'p-2.5 rounded-lg transition-all',
-                  isRecording && 'bg-red-500/20 text-red-400',
-                  !isRecording && state === 'connected' && !rateLimitReached && 'text-white hover:scale-105'
-                )}
-                style={!isRecording && state === 'connected' && !rateLimitReached ? { background: agent.color } : undefined}
-              >
-                <Mic className="w-5 h-5" />
-              </button>
-
-              {/* Keyboard Toggle */}
-              <button
-                onClick={() => setKeyboardOpen(v => !v)}
-                className="p-2.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] transition-all relative"
-                disabled={state !== 'connected' && state !== 'recording'}
-              >
-                <Keyboard className={cn(
-                  'w-5 h-5 transition-all duration-200',
-                  keyboardOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
-                )} />
-                <ChevronDown className={cn(
-                  'w-5 h-5 absolute inset-0 m-auto transition-all duration-200',
-                  keyboardOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-                )} />
-              </button>
-
-              {/* Status */}
-              <div
-                className={cn(
-                  'flex-1 text-center',
-                  !isRecording && !keyboardOpen && state === 'connected' && !rateLimitReached && 'cursor-pointer'
-                )}
-                onClick={() => {
-                  if (!isRecording && !keyboardOpen && state === 'connected' && !rateLimitReached) {
-                    startRecording();
-                  }
-                }}
-              >
-                <p className="text-xs text-[var(--muted)]">
-                  {rateLimitReached
-                    ? 'Limite de demo alcanzado'
-                    : isRecording
-                    ? 'Hablando... click "Enviar mensaje" cuando termines'
-                    : state === 'processing'
-                    ? 'Procesando...'
-                    : state === 'speaking'
-                    ? `${agent.name} esta respondiendo...`
-                    : keyboardOpen
-                    ? 'Escribe tu mensaje'
-                    : 'Toca el microfono o el orbe para hablar'}
-                </p>
-              </div>
-            </div>
-          </div>
+          <div ref={messagesEndRef} />
         </div>
       )}
+
+      {/* Live transcript when no messages yet */}
+      {currentTranscript && messages.length === 0 && (
+        <div className="mx-4 mt-3 rounded-lg p-3 border" style={{ borderColor: `${agent.color}30`, background: `${agent.color}08` }}>
+          <p className="text-sm text-[var(--foreground)] italic">{currentTranscript}...</p>
+        </div>
+      )}
+
+      {/* Orb / Waveform - centered in remaining space */}
+      <div className="flex-1 flex items-center justify-center">
+        {state === 'connecting' ? (
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="h-8 w-8 animate-spin" style={{ color: agent.color }} />
+            <span className="text-sm text-[var(--muted)]">Conectando con {agent.name}...</span>
+          </div>
+        ) : isRecording && analyser ? (
+          <div className="w-full max-w-md px-8">
+            <AudioWaveform analyser={analyser} color={agent.color} />
+          </div>
+        ) : (
+          <div
+            className={cn(
+              'transition-transform duration-200',
+              isActive && !isRecording && !rateLimitReached && 'cursor-pointer hover:scale-110 active:scale-95'
+            )}
+            onClick={() => {
+              if (isActive && !isRecording && !rateLimitReached && state === 'connected') {
+                startRecording();
+              }
+            }}
+          >
+            <Orb
+              agentState={orbState}
+              colors={[agent.color, color2] as [string, string]}
+              className="h-40 w-40"
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Bottom controls - Inspired by carlosbejar.cl */}
+      <div className="mx-4 mb-4 space-y-2">
+        {/* Control bar: mic + keyboard + status */}
+        <div className="rounded-xl border border-[var(--border)] bg-[#0a0a0a] p-2.5">
+          <div className="flex items-center gap-2">
+            {/* Mic button */}
+            <button
+              onClick={() => {
+                if (isRecording) {
+                  sendMessage();
+                } else if (state === 'connected' && !rateLimitReached) {
+                  startRecording();
+                }
+              }}
+              disabled={state === 'processing' || state === 'speaking' || rateLimitReached || !isActive}
+              className={cn(
+                'p-2.5 rounded-lg transition-all flex-shrink-0',
+                isRecording
+                  ? 'bg-red-500 text-white animate-pulse'
+                  : state === 'connected' && !rateLimitReached
+                  ? 'text-white hover:scale-105'
+                  : 'text-[var(--muted)] opacity-50'
+              )}
+              style={!isRecording && state === 'connected' && !rateLimitReached ? { background: agent.color } : undefined}
+            >
+              {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            </button>
+
+            {/* Status text */}
+            <p className="flex-1 text-xs text-[var(--muted)] text-center">
+              {statusText}
+            </p>
+          </div>
+        </div>
+
+        {/* Text input - always visible */}
+        <div className="rounded-xl border border-[var(--border)] bg-[#0a0a0a] flex items-center gap-2 p-2.5">
+          <input
+            type="text"
+            value={textInput}
+            onChange={(e) => setTextInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSendText();
+              }
+            }}
+            placeholder="Escribe tu mensaje..."
+            className="flex-1 bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted)] outline-none"
+            disabled={rateLimitReached || !isActive}
+          />
+          <button
+            onClick={handleSendText}
+            disabled={!textInput.trim() || rateLimitReached || !isActive}
+            className="p-2 rounded-lg text-white disabled:opacity-30 transition-all hover:scale-105 flex-shrink-0"
+            style={{ background: agent.color }}
+          >
+            <ArrowUp className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
