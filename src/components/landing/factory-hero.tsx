@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useLocale } from 'next-intl';
 import { DynamicOrb } from '@/components/ui/dynamic-orb';
 
 const PLANETS = [
@@ -82,6 +83,37 @@ function Planet({ href, color, name, role, avatar, dotSize = 'w-2 h-2', textSize
 
 export function FactoryHero() {
   const [spotlightIndex, setSpotlightIndex] = useState(0);
+  const locale = useLocale();
+
+  const t = locale === 'es' ? {
+    badge: 'Fabrica de Software potenciada por IA',
+    headline: 'Construimos tu software',
+    headlineHighlight: 'en semanas, no meses',
+    description: 'Tu equipo de desarrollo potenciado por agentes IA. Creamos las apps, automatizaciones y sistemas que tu negocio necesita —',
+    descriptionHighlight: '3x mas features en menos tiempo',
+    descriptionEnd: 'que una fabrica tradicional.',
+    subtext: 'Discovery gratuito · Sin compromiso · Precio fijo por MVP',
+    ctaPrimary: 'Iniciar discovery gratis',
+    ctaSecondary: 'Como funciona',
+    speedLabel: 'Mas rapido que desarrollo tradicional',
+    featuresLabel: 'Mas features por sprint',
+    mvpLabel: 'Semanas para tu MVP',
+    agentsLabel: 'Agentes IA especializados',
+  } : {
+    badge: 'AI-Powered Software Factory',
+    headline: 'We build your software',
+    headlineHighlight: 'in weeks, not months',
+    description: 'Your development team powered by AI agents. We create the apps, automations, and systems your business needs —',
+    descriptionHighlight: '3x more features in less time',
+    descriptionEnd: 'than a traditional factory.',
+    subtext: 'Free discovery · No commitment · Fixed price per MVP',
+    ctaPrimary: 'Start free discovery',
+    ctaSecondary: 'How it works',
+    speedLabel: 'Faster than traditional development',
+    featuresLabel: 'More features per sprint',
+    mvpLabel: 'Weeks to your MVP',
+    agentsLabel: 'Specialized AI agents',
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -105,38 +137,38 @@ export function FactoryHero() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#2dd4bf]/20 bg-[#2dd4bf]/5 text-[#2dd4bf] text-xs font-semibold mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-[#2dd4bf] animate-pulse" />
-              Fabrica de Software potenciada por IA
+              {t.badge}
             </div>
 
             {/* Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              Construimos tu software{' '}
-              <span className="text-[#2dd4bf]">en semanas, no meses</span>
+              {t.headline}{' '}
+              <span className="text-[#2dd4bf]">{t.headlineHighlight}</span>
             </h1>
 
             {/* Value prop */}
             <p className="text-lg text-[var(--muted)] leading-relaxed mb-4">
-              Tu equipo de desarrollo potenciado por agentes IA. Creamos las apps, automatizaciones y sistemas que tu negocio necesita —{' '}
-              <span className="text-[var(--foreground)] font-semibold">3x mas features en menos tiempo</span> que una fabrica tradicional.
+              {t.description}{' '}
+              <span className="text-[var(--foreground)] font-semibold">{t.descriptionHighlight}</span> {t.descriptionEnd}
             </p>
 
             <p className="text-sm text-[var(--muted)] mb-8">
-              Discovery gratuito · Sin compromiso · Precio fijo por MVP
+              {t.subtext}
             </p>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
-                href="/chat/product-owner"
+                href={`/${locale}/chat/product-owner`}
                 className="btn text-base px-6 py-3 bg-[#2dd4bf] text-[#0a0a0a] font-bold hover:bg-[#5eead4] transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(45,212,191,0.3)]"
               >
-                Iniciar discovery gratis
+                {t.ctaPrimary}
               </Link>
               <a
                 href="#process"
                 className="btn btn-secondary text-base px-6 py-3"
               >
-                Como funciona
+                {t.ctaSecondary}
               </a>
             </div>
           </div>
@@ -185,19 +217,19 @@ export function FactoryHero() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-10 mt-12 border-t border-[var(--border)]">
           <div>
             <div className="text-3xl md:text-4xl font-bold text-[var(--foreground)]">10x</div>
-            <div className="text-sm text-[var(--muted)] mt-1">Mas rapido que desarrollo tradicional</div>
+            <div className="text-sm text-[var(--muted)] mt-1">{t.speedLabel}</div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-bold text-[#2dd4bf]">3x</div>
-            <div className="text-sm text-[var(--muted)] mt-1">Mas features por sprint</div>
+            <div className="text-sm text-[var(--muted)] mt-1">{t.featuresLabel}</div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-bold text-[var(--foreground)]">1-4</div>
-            <div className="text-sm text-[var(--muted)] mt-1">Semanas para tu MVP</div>
+            <div className="text-sm text-[var(--muted)] mt-1">{t.mvpLabel}</div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-bold text-[#22c55e]">36</div>
-            <div className="text-sm text-[var(--muted)] mt-1">Agentes IA especializados</div>
+            <div className="text-sm text-[var(--muted)] mt-1">{t.agentsLabel}</div>
           </div>
         </div>
       </div>

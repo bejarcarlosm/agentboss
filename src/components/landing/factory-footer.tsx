@@ -1,39 +1,44 @@
+'use client';
+
 import Link from 'next/link';
+import { useLocale } from 'next-intl';
 
 export function FactoryFooter() {
+  const locale = useLocale();
+  const t = locale === 'es'
+    ? { tagline: 'Fabrica de software potenciada por agentes IA. 3x mas features en menos tiempo que una fabrica tradicional.', factory: 'Fabrica', contact: 'Contacto', discovery: 'Discovery gratis', copyright: 'Fabrica de Software · Santiago, Chile' }
+    : { tagline: 'AI-powered software factory. 3x more features in less time than a traditional factory.', factory: 'Factory', contact: 'Contact', discovery: 'Free Discovery', copyright: 'Software Factory · Santiago, Chile' };
+
   return (
     <footer className="border-t border-[var(--border)]">
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
-          {/* Brand */}
           <div className="md:col-span-2">
             <h3 className="text-xl font-bold mb-2">
               Agent<span className="text-[#2dd4bf]">Boss</span>
             </h3>
             <p className="text-sm text-[var(--muted)] leading-relaxed max-w-sm">
-              Fabrica de software potenciada por agentes IA. 3x mas features en menos tiempo que una fabrica tradicional.
+              {t.tagline}
             </p>
           </div>
 
-          {/* Links */}
           <div>
-            <h4 className="text-sm font-bold mb-3">Fabrica</h4>
+            <h4 className="text-sm font-bold mb-3">{t.factory}</h4>
             <div className="space-y-2 text-sm text-[var(--muted)]">
-              <Link href="/chat/product-owner" className="block hover:text-[#2dd4bf] transition-colors">
-                Discovery gratis
+              <Link href={`/${locale}/chat/product-owner`} className="block hover:text-[#2dd4bf] transition-colors">
+                {t.discovery}
               </Link>
-              <Link href="/pipeline" className="block hover:text-[#2dd4bf] transition-colors">
+              <Link href={`/${locale}/pipeline`} className="block hover:text-[#2dd4bf] transition-colors">
                 Pipeline
               </Link>
-              <Link href="/login" className="block hover:text-[#2dd4bf] transition-colors">
+              <Link href={`/${locale}/login`} className="block hover:text-[#2dd4bf] transition-colors">
                 Admin
               </Link>
             </div>
           </div>
 
-          {/* Contact */}
           <div>
-            <h4 className="text-sm font-bold mb-3">Contacto</h4>
+            <h4 className="text-sm font-bold mb-3">{t.contact}</h4>
             <div className="space-y-2 text-sm text-[var(--muted)]">
               <a href="mailto:hola@agentboss.cl" className="block hover:text-[#2dd4bf] transition-colors">
                 hola@agentboss.cl
@@ -51,7 +56,7 @@ export function FactoryFooter() {
             </a>
           </p>
           <p className="text-xs">
-            Fabrica de Software · Santiago, Chile
+            {t.copyright}
           </p>
         </div>
       </div>

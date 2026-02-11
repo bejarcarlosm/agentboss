@@ -2,9 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useLocale } from 'next-intl';
 import { DOSSIER_AGENTS } from '@/lib/dossier-data';
 
-// Simulates a speech waveform: bursts of activity, pauses, varying intensity
 const WAVEFORM = [
   12, 28, 45, 70, 85, 95, 80, 60, 90, 75, 50, 30, 15, 8,
   5, 4, 5, 6, 5,
@@ -39,30 +39,34 @@ function LargeSoundWave() {
 }
 
 export function AgentShowcase() {
+  const locale = useLocale();
+  const t = locale === 'es'
+    ? { badge: 'Dossier Clasificado', heading: 'Nuestro equipo de agentes IA', subheading: 'Cada agente es un especialista. Juntos cubren todo el ciclo de desarrollo — desde la idea hasta el lanzamiento. Haz click para ver su expediente.', active: 'Activo', standby: 'Standby', viewDossier: 'Ver dossier →' }
+    : { badge: 'Classified Dossier', heading: 'Our team of AI agents', subheading: 'Each agent is a specialist. Together they cover the entire development cycle — from idea to launch. Click to view their dossier.', active: 'Active', standby: 'Standby', viewDossier: 'View dossier →' };
+
   return (
     <section id="team" className="border-b border-[var(--border)]">
       <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
         <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-500/20 bg-red-500/5 text-red-400 text-xs font-semibold mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-            Dossier Clasificado
+            {t.badge}
           </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            Nuestro equipo de agentes IA
+            {t.heading}
           </h2>
           <p className="text-[var(--muted)] max-w-xl mx-auto">
-            Cada agente es un especialista. Juntos cubren todo el ciclo de desarrollo — desde la idea hasta el lanzamiento. Haz click para ver su expediente.
+            {t.subheading}
           </p>
         </div>
 
         <LargeSoundWave />
 
-        {/* Agent grid - dossier style */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
           {DOSSIER_AGENTS.map((agent) => (
             <Link
               key={agent.slug}
-              href={`/dossier/${agent.slug}`}
+              href={`/${locale}/dossier/${agent.slug}`}
               className="group relative flex flex-col items-center text-center p-4 rounded-xl border border-[var(--border)] bg-[var(--secondary)] transition-all hover:-translate-y-1 hover:border-transparent"
               style={{
                 // @ts-expect-error css custom property
@@ -77,7 +81,6 @@ export function AgentShowcase() {
                 (e.currentTarget as HTMLElement).style.boxShadow = '';
               }}
             >
-              {/* Avatar */}
               <div
                 className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 mb-3 transition-shadow group-hover:shadow-lg"
                 style={{ borderColor: agent.color }}
@@ -91,7 +94,6 @@ export function AgentShowcase() {
                 />
               </div>
 
-              {/* Name */}
               <span className="font-bold text-sm" style={{ color: agent.color }}>
                 {agent.codename}
               </span>
@@ -99,20 +101,18 @@ export function AgentShowcase() {
                 {agent.role}
               </span>
 
-              {/* Status dot */}
               <div className="flex items-center gap-1 mt-2">
                 <span
                   className={`w-1.5 h-1.5 rounded-full ${agent.status === 'ACTIVE' ? 'animate-pulse' : ''}`}
                   style={{ background: agent.status === 'ACTIVE' ? agent.color : 'var(--muted)' }}
                 />
                 <span className="text-[9px] font-mono uppercase tracking-wider text-[var(--muted)]">
-                  {agent.status === 'ACTIVE' ? 'Activo' : 'Standby'}
+                  {agent.status === 'ACTIVE' ? t.active : t.standby}
                 </span>
               </div>
 
-              {/* Hover: "Ver dossier" */}
               <span className="absolute bottom-1 text-[8px] font-mono uppercase tracking-widest text-[var(--muted)] opacity-0 group-hover:opacity-100 transition-opacity">
-                Ver dossier →
+                {t.viewDossier}
               </span>
             </Link>
           ))}

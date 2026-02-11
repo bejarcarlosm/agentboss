@@ -1,46 +1,41 @@
-const SERVICES = [
-  {
-    icon: '🌐',
-    title: 'Desarrollo Web',
-    description: 'Aplicaciones web modernas con Next.js, React y TypeScript. Dashboards, plataformas SaaS, portales de clientes.',
-  },
-  {
-    icon: '📱',
-    title: 'Apps Moviles',
-    description: 'Apps responsive que funcionan en cualquier dispositivo. PWA y aplicaciones nativas con React Native.',
-  },
-  {
-    icon: '🤖',
-    title: 'Automatizaciones IA',
-    description: 'Chatbots, extraccion de documentos, flujos automatizados. Integramos IA donde mas impacto genera.',
-  },
-  {
-    icon: '🎨',
-    title: 'Diseño UX/UI',
-    description: 'Interfaces intuitivas y prototipos interactivos. Validamos ideas antes de construir para no desperdiciar recursos.',
-  },
-  {
-    icon: '⚡',
-    title: 'MVPs Rapidos',
-    description: 'De la idea al producto funcional en semanas. Lanza rapido, valida con usuarios reales e itera.',
-  },
-  {
-    icon: '🔧',
-    title: 'Consultoria Tech',
-    description: 'Auditoria de codigo, arquitectura de sistemas, optimizacion de procesos. Tu CTO fractional bajo demanda.',
-  },
+'use client';
+
+import { useLocale } from 'next-intl';
+
+const SERVICES_ES = [
+  { icon: '🌐', title: 'Desarrollo Web', description: 'Aplicaciones web modernas con Next.js, React y TypeScript. Dashboards, plataformas SaaS, portales de clientes.' },
+  { icon: '📱', title: 'Apps Moviles', description: 'Apps responsive que funcionan en cualquier dispositivo. PWA y aplicaciones nativas con React Native.' },
+  { icon: '🤖', title: 'Automatizaciones IA', description: 'Chatbots, extraccion de documentos, flujos automatizados. Integramos IA donde mas impacto genera.' },
+  { icon: '🎨', title: 'Diseño UX/UI', description: 'Interfaces intuitivas y prototipos interactivos. Validamos ideas antes de construir para no desperdiciar recursos.' },
+  { icon: '⚡', title: 'MVPs Rapidos', description: 'De la idea al producto funcional en semanas. Lanza rapido, valida con usuarios reales e itera.' },
+  { icon: '🔧', title: 'Consultoria Tech', description: 'Auditoria de codigo, arquitectura de sistemas, optimizacion de procesos. Tu CTO fractional bajo demanda.' },
+];
+
+const SERVICES_EN = [
+  { icon: '🌐', title: 'Web Development', description: 'Modern web applications with Next.js, React, and TypeScript. Dashboards, SaaS platforms, client portals.' },
+  { icon: '📱', title: 'Mobile Apps', description: 'Responsive apps that work on any device. PWA and native applications with React Native.' },
+  { icon: '🤖', title: 'AI Automations', description: 'Chatbots, document extraction, automated workflows. We integrate AI where it generates the most impact.' },
+  { icon: '🎨', title: 'UX/UI Design', description: 'Intuitive interfaces and interactive prototypes. We validate ideas before building to avoid wasting resources.' },
+  { icon: '⚡', title: 'Rapid MVPs', description: 'From idea to working product in weeks. Launch fast, validate with real users, and iterate.' },
+  { icon: '🔧', title: 'Tech Consulting', description: 'Code audits, system architecture, process optimization. Your fractional CTO on demand.' },
 ];
 
 export function ServicesSection() {
+  const locale = useLocale();
+  const SERVICES = locale === 'es' ? SERVICES_ES : SERVICES_EN;
+  const t = locale === 'es'
+    ? { heading: 'Soluciones para tu negocio', subheading: 'Todo lo que necesitas para digitalizar y escalar, con la velocidad de una fabrica potenciada por IA.' }
+    : { heading: 'Solutions for your business', subheading: 'Everything you need to digitize and scale, with the speed of an AI-powered factory.' };
+
   return (
     <section id="services" className="border-b border-[var(--border)]">
       <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            Soluciones para tu negocio
+            {t.heading}
           </h2>
           <p className="text-[var(--muted)] max-w-xl mx-auto">
-            Todo lo que necesitas para digitalizar y escalar, con la velocidad de una fabrica potenciada por IA.
+            {t.subheading}
           </p>
         </div>
 
