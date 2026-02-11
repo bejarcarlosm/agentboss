@@ -25,40 +25,30 @@ interface PlanetProps {
   name: string;
   role: string;
   avatar: string;
-  slug: string;
   dotSize?: string;
   textSize?: string;
   isOuter?: boolean;
   isSpotlight?: boolean;
 }
 
-function Planet({ href, color, name, role, avatar, slug, dotSize = 'w-2 h-2', textSize = 'text-[9px]', isOuter = false, isSpotlight = false }: PlanetProps) {
-  const agentLink = `agentboss.cl/dossier/${slug}`;
+function Planet({ href, color, name, role, avatar, dotSize = 'w-2 h-2', textSize = 'text-[9px]', isOuter = false, isSpotlight = false }: PlanetProps) {
 
   return (
     <Link href={href} className="group/planet relative flex items-center gap-1.5 hover:scale-110 transition-transform">
       {/* Avatar - shown on hover OR when spotlight is active */}
-      <div className="absolute -top-[9rem] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
+      <div className="absolute -top-[9rem] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
         <Image
           src={avatar}
           alt={name}
           width={128}
           height={128}
-          className={`w-32 h-32 rounded-full object-cover border-2 transition-all duration-300 shadow-lg ${
+          className={`w-32 h-32 rounded-full object-cover border-2 transition-all duration-300 shadow-lg cursor-pointer ${
             isSpotlight
               ? 'opacity-100 scale-100'
-              : 'opacity-0 scale-75 group-hover/planet:opacity-100 group-hover/planet:scale-100'
+              : 'opacity-0 scale-75 pointer-events-none group-hover/planet:opacity-100 group-hover/planet:scale-100 group-hover/planet:pointer-events-auto'
           }`}
           style={{ borderColor: color, boxShadow: isSpotlight ? `0 0 16px ${color}60` : `0 0 12px ${color}40` }}
         />
-        {/* Agent link - appears with avatar */}
-        <span className={`text-[9px] font-medium transition-all duration-300 whitespace-nowrap ${
-          isSpotlight
-            ? 'opacity-75'
-            : 'opacity-0 group-hover/planet:opacity-75'
-        }`} style={{ color: color }}>
-          {agentLink}
-        </span>
       </div>
       <span className={`${dotSize} rounded-full flex-shrink-0`} style={{ background: color, boxShadow: `0 0 8px ${color}99` }} />
       <span className={`px-1.5 py-0.5 rounded-full border ${textSize} font-semibold whitespace-nowrap ${isOuter ? 'opacity-80' : ''}`} style={{ background: `${color}10`, borderColor: `${color}20`, color: color }}>
@@ -184,7 +174,6 @@ export function FactoryHero() {
                     name={planet.name}
                     role={locale === 'es' ? planet.role_es : planet.role_en}
                     avatar={planet.avatar}
-                    slug={planet.id}
                     dotSize={planet.dotSize}
                     textSize={planet.textSize}
                     isOuter={planet.orbit === 'outer'}
