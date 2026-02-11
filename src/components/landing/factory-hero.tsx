@@ -37,9 +37,9 @@ function Planet({ href, color, name, role, avatar, dotSize = 'w-2 h-2', textSize
       <Image
         src={avatar}
         alt={name}
-        width={64}
-        height={64}
-        className={`w-16 h-16 rounded-full object-cover border-2 transition-all duration-300 absolute -top-[4.5rem] left-1/2 -translate-x-1/2 shadow-lg pointer-events-none ${
+        width={128}
+        height={128}
+        className={`w-32 h-32 rounded-full object-cover border-2 transition-all duration-300 absolute -top-[9rem] left-1/2 -translate-x-1/2 shadow-lg pointer-events-none ${
           isSpotlight
             ? 'opacity-100 scale-100'
             : 'opacity-0 scale-75 group-hover/planet:opacity-100 group-hover/planet:scale-100'
