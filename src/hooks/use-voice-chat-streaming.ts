@@ -177,6 +177,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
             setState('connected');
             break;
           case 'thinking':
+          case 'processing':
             setState('processing');
             break;
           case 'transcription':
@@ -202,6 +203,9 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
               setState('connected');
             }
             break;
+          case 'questions_remaining':
+            // Info event — just log, don't change state
+            break;
           case 'error':
             if (msg.message === 'processing_failed' && messages.length > 0) {
               setState('connected');
@@ -209,6 +213,9 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
               setError(msg.message || 'Unknown error');
               setState('error');
             }
+            break;
+          default:
+            console.log('[Voice] Unhandled msg type:', msg.type);
             break;
         }
       };
@@ -488,44 +495,34 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
   }, [stopRecording]);
 
   const playAudio = useCallback(async (base64Audio: string) => {
-    try {
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-      if (isMobile) {
-        const binaryString = atob(base64Audio);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        const blob = new Blob([bytes.buffer], { type: 'audio/mpeg' });
-        const blobUrl = URL.createObjectURL(blob);
-        const audio = new Audio(blobUrl);
-
-        audio.onended = () => { setState('connected'); URL.revokeObjectURL(blobUrl); };
-        audio.onerror = () => { setState('connected'); URL.revokeObjectURL(blobUrl); };
-        audio.play().catch(() => { setState('connected'); URL.revokeObjectURL(blobUrl); });
-      } else {
-        if (!playbackAudioContextRef.current) {
-          playbackAudioContextRef.current = new AudioContext();
-        }
-        const audioContext = playbackAudioContextRef.current;
-        if (audioContext.state === 'suspended') await audioContext.resume();
-
-        const binaryString = atob(base64Audio);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-
-        const audioBuffer = await audioContext.decodeAudioData(bytes.buffer);
-        const source = audioContext.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(audioContext.destination);
-        source.onended = () => setState('connected');
-        source.start(0);
-      }
-    } catch {
+    // Safety timeout: if audio doesn't finish in 30s, force back to connected
+    const safetyTimeout = setTimeout(() => {
+      console.warn('[Voice] Audio playback safety timeout - forcing connected state');
       setState('connected');
+    }, 30000);
+
+    const done = () => {
+      clearTimeout(safetyTimeout);
+      setState('connected');
+    };
+
+    try {
+      const binaryString = atob(base64Audio);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      // Use Audio element for all platforms (more reliable than AudioContext)
+      const blob = new Blob([bytes.buffer], { type: 'audio/mpeg' });
+      const blobUrl = URL.createObjectURL(blob);
+      const audio = new Audio(blobUrl);
+
+      audio.onended = () => { done(); URL.revokeObjectURL(blobUrl); };
+      audio.onerror = () => { done(); URL.revokeObjectURL(blobUrl); };
+      audio.play().catch(() => { done(); URL.revokeObjectURL(blobUrl); });
+    } catch {
+      done();
     }
   }, []);
 
