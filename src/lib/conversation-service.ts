@@ -44,6 +44,99 @@ export async function saveMessage(
   }
 }
 
+export async function updateConversationUser(
+  conversationId: string,
+  userName?: string,
+  userEmail?: string
+) {
+  const updates: Record<string, string> = {};
+  if (userName) updates.user_name = userName;
+  if (userEmail) updates.user_email = userEmail;
+  if (Object.keys(updates).length === 0) return;
+
+  const { error } = await supabase
+    .from('conversations')
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq('id', conversationId);
+
+  if (error) {
+    console.error('Error updating conversation user:', error);
+  }
+}
+
+export async function createOrUpdateLead(
+  agentSlug: string,
+  conversationId: string,
+  name?: string,
+  email?: string,
+  phone?: string
+) {
+  if (!email && !name) return null;
+
+  // Check if lead with this email already exists
+  if (email) {
+    const { data: existing } = await supabase
+      .from('leads')
+      .select('id')
+      .eq('email', email)
+      .limit(1)
+      .single();
+
+    if (existing) {
+      // Update existing lead
+      const updates: Record<string, string> = { updated_at: new Date().toISOString() };
+      if (name) updates.name = name;
+      if (phone) updates.phone = phone;
+
+      await supabase.from('leads').update(updates).eq('id', existing.id);
+      await supabase.from('conversations').update({ lead_id: existing.id }).eq('id', conversationId);
+      return existing.id;
+    }
+  }
+
+  // Create new lead
+  const { data, error } = await supabase
+    .from('leads')
+    .insert({
+      name: name || null,
+      email: email || null,
+      phone: phone || null,
+      agent_slug: agentSlug,
+      source: 'voice_chat',
+    })
+    .select('id')
+    .single();
+
+  if (error) {
+    console.error('Error creating lead:', error);
+    return null;
+  }
+
+  // Link lead to conversation
+  await supabase.from('conversations').update({ lead_id: data.id }).eq('id', conversationId);
+  return data.id;
+}
+
+// Extract name and email from conversation messages
+const EMAIL_REGEX = /[\w.-]+@[\w.-]+\.\w{2,}/;
+const NAME_PATTERNS = [
+  /(?:me llamo|soy|mi nombre es)\s+([A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+)?)/i,
+  /(?:my name is|i'm|i am)\s+([A-Za-z]+(?:\s+[A-Za-z]+)?)/i,
+];
+
+export function extractEmail(text: string): string | null {
+  const match = text.match(EMAIL_REGEX);
+  return match ? match[0].toLowerCase() : null;
+}
+
+export function extractName(text: string): string | null {
+  for (const pattern of NAME_PATTERNS) {
+    const match = text.match(pattern);
+    if (match && match[1]) return match[1].trim();
+  }
+  return null;
+}
+
 export async function getConversationHistory(agentSlug: string) {
   const sessionId = getSessionId();
   const { data, error } = await supabase

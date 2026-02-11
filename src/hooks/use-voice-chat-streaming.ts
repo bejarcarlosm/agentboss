@@ -1,6 +1,14 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import {
+  createConversation,
+  saveMessage,
+  updateConversationUser,
+  createOrUpdateLead,
+  extractEmail,
+  extractName,
+} from '@/lib/conversation-service';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -80,11 +88,40 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const speechRecognitionRef = useRef<SpeechRecognitionInstance | null>(null);
   const finalTranscriptRef = useRef<string>('');
+  const conversationIdRef = useRef<string | null>(null);
+  const agentSlugRef = useRef<string>('');
+  const capturedNameRef = useRef<string | null>(null);
+  const capturedEmailRef = useRef<string | null>(null);
 
   const checkRateLimit = useCallback((): boolean => {
     if (isLiveMode) return false;
     return getMessageCount() >= MAX_MESSAGES_DEMO;
   }, [isLiveMode]);
+
+  // Persist a message to Supabase and check for lead info
+  const persistMessage = useCallback(async (role: 'user' | 'agent', content: string) => {
+    if (!conversationIdRef.current) return;
+    saveMessage(conversationIdRef.current, role, content);
+
+    // Try to extract name/email from user messages
+    if (role === 'user') {
+      const email = extractEmail(content);
+      const name = extractName(content);
+
+      if (email && email !== capturedEmailRef.current) {
+        capturedEmailRef.current = email;
+        updateConversationUser(conversationIdRef.current, capturedNameRef.current || undefined, email);
+        createOrUpdateLead(agentSlugRef.current, conversationIdRef.current, capturedNameRef.current || undefined, email);
+      }
+      if (name && name !== capturedNameRef.current) {
+        capturedNameRef.current = name;
+        updateConversationUser(conversationIdRef.current, name, capturedEmailRef.current || undefined);
+        if (capturedEmailRef.current) {
+          createOrUpdateLead(agentSlugRef.current, conversationIdRef.current, name, capturedEmailRef.current);
+        }
+      }
+    }
+  }, []);
 
   const connect = useCallback(async (agentId: string) => {
     if (isConnectingRef.current || sessionIdRef.current) return;
@@ -120,6 +157,12 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
 
       const sessionData = await sessionResponse.json();
       sessionIdRef.current = sessionData.sessionId;
+      agentSlugRef.current = agentId;
+
+      // Create conversation in Supabase
+      const convId = await createConversation(agentId);
+      conversationIdRef.current = convId;
+      console.log('[Voice] Supabase conversation:', convId);
 
       const wsUrl = BACKEND_URL.replace('https://', 'wss://').replace('http://', 'ws://');
       console.log('[Voice] Session created:', sessionData.sessionId);
@@ -142,12 +185,14 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
               const last = prev[prev.length - 1];
               if (last?.role === 'user' && last?.content === msg.text) return prev;
               if (!isLiveMode) incrementMessageCount();
+              persistMessage('user', msg.text);
               return [...prev, { role: 'user', content: msg.text }];
             });
             break;
           case 'ai_response':
             setMessages(prev => [...prev, { role: 'assistant', content: msg.text }]);
             setCurrentTranscript('');
+            persistMessage('agent', msg.text);
             break;
           case 'speaking':
             if (msg.audioChunk) {
@@ -403,6 +448,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     try {
       setState('processing');
       setMessages(prev => [...prev, { role: 'user', content: text }]);
+      persistMessage('user', text);
 
       const response = await fetch(`${BACKEND_URL}/api/chat/stream-text`, {
         method: 'POST',
