@@ -71,7 +71,7 @@ export function FactoryHero() {
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-[#22c55e] shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#22c55e]/10 border border-[#22c55e]/20 text-[9px] font-semibold text-[#22c55e] whitespace-nowrap">
-                    Pluto
+                    Pluto · QA
                   </span>
                 </div>
               </div>
@@ -81,7 +81,7 @@ export function FactoryHero() {
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-[#ef4444] shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#ef4444]/10 border border-[#ef4444]/20 text-[9px] font-semibold text-[#ef4444] whitespace-nowrap">
-                    Mars
+                    Mars · Growth
                   </span>
                 </div>
               </div>
@@ -91,7 +91,7 @@ export function FactoryHero() {
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-[#06b6d4] shadow-[0_0_8px_rgba(6,182,212,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#06b6d4]/10 border border-[#06b6d4]/20 text-[9px] font-semibold text-[#06b6d4] whitespace-nowrap">
-                    Flux
+                    Flux · Dev
                   </span>
                 </div>
               </div>
@@ -101,7 +101,7 @@ export function FactoryHero() {
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-[#f97316] shadow-[0_0_8px_rgba(249,115,22,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#f97316]/10 border border-[#f97316]/20 text-[9px] font-semibold text-[#f97316] whitespace-nowrap">
-                    Orion
+                    Orion · Infra
                   </span>
                 </div>
               </div>
@@ -111,7 +111,7 @@ export function FactoryHero() {
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-[#a855f7] shadow-[0_0_8px_rgba(168,85,247,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#a855f7]/10 border border-[#a855f7]/20 text-[9px] font-semibold text-[#a855f7] whitespace-nowrap">
-                    Venus
+                    Venus · UX
                   </span>
                 </div>
               </div>
@@ -121,7 +121,7 @@ export function FactoryHero() {
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-[#3b82f6] shadow-[0_0_8px_rgba(59,130,246,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#3b82f6]/10 border border-[#3b82f6]/20 text-[9px] font-semibold text-[#3b82f6] whitespace-nowrap">
-                    Nova
+                    Nova · AI
                   </span>
                 </div>
               </div>
@@ -131,7 +131,7 @@ export function FactoryHero() {
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#2dd4bf] shadow-[0_0_10px_rgba(45,212,191,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#2dd4bf]/10 border border-[#2dd4bf]/20 text-[9px] font-semibold text-[#2dd4bf] whitespace-nowrap">
-                    Atlas
+                    Atlas · PO
                   </span>
                 </div>
               </div>
