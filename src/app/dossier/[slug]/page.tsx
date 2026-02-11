@@ -104,6 +104,26 @@ export default async function DossierPage({ params }: Props) {
                 </div>
               ))}
             </div>
+
+            {/* Tech Stack */}
+            {agent.techStack.length > 0 && (
+              <div className="mt-8">
+                <h2 className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] mb-3">
+                  Stack Tecnologico
+                </h2>
+                <div className="space-y-1.5">
+                  {agent.techStack.map(tech => (
+                    <div
+                      key={tech}
+                      className="flex items-center gap-2 text-xs text-[var(--muted)]"
+                    >
+                      <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: agent.color }} />
+                      {tech}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right: Dossier info */}
@@ -167,6 +187,38 @@ export default async function DossierPage({ params }: Props) {
                 ))}
               </div>
             </div>
+
+            {/* Responsibilities */}
+            {agent.responsibilities.length > 0 && (
+              <div className="mb-10">
+                <h2 className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] mb-4">
+                  Responsabilidades
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {agent.responsibilities.map((resp) => (
+                    <div
+                      key={resp.title}
+                      className="p-4 rounded-lg border border-white/5 bg-white/[0.015]"
+                    >
+                      <h3
+                        className="text-xs font-bold uppercase tracking-wide mb-3"
+                        style={{ color: agent.color }}
+                      >
+                        {resp.title}
+                      </h3>
+                      <ul className="space-y-2">
+                        {resp.items.map((item, i) => (
+                          <li key={i} className="flex gap-2 text-xs text-[var(--muted)] leading-relaxed">
+                            <span className="w-1 h-1 rounded-full mt-1.5 flex-shrink-0" style={{ background: agent.color }} />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* CTA */}
             {agent.chatSlug ? (

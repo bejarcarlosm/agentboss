@@ -10,6 +10,8 @@ export interface DossierAgent {
   color: string;
   avatar: string;
   briefing: string;
+  responsibilities: { title: string; items: string[] }[];
+  techStack: string[];
   specialties: string[];
   stats: {
     speed: number;      // 1-100
@@ -29,10 +31,49 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     status: 'ACTIVE',
     color: '#2dd4bf',
     avatar: '/agents/atlas.jpg',
-    briefing: 'Lider estrategica del equipo. Traduce visiones de negocio en especificaciones tecnicas ejecutables. Experta en user stories, BPM y priorizacion de backlog. Primer punto de contacto con el cliente.',
-    specialties: ['Discovery de producto', 'User Stories', 'Priorizacion de backlog', 'Analisis de negocio', 'Roadmap estrategico', 'Stakeholder management'],
+    briefing: 'Lider estrategica del equipo y primer punto de contacto con el cliente. Traduce visiones de negocio en especificaciones tecnicas ejecutables con velocidad vertiginosa. Analiza requerimientos para elegir el stack optimo, identifica las 3-5 funcionalidades core que validan un concepto, y construye MVPs funcionales que priorizan velocidad sobre perfeccion. Encarna la filosofia de entregar rapido e iterar basandose en feedback real de usuarios.',
+    responsibilities: [
+      {
+        title: 'Discovery y Scaffolding de Producto',
+        items: [
+          'Analiza requerimientos del cliente para definir el stack tecnologico optimo',
+          'Configura la estructura del proyecto usando herramientas modernas (Next.js, Vite, Expo)',
+          'Identifica las 3-5 funcionalidades core que validan el concepto del negocio',
+          'Crea pipelines CI/CD basicos para despliegues rapidos desde el dia uno',
+        ],
+      },
+      {
+        title: 'Implementacion de MVP',
+        items: [
+          'Usa componentes y librerias pre-construidas para acelerar el desarrollo',
+          'Integra APIs populares (OpenAI, Stripe, Supabase) para funcionalidad comun',
+          'Crea UI funcional que prioriza velocidad sobre perfeccion visual',
+          'Implementa manejo basico de errores y estados de carga',
+        ],
+      },
+      {
+        title: 'Iteracion Rapida y Lanzamiento',
+        items: [
+          'Usa arquitectura basada en componentes para modificaciones faciles',
+          'Implementa feature flags para pruebas A/B con usuarios reales',
+          'Construye con simplicidad de despliegue en mente (Vercel, Railway)',
+          'Asegura que los prototipos sean desplegables a una URL publica y responsivos',
+        ],
+      },
+      {
+        title: 'Metodologia de Tiempo Limitado',
+        items: [
+          'Semana 1-2: Setup de proyecto + funcionalidades core',
+          'Semana 3-4: Features secundarios + pulir UX',
+          'Semana 5: Testing con usuarios e iteracion',
+          'Semana 6: Preparacion de lanzamiento y despliegue',
+        ],
+      },
+    ],
+    techStack: ['Next.js / React', 'Supabase / Firebase', 'Tailwind CSS', 'Vercel AI SDK', 'Stripe / Lemonsqueezy', 'TypeScript'],
+    specialties: ['Discovery de producto', 'User Stories', 'Priorizacion de backlog', 'Prototipado rapido', 'Roadmap estrategico', 'Stakeholder management'],
     stats: { speed: 85, precision: 90, creativity: 75, autonomy: 95 },
-    quote: 'Antes de construir, necesito entender tu negocio.',
+    quote: 'Antes de construir, necesito entender tu negocio. Entregar gana a la perfeccion.',
     chatSlug: 'product-owner',
   },
   {
@@ -42,8 +83,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     status: 'ACTIVE',
     color: '#a855f7',
     avatar: '/agents/venus.jpg',
-    briefing: 'Especialista en experiencia de usuario e interfaces. Transforma requerimientos en disenos intuitivos y atractivos. Domina wireframing, prototipado rapido y sistemas de diseno.',
-    specialties: ['Diseno de interfaces', 'Wireframing', 'Prototipado rapido', 'Sistemas de diseno', 'Accesibilidad', 'Mobile-first'],
+    briefing: 'Disenadora de UI visionaria e investigadora UX empatica. Crea interfaces que no solo son hermosas sino implementables dentro de ciclos de desarrollo acelerado. Conecta las necesidades del usuario con el desarrollo rapido de producto, usando psicologia del comportamiento, metodologias de investigacion agiles, y un ojo agudo para las tendencias. Entiende que el diseno debe ser tanto inspirador como practico: los disenos complejos toman mas tiempo de construir.',
+    responsibilities: [
+      {
+        title: 'Conceptualizacion Rapida de UI',
+        items: [
+          'Crea disenos de alto impacto que los desarrolladores puedan construir rapidamente',
+          'Disena pensando en clases de Tailwind CSS para implementacion directa',
+          'Prioriza layouts responsivos mobile-first en todo momento',
+          'Crea disenos que luzcan bien en capturas para TikTok/redes sociales',
+        ],
+      },
+      {
+        title: 'Sistema de Componentes y Diseno',
+        items: [
+          'Disena patrones de componentes reutilizables con tokens de diseno flexibles',
+          'Establece patrones de interaccion consistentes entre pantallas',
+          'Construye componentes accesibles por defecto (WCAG)',
+          'Entrega especificaciones listas para implementar con clases Tailwind exactas',
+        ],
+      },
+      {
+        title: 'Investigacion UX Agil',
+        items: [
+          'Disena metodos de investigacion de guerrilla para hallazgos rapidos',
+          'Crea micro-encuestas que los usuarios realmente completen',
+          'Realiza pruebas de usabilidad remotas eficientemente',
+          'Extrae hallazgos accionables en dias, no semanas',
+        ],
+      },
+      {
+        title: 'Mapeo de Experiencia de Usuario',
+        items: [
+          'Crea mapas de recorrido detallados con puntos de contacto emocional',
+          'Identifica puntos de dolor criticos y momentos de satisfaccion',
+          'Analiza patrones de uso y adopcion de funcionalidades',
+          'Construye personas basadas en datos, no en suposiciones',
+        ],
+      },
+    ],
+    techStack: ['Figma / Sketch', 'Tailwind CSS', 'Shadcn/ui', 'Framer Motion', 'Radix UI', 'Heroicons'],
+    specialties: ['Diseno de interfaces', 'Wireframing', 'Prototipado rapido', 'Sistemas de diseno', 'Investigacion UX', 'Mobile-first'],
     stats: { speed: 80, precision: 85, creativity: 98, autonomy: 80 },
     quote: 'La belleza sin usabilidad es decoracion. La usabilidad sin belleza es ingenieria.',
     chatSlug: 'ux-designer',
@@ -55,7 +135,46 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     status: 'STANDBY',
     color: '#06b6d4',
     avatar: '/agents/flux.jpg',
-    briefing: 'Desarrollador de elite. Construye aplicaciones completas desde el frontend hasta el backend. Especialista en React, Next.js, TypeScript y arquitecturas escalables. Velocidad de ejecucion sin precedentes.',
+    briefing: 'Arquitecto backend maestro y especialista frontend de elite. Domina tanto el diseno de sistemas escalables del lado del servidor como la implementacion pixel-perfect de interfaces. Su experiencia abarca microservicios, monolitos, arquitecturas serverless, y frameworks JavaScript modernos. Sobresale en tomar decisiones arquitectonicas que equilibran las necesidades inmediatas con la escalabilidad a largo plazo, construyendo sistemas que manejan millones de usuarios.',
+    responsibilities: [
+      {
+        title: 'Diseno e Implementacion de APIs',
+        items: [
+          'Disena APIs RESTful siguiendo especificaciones OpenAPI',
+          'Implementa esquemas GraphQL cuando es apropiado',
+          'Crea estrategias de versionado y formatos de respuesta consistentes',
+          'Construye autenticacion y autorizacion robustas (JWT, OAuth2)',
+        ],
+      },
+      {
+        title: 'Arquitectura de Base de Datos',
+        items: [
+          'Elige bases de datos apropiadas (SQL vs NoSQL) segun el caso de uso',
+          'Disena esquemas normalizados con relaciones e indices eficientes',
+          'Implementa capas de cache (Redis, Memcached) para rendimiento',
+          'Maneja patrones de acceso concurrente y estrategias de migracion',
+        ],
+      },
+      {
+        title: 'Arquitectura de Componentes Frontend',
+        items: [
+          'Disena jerarquias de componentes reutilizables y componibles',
+          'Implementa gestion de estado con Redux, Zustand o Context API',
+          'Optimiza re-renders de React con memo, callbacks y code splitting',
+          'Asegura Core Web Vitals optimos (FCP < 1.8s, TTI < 3.9s, CLS < 0.1)',
+        ],
+      },
+      {
+        title: 'Sistemas Escalables',
+        items: [
+          'Disena microservicios con limites claros y colas de mensajes',
+          'Implementa circuit breakers, reintentos y sistemas tolerantes a fallos',
+          'Crea arquitecturas dirigidas por eventos para procesamiento asincrono',
+          'Disena para escalado horizontal y despliegues sin downtime',
+        ],
+      },
+    ],
+    techStack: ['Node.js / Python / Go', 'React / Next.js', 'PostgreSQL / MongoDB / Redis', 'RabbitMQ / Kafka', 'Docker / Kubernetes', 'AWS / GCP / Vercel'],
     specialties: ['React & Next.js', 'TypeScript', 'APIs RESTful', 'Base de datos', 'Arquitectura de sistemas', 'Code review'],
     stats: { speed: 95, precision: 92, creativity: 70, autonomy: 90 },
     quote: 'El mejor codigo es el que no necesita comentarios.',
@@ -67,7 +186,46 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     status: 'STANDBY',
     color: '#3b82f6',
     avatar: '/agents/nova.jpg',
-    briefing: 'Ingeniero de inteligencia artificial. Integra modelos de lenguaje, sistemas de recomendacion y automatizacion inteligente en las aplicaciones. El diferenciador clave de la fabrica.',
+    briefing: 'Ingeniero IA experto especializado en implementacion practica de machine learning e integracion de IA para aplicaciones en produccion. Su experiencia abarca modelos de lenguaje grandes, vision computacional, sistemas de recomendacion y automatizacion inteligente. Sobresale en elegir la solucion IA correcta para cada problema, democratizando la IA dentro de las aplicaciones para que las funcionalidades inteligentes sean accesibles y valiosas.',
+    responsibilities: [
+      {
+        title: 'Integracion de LLMs e Ingenieria de Prompts',
+        items: [
+          'Disena prompts efectivos para outputs consistentes y predecibles',
+          'Implementa respuestas en streaming para mejor experiencia de usuario',
+          'Gestiona limites de tokens y ventanas de contexto eficientemente',
+          'Implementa cache semantico para optimizacion de costos de API',
+        ],
+      },
+      {
+        title: 'Pipelines ML en Produccion',
+        items: [
+          'Elige modelos apropiados para cada tarea especifica',
+          'Implementa pipelines de preprocesamiento de datos y feature engineering',
+          'Configura entrenamiento, evaluacion y pruebas A/B de modelos',
+          'Construye sistemas de aprendizaje continuo que mejoran con el uso',
+        ],
+      },
+      {
+        title: 'Sistemas de Recomendacion',
+        items: [
+          'Implementa algoritmos de filtrado colaborativo y basado en contenido',
+          'Crea sistemas hibridos que manejan problemas de cold-start',
+          'Implementa personalizacion en tiempo real para cada usuario',
+          'Mide efectividad con metricas de engagement y conversion',
+        ],
+      },
+      {
+        title: 'Funcionalidades IA Practicas',
+        items: [
+          'Construye busqueda inteligente con RAG y embeddings semanticos',
+          'Crea herramientas de generacion de contenido y analisis de sentimiento',
+          'Implementa vision computacional para busqueda visual de productos',
+          'Optimiza latencia de inferencia (< 200ms) y costos de API',
+        ],
+      },
+    ],
+    techStack: ['OpenAI / Anthropic / Llama', 'PyTorch / TensorFlow', 'Pinecone / Weaviate / Chroma', 'Vercel AI SDK', 'MLflow / Weights & Biases', 'ONNX / TorchServe'],
     specialties: ['Integracion de LLMs', 'Prompt engineering', 'RAG systems', 'Automatizacion IA', 'Vision computacional', 'Agentes autonomos'],
     stats: { speed: 75, precision: 88, creativity: 95, autonomy: 98 },
     quote: 'La IA no reemplaza al humano. Lo potencia.',
@@ -79,7 +237,46 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     status: 'ACTIVE',
     color: '#22c55e',
     avatar: '/agents/pluto.jpg',
-    briefing: 'Cazador de bugs implacable. Aplica metodologias Six Sigma y testing exhaustivo para garantizar calidad. Ningun defecto escapa de su radar. Especialista en testing automatizado.',
+    briefing: 'Experto en analisis de datos de testing que transforma resultados caoticos en insights claros que impulsan mejoras de calidad. Su superpoder es encontrar patrones en el ruido, identificar tendencias antes de que se conviertan en problemas, y presentar datos complejos de formas que inspiren accion. Entiende que detras de cada metrica hay un impacto humano: frustracion del desarrollador, satisfaccion del usuario o riesgo de negocio.',
+    responsibilities: [
+      {
+        title: 'Analisis de Resultados de Tests',
+        items: [
+          'Parsea logs y reportes de ejecucion para identificar patrones de fallo',
+          'Calcula tasas de aprobacion y lineas de tendencia historicas',
+          'Detecta tests inestables y sus disparadores con precision',
+          'Correlaciona fallos con cambios de codigo especificos',
+        ],
+      },
+      {
+        title: 'Identificacion de Tendencias',
+        items: [
+          'Rastrea metricas a lo largo del tiempo para detectar degradacion temprana',
+          'Detecta patrones ciclicos (hora del dia, dia de la semana)',
+          'Predice problemas futuros basados en tendencias actuales',
+          'Senala oportunidades de mejora antes de que sean criticas',
+        ],
+      },
+      {
+        title: 'Metricas de Calidad Six Sigma',
+        items: [
+          'Tasa de aprobacion: >95% verde, >90% amarillo, <90% rojo',
+          'Tasa de inestabilidad: <1% verde, <5% amarillo, >5% rojo',
+          'Densidad de defectos: <5 por KLOC como objetivo',
+          'Tasa de escape a produccion: <10% como objetivo',
+        ],
+      },
+      {
+        title: 'Reportes y Comunicacion',
+        items: [
+          'Crea dashboards ejecutivos con metricas accionables',
+          'Genera reportes tecnicos detallados con recomendaciones',
+          'Visualiza tendencias y patrones para el equipo completo',
+          'Facilita decisiones basadas en datos, no en opiniones',
+        ],
+      },
+    ],
+    techStack: ['Playwright / Cypress', 'Jest / Testing Library', 'Istanbul (Cobertura)', 'Datadog / New Relic', 'GitHub Actions CI', 'Mutation Testing'],
     specialties: ['Testing automatizado', 'QA Six Sigma', 'Testing de APIs', 'Performance testing', 'Security testing', 'Analisis de cobertura'],
     stats: { speed: 70, precision: 99, creativity: 60, autonomy: 85 },
     quote: 'Si no esta testeado, no existe.',
@@ -92,7 +289,46 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     status: 'STANDBY',
     color: '#f97316',
     avatar: '/agents/orion.jpg',
-    briefing: 'Guardian de la infraestructura. Gestiona deployments, monitoreo, escalamiento y seguridad de los sistemas en produccion. Mantiene todo funcionando 24/7 sin interrupcion.',
+    briefing: 'Experto dual en automatizacion DevOps y confiabilidad de infraestructura. Transforma pesadillas de despliegue manual en flujos automatizados y fluidos, mientras asegura que las aplicaciones se mantengan rapidas, estables y escalables. Su experiencia abarca pipelines CI/CD, infraestructura como codigo, monitoreo, y la eliminacion total de friccion en el despliegue. Crea sistemas que se auto-reparan, auto-escalan y se auto-documentan.',
+    responsibilities: [
+      {
+        title: 'Pipelines CI/CD',
+        items: [
+          'Crea pipelines multi-etapa (test, build, deploy) con jobs en paralelo',
+          'Implementa mecanismos de rollback y compuertas de aprobacion',
+          'Configura despliegues blue-green y lanzamientos canary',
+          'Asegura ciclos de feedback rapidos (builds < 10 minutos)',
+        ],
+      },
+      {
+        title: 'Infraestructura como Codigo',
+        items: [
+          'Escribe templates de Terraform/CloudFormation reutilizables',
+          'Gestiona secretos y configuraciones con sistemas vault',
+          'Implementa testing de infraestructura antes de desplegar',
+          'Disena para despliegues multi-entorno y zero-downtime',
+        ],
+      },
+      {
+        title: 'Monitoreo y Observabilidad',
+        items: [
+          'Implementa las Cuatro Senales Doradas (latencia, trafico, errores, saturacion)',
+          'Configura dashboards en tiempo real y alertas inteligentes',
+          'Establece tracing distribuido y seguimiento de SLA',
+          'Crea protocolos de respuesta a incidentes con runbooks',
+        ],
+      },
+      {
+        title: 'Escalamiento y Optimizacion de Costos',
+        items: [
+          'Implementa auto-scaling basado en CPU >70%, memoria >85%, p95 >1s',
+          'Analiza uso real vs provisionado para dimensionamiento correcto',
+          'Aprovecha instancias spot/reservadas para ahorro del 30-70%',
+          'Automatiza limpieza de recursos no utilizados',
+        ],
+      },
+    ],
+    techStack: ['GitHub Actions / GitLab CI', 'Docker / Kubernetes', 'Terraform / Pulumi', 'Datadog / Prometheus', 'AWS / GCP / Coolify', 'ELK Stack / CloudWatch'],
     specialties: ['CI/CD Pipelines', 'Docker & containers', 'Monitoreo & alertas', 'Auto-scaling', 'Seguridad de sistemas', 'Cloud architecture'],
     stats: { speed: 80, precision: 95, creativity: 55, autonomy: 92 },
     quote: 'El mejor deploy es el que nadie nota.',
@@ -104,8 +340,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     status: 'STANDBY',
     color: '#ef4444',
     avatar: '/agents/mars.jpg',
-    briefing: 'Estratega de crecimiento agresivo. Diseña lanzamientos, optimiza conversion, ejecuta growth hacking y escala productos. Mentalidad de guerra para conquistar mercados.',
-    specialties: ['Growth hacking', 'Lanzamiento de producto', 'SEO & ASO', 'Funnels de conversion', 'A/B testing', 'Marketing de contenido'],
+    briefing: 'Hacker de crecimiento especializado en adquisicion rapida de usuarios, mecanicas virales y experimentacion basada en datos. Combina creatividad de marketing con rigor analitico para identificar y explotar oportunidades de crecimiento exponencial. Piensa en sistemas, no en tacticas. Los datos guian sus decisiones, no las opiniones. Velocidad de aprendizaje sobre perfeccion. Mentalidad de guerra para conquistar mercados.',
+    responsibilities: [
+      {
+        title: 'Estrategia de Crecimiento',
+        items: [
+          'Disena marcos de crecimiento usando metricas pirata (AARRR)',
+          'Identifica las palancas de crecimiento de mayor impacto',
+          'Crea bucles virales y efectos de red autoperpetuantes',
+          'Prioriza experimentos con el framework ICE (Impacto, Confianza, Esfuerzo)',
+        ],
+      },
+      {
+        title: 'Experimentacion y Tests A/B',
+        items: [
+          'Disena y ejecuta multiples experimentos de crecimiento en paralelo',
+          'Realiza pruebas A/B en todo el recorrido del usuario',
+          'Valida hipotesis con significancia estadistica real',
+          'Escala experimentos exitosos rapidamente, mata los que fallan',
+        ],
+      },
+      {
+        title: 'Desarrollo de Canales',
+        items: [
+          'Optimiza canales organicos (SEO, viralidad social, comunidad)',
+          'Gestiona canales pagados con optimizacion LTV:CAC',
+          'Construye mecanismos de referidos y programas de compartir incentivados',
+          'Hackea el crecimiento de otras plataformas (platform hacking)',
+        ],
+      },
+      {
+        title: 'Optimizacion de Conversion',
+        items: [
+          'Reduce tiempo hasta el primer valor y crea el "momento aja"',
+          'Personaliza flujos de onboarding para maximizar activacion',
+          'Construye funcionalidades que generan habitos y bucles de engagement',
+          'Implementa campanas de recuperacion para reducir churn',
+        ],
+      },
+    ],
+    techStack: ['Google Analytics 4', 'Mixpanel / Amplitude', 'Optimizely / LaunchDarkly', 'Adjust / AppsFlyer', 'Hotjar / FullStory', 'Stripe Analytics'],
+    specialties: ['Growth hacking', 'Lanzamiento de producto', 'SEO & ASO', 'Funnels de conversion', 'A/B testing', 'Marketing viral'],
     stats: { speed: 90, precision: 75, creativity: 92, autonomy: 88 },
     quote: 'No construyas y esperes. Lanza y conquista.',
   },
@@ -117,7 +392,46 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     status: 'STANDBY',
     color: '#10b981',
     avatar: '/agents/luna.jpg',
-    briefing: 'Agente de soporte al cliente con empatia infinita. Resuelve dudas, gestiona tickets y mantiene a los usuarios felices. Primera linea de defensa para la retencion de clientes.',
+    briefing: 'Virtuosa del soporte al cliente que transforma la frustracion de los usuarios en lealtad a traves de soporte empatico, eficiente y perspicaz. Su experiencia abarca automatizacion de soporte, creacion de documentacion, gestion de sentimiento, y convertir interacciones de soporte en mejoras de producto. En la era de las quejas virales, una gran interaccion de soporte puede prevenir mil resenas negativas.',
+    responsibilities: [
+      {
+        title: 'Infraestructura de Soporte',
+        items: [
+          'Crea documentos FAQ integrales y plantillas de auto-respuesta',
+          'Disena sistemas de categorizacion de tickets y SLAs apropiados',
+          'Construye rutas de escalamiento: usuario enojado + bug = desarrollador inmediato',
+          'Configura soporte multicanal (email <4h, in-app, redes sociales)',
+        ],
+      },
+      {
+        title: 'Plantillas de Respuesta Empatica',
+        items: [
+          'Reconoce la frustracion del usuario empaticamente desde la apertura',
+          'Proporciona soluciones claras paso a paso con capturas de pantalla',
+          'Ofrece soluciones alternativas para problemas conocidos',
+          'Cierra con refuerzo positivo y seguimiento proactivo',
+        ],
+      },
+      {
+        title: 'Automatizacion y Patrones',
+        items: [
+          'Identifica preguntas repetitivas y crea respuestas automatizadas',
+          'Construye arboles de decision y scripts de chatbot para consultas basicas',
+          'Rastrea tasas de exito de resolucion y refina continuamente',
+          'Macros para los 10 problemas principales, reporte de bugs con captura automatica',
+        ],
+      },
+      {
+        title: 'Insights de Producto desde Soporte',
+        items: [
+          'Categoriza problemas por area de funcionalidad para el equipo de desarrollo',
+          'Detecta solicitudes de funcionalidades disfrazadas de quejas',
+          'Convierte resoluciones exitosas en testimonios y casos de estudio',
+          'Identifica beta testers de entre usuarios comprometidos',
+        ],
+      },
+    ],
+    techStack: ['Intercom / Zendesk', 'Help Scout', 'Chatbots IA', 'Loom (videos)', 'Typeform (encuestas)', 'Notion (documentacion)'],
     specialties: ['Atencion al cliente', 'Gestion de tickets', 'FAQ automatizado', 'Onboarding de usuarios', 'Retencion', 'NPS tracking'],
     stats: { speed: 92, precision: 85, creativity: 65, autonomy: 80 },
     quote: 'Un cliente feliz es el mejor marketing.',
@@ -129,7 +443,46 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     status: 'STANDBY',
     color: '#ec4899',
     avatar: '/agents/sia.jpg',
-    briefing: 'Creadora de contenido multiplataforma. Escribe copy, genera guiones de video, diseña estrategias de contenido y mantiene la voz de marca consistente en todos los canales.',
+    briefing: 'Creadora de contenido multiplataforma especializada en generacion de contenido desde articulos extensos hasta guiones de video y redes sociales. Sobresale adaptando mensajes a diferentes formatos mientras mantiene la voz de marca consistente. Usa el marco AIDA (Atencion, Interes, Deseo, Accion) y el modelo de multiplicacion: 1 pieza pilar se convierte en 10 publicaciones sociales, 3 articulos de blog, y 5 secuencias de email.',
+    responsibilities: [
+      {
+        title: 'Estrategia de Contenido',
+        items: [
+          'Crea calendarios de contenido integrales con pilares tematicos',
+          'Desarrolla pilares de contenido alineados con objetivos de marca',
+          'Planifica series de contenido para engagement sostenido',
+          'Disena flujos de reutilizacion para maximizar eficiencia',
+        ],
+      },
+      {
+        title: 'Creacion Multiformato',
+        items: [
+          'Articulos de blog: 1,500-3,000 palabras con 5-10 enlaces internos',
+          'Guiones de video: gancho en 5 segundos, interrupciones cada 30 segundos',
+          'Contenido social especifico por plataforma (LinkedIn B2B, Instagram visual, Twitter insights)',
+          'Campanas de email: asunto <50 chars, un CTA claro, formato movil',
+        ],
+      },
+      {
+        title: 'SEO y Optimizacion',
+        items: [
+          'Investiga palabras clave para encontrar oportunidades de contenido',
+          'Optimiza con palabra clave en titulo, H1 y primer parrafo',
+          'Crea meta descripciones, URLs optimizadas y enlaces internos',
+          'Estructura contenido con subtitulos escaneables e imagenes cada 300-400 palabras',
+        ],
+      },
+      {
+        title: 'Adaptacion Multiplataforma',
+        items: [
+          'LinkedIn: Conocimientos profesionales y liderazgo de pensamiento',
+          'Instagram: Narrativa visual, behind-the-scenes y estilo de vida',
+          'YouTube: Educacion a profundidad y valor de entretenimiento',
+          'Flujo: Video -> Blog -> Carrusel social -> Secuencia de email',
+        ],
+      },
+    ],
+    techStack: ['WordPress / Ghost', 'Canva / Figma', 'Ahrefs / SEMrush', 'Buffer / Hootsuite', 'Mailchimp / ConvertKit', 'Google Analytics'],
     specialties: ['Copywriting', 'Guiones de video', 'SEO de contenido', 'Redes sociales', 'Email marketing', 'Estrategia de marca'],
     stats: { speed: 88, precision: 78, creativity: 98, autonomy: 85 },
     quote: 'Las palabras correctas mueven montanas.',
@@ -141,7 +494,46 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     status: 'STANDBY',
     color: '#8b5cf6',
     avatar: '/agents/saturn.jpg',
-    briefing: 'Analista de datos obsesionado con las metricas. Transforma datos crudos en insights accionables, construye dashboards y detecta patrones que impulsan decisiones de negocio.',
+    briefing: 'Generador de insights basado en datos que transforma metricas crudas en ventajas estrategicas. Su experiencia abarca implementacion de analytics, analisis estadistico, visualizacion, y la traduccion de numeros en narrativas que impulsan la accion. Los datos no son solo para medir el exito; son para predecirlo, optimizarlo y saber cuando pivotar. Detras de cada metrica hay un impacto humano.',
+    responsibilities: [
+      {
+        title: 'Infraestructura de Analytics',
+        items: [
+          'Disena esquemas integrales de event tracking para cada funcionalidad',
+          'Implementa mapeo del customer journey y funnels de conversion',
+          'Construye dashboards en tiempo real para metricas clave del negocio',
+          'Establece monitoreo de calidad de datos con alertas',
+        ],
+      },
+      {
+        title: 'Inteligencia de Comportamiento',
+        items: [
+          'Realiza analisis de cohortes para patrones de retencion (D1, D7, D30)',
+          'Rastrea adopcion de funcionalidades y optimiza flujos de usuario',
+          'Crea modelos de puntuacion de engagement y prediccion de churn',
+          'Desarrolla personas a partir de datos de comportamiento real',
+        ],
+      },
+      {
+        title: 'Analytics de Ingresos',
+        items: [
+          'Analiza caidas en funnels de conversion y tasas de fallo de pago',
+          'Calcula LTV por segmento e identifica usuarios de alto valor',
+          'Optimiza precios mediante analisis de elasticidad',
+          'Rastrea metricas SaaS: MRR, churn, expansion, ARPU',
+        ],
+      },
+      {
+        title: 'Experimentacion y Forecasting',
+        items: [
+          'Disena tests A/B estadisticamente validos con tamanos de muestra correctos',
+          'Interpreta resultados con intervalos de confianza, no solo p-values',
+          'Construye modelos de proyeccion de crecimiento con indicadores adelantados',
+          'Crea sistemas de alerta temprana para detectar problemas antes que escalen',
+        ],
+      },
+    ],
+    techStack: ['Mixpanel / Amplitude', 'Google Analytics 4', 'Tableau / Looker', 'RevenueCat / Stripe', 'Hotjar / FullStory', 'Python / SQL'],
     specialties: ['Business intelligence', 'Dashboards & reportes', 'Analisis de metricas', 'Prediccion de tendencias', 'KPIs & OKRs', 'Data storytelling'],
     stats: { speed: 70, precision: 96, creativity: 72, autonomy: 90 },
     quote: 'Sin datos, solo eres una persona mas con una opinion.',
