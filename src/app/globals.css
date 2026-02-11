@@ -413,16 +413,18 @@ body {
 
 /* Planetary orbit system - crossing orbits */
 .planetary-system {
-  --r-inner: 100px;
-  --r-mid: 120px;
-  --r-outer: 140px;
+  --r-inner: 80px;
+  --r-mid: 100px;
+  --r-outer: 120px;
+  --r-far: 150px;
 }
 
 @media (min-width: 768px) {
   .planetary-system {
-    --r-inner: 140px;
-    --r-mid: 170px;
-    --r-outer: 200px;
+    --r-inner: 125px;
+    --r-mid: 160px;
+    --r-outer: 195px;
+    --r-far: 240px;
   }
 }
 
@@ -521,6 +523,50 @@ body {
 
 .planet-atlas {
   animation: planet-atlas 40s linear infinite;
+  will-change: transform;
+}
+
+/* === Business orbit (far, slow) === */
+
+/* Luna - 48s, support, mostly far, dips to outer */
+@keyframes planet-luna {
+  0%   { transform: rotate(0deg)   translateX(var(--r-far))   rotate(0deg); }
+  30%  { transform: rotate(108deg) translateX(var(--r-outer)) rotate(-108deg); }
+  50%  { transform: rotate(180deg) translateX(var(--r-far))   rotate(-180deg); }
+  80%  { transform: rotate(288deg) translateX(var(--r-far))   rotate(-288deg); }
+  100% { transform: rotate(360deg) translateX(var(--r-far))   rotate(-360deg); }
+}
+
+/* Sia - 52s, content, far orbit with occasional outer dip */
+@keyframes planet-sia {
+  0%   { transform: rotate(0deg)   translateX(var(--r-far))   rotate(0deg); }
+  25%  { transform: rotate(90deg)  translateX(var(--r-far))   rotate(-90deg); }
+  50%  { transform: rotate(180deg) translateX(var(--r-outer)) rotate(-180deg); }
+  75%  { transform: rotate(270deg) translateX(var(--r-far))   rotate(-270deg); }
+  100% { transform: rotate(360deg) translateX(var(--r-far))   rotate(-360deg); }
+}
+
+/* Saturn - 56s, analytics, steady far orbit */
+@keyframes planet-saturn {
+  0%   { transform: rotate(0deg)   translateX(var(--r-far))   rotate(0deg); }
+  20%  { transform: rotate(72deg)  translateX(var(--r-far))   rotate(-72deg); }
+  45%  { transform: rotate(162deg) translateX(var(--r-outer)) rotate(-162deg); }
+  70%  { transform: rotate(252deg) translateX(var(--r-far))   rotate(-252deg); }
+  100% { transform: rotate(360deg) translateX(var(--r-far))   rotate(-360deg); }
+}
+
+.planet-luna {
+  animation: planet-luna 48s linear infinite;
+  will-change: transform;
+}
+
+.planet-sia {
+  animation: planet-sia 52s linear infinite;
+  will-change: transform;
+}
+
+.planet-saturn {
+  animation: planet-saturn 56s linear infinite;
   will-change: transform;
 }
 

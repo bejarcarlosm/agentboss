@@ -56,12 +56,13 @@ export function FactoryHero() {
           </div>
 
           {/* Right: Planetary System */}
-          <div className="flex-shrink-0 relative w-[280px] h-[280px] md:w-[400px] md:h-[400px] planetary-system">
+          <div className="flex-shrink-0 relative w-[320px] h-[320px] md:w-[500px] md:h-[500px] planetary-system">
             {/* Static orbit path guides */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="absolute w-[200px] h-[200px] md:w-[280px] md:h-[280px] rounded-full border border-white/[0.04]" />
-              <div className="absolute w-[240px] h-[240px] md:w-[340px] md:h-[340px] rounded-full border border-dashed border-white/[0.03]" />
-              <div className="absolute w-[280px] h-[280px] md:w-[400px] md:h-[400px] rounded-full border border-white/[0.02]" />
+              <div className="absolute w-[160px] h-[160px] md:w-[250px] md:h-[250px] rounded-full border border-white/[0.04]" />
+              <div className="absolute w-[200px] h-[200px] md:w-[320px] md:h-[320px] rounded-full border border-dashed border-white/[0.03]" />
+              <div className="absolute w-[240px] h-[240px] md:w-[390px] md:h-[390px] rounded-full border border-white/[0.02]" />
+              <div className="absolute w-[300px] h-[300px] md:w-[480px] md:h-[480px] rounded-full border border-dotted border-white/[0.015]" />
             </div>
 
             {/* Orbiting planets - 7 agents */}
@@ -132,6 +133,38 @@ export function FactoryHero() {
                   <span className="w-2.5 h-2.5 rounded-full bg-[#2dd4bf] shadow-[0_0_10px_rgba(45,212,191,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#2dd4bf]/10 border border-[#2dd4bf]/20 text-[9px] font-semibold text-[#2dd4bf] whitespace-nowrap">
                     Atlas · PO
+                  </span>
+                </div>
+              </div>
+
+              {/* === Business orbit (far, slow) === */}
+
+              {/* Luna Support - 48s */}
+              <div className="absolute planet-luna" style={{ animationDelay: '-16s' }}>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] shadow-[0_0_6px_rgba(16,185,129,0.5)] flex-shrink-0" />
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#10b981]/10 border border-[#10b981]/15 text-[8px] font-semibold text-[#10b981]/80 whitespace-nowrap">
+                    Luna · Soporte
+                  </span>
+                </div>
+              </div>
+
+              {/* Sia Content - 52s */}
+              <div className="absolute planet-sia" style={{ animationDelay: '-30s' }}>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ec4899] shadow-[0_0_6px_rgba(236,72,153,0.5)] flex-shrink-0" />
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#ec4899]/10 border border-[#ec4899]/15 text-[8px] font-semibold text-[#ec4899]/80 whitespace-nowrap">
+                    Sia · Contenido
+                  </span>
+                </div>
+              </div>
+
+              {/* Saturn Analytics - 56s */}
+              <div className="absolute planet-saturn" style={{ animationDelay: '-40s' }}>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6] shadow-[0_0_6px_rgba(139,92,246,0.5)] flex-shrink-0" />
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/15 text-[8px] font-semibold text-[#8b5cf6]/80 whitespace-nowrap">
+                    Saturn · Analytics
                   </span>
                 </div>
               </div>
