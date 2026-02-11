@@ -59,46 +59,86 @@ export function FactoryHero() {
           <div className="flex-shrink-0 relative w-[280px] h-[280px] md:w-[400px] md:h-[400px] planetary-system">
             {/* Static orbit path guides */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="absolute w-[200px] h-[200px] md:w-[280px] md:h-[280px] rounded-full border border-[#22c55e]/[0.07]" />
-              <div className="absolute w-[240px] h-[240px] md:w-[340px] md:h-[340px] rounded-full border border-dashed border-[#a855f7]/[0.07]" />
-              <div className="absolute w-[280px] h-[280px] md:w-[400px] md:h-[400px] rounded-full border border-[#2dd4bf]/[0.05]" />
+              <div className="absolute w-[200px] h-[200px] md:w-[280px] md:h-[280px] rounded-full border border-white/[0.04]" />
+              <div className="absolute w-[240px] h-[240px] md:w-[340px] md:h-[340px] rounded-full border border-dashed border-white/[0.03]" />
+              <div className="absolute w-[280px] h-[280px] md:w-[400px] md:h-[400px] rounded-full border border-white/[0.02]" />
             </div>
 
-            {/* Orbiting planets */}
+            {/* Orbiting planets - 7 agents */}
             <div className="absolute inset-0 flex items-center justify-center">
-              {/* Pluto QA - fast, crosses to mid orbit */}
+              {/* Pluto QA - 20s */}
               <div className="absolute planet-pluto">
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#22c55e] shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0" />
-                  <span className="px-2 py-0.5 rounded-full bg-[#22c55e]/10 border border-[#22c55e]/20 text-[10px] font-semibold text-[#22c55e] whitespace-nowrap">
-                    Pluto · QA
+                  <span className="w-2 h-2 rounded-full bg-[#22c55e] shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0" />
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#22c55e]/10 border border-[#22c55e]/20 text-[9px] font-semibold text-[#22c55e] whitespace-nowrap">
+                    Pluto
                   </span>
                 </div>
               </div>
 
-              {/* Venus UX - medium, crosses inner and outer */}
+              {/* Mars Growth - 22s */}
+              <div className="absolute planet-mars" style={{ animationDelay: '-8s' }}>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#ef4444] shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0" />
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#ef4444]/10 border border-[#ef4444]/20 text-[9px] font-semibold text-[#ef4444] whitespace-nowrap">
+                    Mars
+                  </span>
+                </div>
+              </div>
+
+              {/* Flux Dev - 25s */}
+              <div className="absolute planet-flux" style={{ animationDelay: '-5s' }}>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#06b6d4] shadow-[0_0_8px_rgba(6,182,212,0.6)] flex-shrink-0" />
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#06b6d4]/10 border border-[#06b6d4]/20 text-[9px] font-semibold text-[#06b6d4] whitespace-nowrap">
+                    Flux
+                  </span>
+                </div>
+              </div>
+
+              {/* Orion Infra - 28s */}
+              <div className="absolute planet-orion" style={{ animationDelay: '-14s' }}>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#f97316] shadow-[0_0_8px_rgba(249,115,22,0.6)] flex-shrink-0" />
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#f97316]/10 border border-[#f97316]/20 text-[9px] font-semibold text-[#f97316] whitespace-nowrap">
+                    Orion
+                  </span>
+                </div>
+              </div>
+
+              {/* Venus UX - 30s */}
               <div className="absolute planet-venus" style={{ animationDelay: '-10s' }}>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#a855f7] shadow-[0_0_8px_rgba(168,85,247,0.6)] flex-shrink-0" />
-                  <span className="px-2 py-0.5 rounded-full bg-[#a855f7]/10 border border-[#a855f7]/20 text-[10px] font-semibold text-[#a855f7] whitespace-nowrap">
-                    Venus · UX
+                  <span className="w-2 h-2 rounded-full bg-[#a855f7] shadow-[0_0_8px_rgba(168,85,247,0.6)] flex-shrink-0" />
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#a855f7]/10 border border-[#a855f7]/20 text-[9px] font-semibold text-[#a855f7] whitespace-nowrap">
+                    Venus
                   </span>
                 </div>
               </div>
 
-              {/* Atlas PO - slow, dips to inner orbit */}
+              {/* Nova AI - 35s */}
+              <div className="absolute planet-nova" style={{ animationDelay: '-20s' }}>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#3b82f6] shadow-[0_0_8px_rgba(59,130,246,0.6)] flex-shrink-0" />
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#3b82f6]/10 border border-[#3b82f6]/20 text-[9px] font-semibold text-[#3b82f6] whitespace-nowrap">
+                    Nova
+                  </span>
+                </div>
+              </div>
+
+              {/* Atlas PO - 40s */}
               <div className="absolute planet-atlas" style={{ animationDelay: '-26.67s' }}>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded-full bg-[#2dd4bf] shadow-[0_0_10px_rgba(45,212,191,0.6)] flex-shrink-0" />
-                  <span className="px-2 py-0.5 rounded-full bg-[#2dd4bf]/10 border border-[#2dd4bf]/20 text-[10px] font-semibold text-[#2dd4bf] whitespace-nowrap">
-                    Atlas · PO
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#2dd4bf] shadow-[0_0_10px_rgba(45,212,191,0.6)] flex-shrink-0" />
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#2dd4bf]/10 border border-[#2dd4bf]/20 text-[9px] font-semibold text-[#2dd4bf] whitespace-nowrap">
+                    Atlas
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Central Orb */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120px] h-[120px] md:w-[160px] md:h-[160px] rounded-full orb-hero-glow">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] md:w-[140px] md:h-[140px] rounded-full orb-hero-glow">
               <DynamicOrb agentState={null} colors={['#2dd4bf', '#0f766e']} />
             </div>
           </div>

@@ -453,13 +453,69 @@ body {
   100% { transform: rotate(360deg) translateX(var(--r-outer)) rotate(-360deg); }
 }
 
+/* Mars - 22s, aggressive crosser, all 3 orbits */
+@keyframes planet-mars {
+  0%   { transform: rotate(0deg)   translateX(var(--r-outer)) rotate(0deg); }
+  25%  { transform: rotate(90deg)  translateX(var(--r-inner)) rotate(-90deg); }
+  50%  { transform: rotate(180deg) translateX(var(--r-mid))   rotate(-180deg); }
+  75%  { transform: rotate(270deg) translateX(var(--r-outer)) rotate(-270deg); }
+  100% { transform: rotate(360deg) translateX(var(--r-outer)) rotate(-360deg); }
+}
+
+/* Flux - 25s, dev stays inner-mid */
+@keyframes planet-flux {
+  0%   { transform: rotate(0deg)   translateX(var(--r-inner)) rotate(0deg); }
+  30%  { transform: rotate(108deg) translateX(var(--r-mid))   rotate(-108deg); }
+  60%  { transform: rotate(216deg) translateX(var(--r-inner)) rotate(-216deg); }
+  80%  { transform: rotate(288deg) translateX(var(--r-outer)) rotate(-288deg); }
+  100% { transform: rotate(360deg) translateX(var(--r-inner)) rotate(-360deg); }
+}
+
+/* Orion - 28s, infra patrols mid-outer */
+@keyframes planet-orion {
+  0%   { transform: rotate(0deg)   translateX(var(--r-mid))   rotate(0deg); }
+  25%  { transform: rotate(90deg)  translateX(var(--r-outer)) rotate(-90deg); }
+  50%  { transform: rotate(180deg) translateX(var(--r-mid))   rotate(-180deg); }
+  75%  { transform: rotate(270deg) translateX(var(--r-inner)) rotate(-270deg); }
+  100% { transform: rotate(360deg) translateX(var(--r-mid))   rotate(-360deg); }
+}
+
+/* Nova - 35s, AI wanders all orbits */
+@keyframes planet-nova {
+  0%   { transform: rotate(0deg)   translateX(var(--r-outer)) rotate(0deg); }
+  20%  { transform: rotate(72deg)  translateX(var(--r-inner)) rotate(-72deg); }
+  50%  { transform: rotate(180deg) translateX(var(--r-mid))   rotate(-180deg); }
+  80%  { transform: rotate(288deg) translateX(var(--r-outer)) rotate(-288deg); }
+  100% { transform: rotate(360deg) translateX(var(--r-outer)) rotate(-360deg); }
+}
+
 .planet-pluto {
   animation: planet-pluto 20s linear infinite;
   will-change: transform;
 }
 
+.planet-mars {
+  animation: planet-mars 22s linear infinite;
+  will-change: transform;
+}
+
+.planet-flux {
+  animation: planet-flux 25s linear infinite;
+  will-change: transform;
+}
+
+.planet-orion {
+  animation: planet-orion 28s linear infinite;
+  will-change: transform;
+}
+
 .planet-venus {
   animation: planet-venus 30s linear infinite;
+  will-change: transform;
+}
+
+.planet-nova {
+  animation: planet-nova 35s linear infinite;
   will-change: transform;
 }
 
