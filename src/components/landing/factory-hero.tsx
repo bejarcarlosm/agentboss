@@ -170,7 +170,7 @@ export function FactoryHero() {
             <div className="text-sm text-[var(--muted)] mt-1">Semanas para tu MVP</div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-bold text-[#22c55e]">5</div>
+            <div className="text-3xl md:text-4xl font-bold text-[#22c55e]">36</div>
             <div className="text-sm text-[var(--muted)] mt-1">Agentes IA especializados</div>
           </div>
         </div>
