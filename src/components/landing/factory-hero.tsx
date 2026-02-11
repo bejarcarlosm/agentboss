@@ -36,19 +36,23 @@ function Planet({ href, color, name, role, avatar, dotSize = 'w-2 h-2', textSize
   return (
     <Link href={href} className="group/planet relative flex items-center gap-1.5 hover:scale-110 transition-transform">
       {/* Avatar - shown on hover OR when spotlight is active */}
-      <div className="absolute -top-[9rem] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
-        <Image
-          src={avatar}
-          alt={name}
-          width={128}
-          height={128}
-          className={`w-32 h-32 rounded-full object-cover border-2 transition-all duration-300 shadow-lg !pointer-events-auto cursor-pointer ${
+      <div className="absolute -top-[9rem] left-1/2 -translate-x-1/2 pointer-events-none">
+        <div
+          className={`w-32 h-32 rounded-full overflow-hidden border-2 transition-all duration-300 shadow-lg !pointer-events-auto cursor-pointer flex-shrink-0 ${
             isSpotlight
               ? 'opacity-100 scale-100'
               : 'opacity-0 scale-75 group-hover/planet:opacity-100 group-hover/planet:scale-100'
           }`}
           style={{ borderColor: color, boxShadow: isSpotlight ? `0 0 16px ${color}60` : `0 0 12px ${color}40` }}
-        />
+        >
+          <Image
+            src={avatar}
+            alt={name}
+            width={128}
+            height={128}
+            className="w-full h-full object-cover"
+          />
+        </div>
       </div>
       <span className={`${dotSize} rounded-full flex-shrink-0`} style={{ background: color, boxShadow: `0 0 8px ${color}99` }} />
       <span className={`px-1.5 py-0.5 rounded-full border ${textSize} font-semibold whitespace-nowrap ${isOuter ? 'opacity-80' : ''}`} style={{ background: `${color}10`, borderColor: `${color}20`, color: color }}>
