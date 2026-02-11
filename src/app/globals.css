@@ -411,21 +411,59 @@ body {
   -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
-/* Planetary orbit system */
-@keyframes orbit-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+/* Planetary orbit system - crossing orbits */
+.planetary-system {
+  --r-inner: 100px;
+  --r-mid: 120px;
+  --r-outer: 140px;
 }
 
-@keyframes orbit-counter-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
+@media (min-width: 768px) {
+  .planetary-system {
+    --r-inner: 140px;
+    --r-mid: 170px;
+    --r-outer: 200px;
+  }
 }
 
-.orbit-spin {
-  animation: orbit-spin 30s linear infinite;
+/* rotate(angle) translateX(radius) rotate(-angle) = orbit at radius, text stays horizontal */
+/* Varying translateX between keyframes = orbit crossing */
+
+@keyframes planet-pluto {
+  0%   { transform: rotate(0deg)   translateX(var(--r-inner)) rotate(0deg); }
+  25%  { transform: rotate(90deg)  translateX(var(--r-mid))   rotate(-90deg); }
+  50%  { transform: rotate(180deg) translateX(var(--r-inner)) rotate(-180deg); }
+  75%  { transform: rotate(270deg) translateX(var(--r-mid))   rotate(-270deg); }
+  100% { transform: rotate(360deg) translateX(var(--r-inner)) rotate(-360deg); }
 }
 
-.orbit-counter-spin {
-  animation: orbit-counter-spin 30s linear infinite;
+@keyframes planet-venus {
+  0%   { transform: rotate(0deg)   translateX(var(--r-mid))   rotate(0deg); }
+  25%  { transform: rotate(90deg)  translateX(var(--r-outer)) rotate(-90deg); }
+  50%  { transform: rotate(180deg) translateX(var(--r-inner)) rotate(-180deg); }
+  75%  { transform: rotate(270deg) translateX(var(--r-mid))   rotate(-270deg); }
+  100% { transform: rotate(360deg) translateX(var(--r-mid))   rotate(-360deg); }
+}
+
+@keyframes planet-atlas {
+  0%   { transform: rotate(0deg)   translateX(var(--r-outer)) rotate(0deg); }
+  25%  { transform: rotate(90deg)  translateX(var(--r-mid))   rotate(-90deg); }
+  50%  { transform: rotate(180deg) translateX(var(--r-outer)) rotate(-180deg); }
+  75%  { transform: rotate(270deg) translateX(var(--r-inner)) rotate(-270deg); }
+  100% { transform: rotate(360deg) translateX(var(--r-outer)) rotate(-360deg); }
+}
+
+.planet-pluto {
+  animation: planet-pluto 20s linear infinite;
+  will-change: transform;
+}
+
+.planet-venus {
+  animation: planet-venus 30s linear infinite;
+  will-change: transform;
+}
+
+.planet-atlas {
+  animation: planet-atlas 40s linear infinite;
+  will-change: transform;
 }
