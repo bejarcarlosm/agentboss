@@ -117,7 +117,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     <div className="flex flex-col h-screen bg-[var(--background)]">
       {/* Header */}
       <div className="flex items-center gap-4 px-5 py-4 border-b border-[var(--border)]">
-        <button onClick={() => router.back()} className="p-1.5 hover:bg-white/5 rounded-lg transition-colors">
+        <button onClick={() => router.back()} className="p-1.5 hover:bg-[var(--foreground)]/5 rounded-lg transition-colors">
           <ArrowLeft className="w-5 h-5 text-[var(--muted)]" />
         </button>
         <img
@@ -163,14 +163,14 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
 
       {/* Messages area */}
       {messages.length > 0 && (
-        <div className="flex-shrink-0 max-h-[40vh] overflow-y-auto mx-4 mt-3 space-y-2 rounded-lg bg-[#0a0a0a] border border-[var(--border)] p-3">
+        <div className="flex-shrink-0 max-h-[40vh] overflow-y-auto mx-4 mt-3 space-y-2 rounded-lg bg-[var(--surface)] border border-[var(--border)] p-3">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={cn(
                 'max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed',
                 msg.role === 'user'
-                  ? 'text-white'
-                  : 'bg-[#1a1a1a] text-[var(--foreground)]'
+                  ? 'text-[var(--text-on-accent)]'
+                  : 'bg-[var(--surface-elevated)] text-[var(--foreground)]'
               )} style={msg.role === 'user' ? { background: agent.color } : undefined}>
                 {msg.content}
               </div>
@@ -179,7 +179,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
           {/* Show current transcript while recording (not in review) */}
           {currentTranscript && state === 'recording' && (
             <div className="flex justify-end">
-              <div className="max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed text-white/70 italic" style={{ background: `${agent.color}80` }}>
+              <div className="max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed text-[var(--foreground)]/70 italic" style={{ background: `${agent.color}80` }}>
                 {currentTranscript}...
               </div>
             </div>
@@ -198,7 +198,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
 
       {/* Transcribing indicator */}
       {state === 'transcribing' && (
-        <div className="mx-4 mt-3 rounded-xl p-4 border border-[var(--border)] bg-[#0a0a0a] flex items-center justify-center gap-2">
+        <div className="mx-4 mt-3 rounded-xl p-4 border border-[var(--border)] bg-[var(--surface)] flex items-center justify-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin" style={{ color: agent.color }} />
           <span className="text-sm text-[var(--muted)]">Transcribiendo...</span>
         </div>
@@ -208,7 +208,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
       <div className="flex-1 flex flex-col items-center justify-center gap-4 overflow-y-auto px-4">
         {/* Welcome presentation - shown when connected and no messages yet */}
         {messages.length === 0 && state !== 'connecting' && state !== 'recording' && state !== 'transcribing' && agentWelcome[agent.slug] && (
-          <div className="max-w-sm w-full rounded-xl p-4 bg-[#0a0a0a] border border-[var(--border)]">
+          <div className="max-w-sm w-full rounded-xl p-4 bg-[var(--surface)] border border-[var(--border)]">
             <div className="flex items-start gap-3">
               <img
                 src={agent.avatar}
@@ -268,7 +268,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
                   // Small delay to let state settle, then start recording
                   setTimeout(() => startRecording(), 100);
                 }}
-                className="p-2.5 rounded-lg text-[var(--muted)] hover:text-white hover:bg-white/10 transition-all flex-shrink-0 flex items-center gap-1.5"
+                className="p-2.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/10 transition-all flex-shrink-0 flex items-center gap-1.5"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span className="text-xs">Regrabar</span>
@@ -282,7 +282,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
               {/* Send button - agent color */}
               <button
                 onClick={() => confirmSend()}
-                className="px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-all hover:scale-105 hover:brightness-110 flex-shrink-0 flex items-center gap-1.5"
+                className="px-5 py-2.5 rounded-lg text-[var(--text-on-accent)] text-sm font-medium transition-all hover:scale-105 hover:brightness-110 flex-shrink-0 flex items-center gap-1.5"
                 style={{ background: agent.color }}
               >
                 <ArrowUp className="w-4 h-4" />
@@ -294,7 +294,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
 
         {/* Recording controls */}
         {state !== 'review' && (
-          <div className="rounded-xl border border-[var(--border)] bg-[#0a0a0a] p-2.5">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2.5">
             <div className="flex items-center gap-2">
               {/* Mic button */}
               <button
@@ -309,7 +309,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
                   isRecording
                     ? 'animate-pulse'
                     : state === 'connected' && !rateLimitReached
-                    ? 'text-white hover:scale-105'
+                    ? 'text-[var(--text-on-accent)] hover:scale-105'
                     : 'text-[var(--muted)] opacity-50'
                 )}
                 style={
@@ -332,7 +332,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
               {isRecording && (
                 <button
                   onClick={() => sendMessage()}
-                  className="px-4 py-2 rounded-lg text-white text-sm font-medium transition-all hover:scale-105 hover:brightness-110 flex-shrink-0 flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-lg text-[var(--text-on-accent)] text-sm font-medium transition-all hover:scale-105 hover:brightness-110 flex-shrink-0 flex items-center gap-1.5"
                   style={{ background: agent.color }}
                 >
                   <ArrowUp className="w-4 h-4" />
@@ -344,7 +344,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
               {isRecording && (
                 <button
                   onClick={() => stopRecording()}
-                  className="p-2.5 rounded-lg text-[var(--muted)] hover:text-white hover:bg-white/10 transition-all flex-shrink-0"
+                  className="p-2.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/10 transition-all flex-shrink-0"
                   title="Cancelar grabacion"
                 >
                   <X className="w-4 h-4" />

@@ -31,21 +31,47 @@ interface PlanetProps {
 }
 
 function Planet({ href, color, name, role, avatar, dotSize = 'w-2 h-2', textSize = 'text-[9px]', isOuter = false, isSpotlight = false }: PlanetProps) {
+  const slugMap: { [key: string]: string } = {
+    'Pluto': 'pluto',
+    'Mars': 'mars',
+    'Flux': 'flux',
+    'Orion': 'orion',
+    'Venus': 'venus',
+    'Nova': 'nova',
+    'Atlas': 'atlas',
+    'Luna': 'luna',
+    'Sia': 'sia',
+    'Saturn': 'saturn',
+  };
+
+  const slug = slugMap[name] || name.toLowerCase();
+  const agentLink = `agentboss.cl/dossier/${slug}`;
+
   return (
     <Link href={href} className="group/planet relative flex items-center gap-1.5 hover:scale-110 transition-transform">
       {/* Avatar - shown on hover OR when spotlight is active */}
-      <Image
-        src={avatar}
-        alt={name}
-        width={128}
-        height={128}
-        className={`w-32 h-32 rounded-full object-cover border-2 transition-all duration-300 absolute -top-[9rem] left-1/2 -translate-x-1/2 shadow-lg pointer-events-none ${
+      <div className="absolute -top-[9rem] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
+        <Image
+          src={avatar}
+          alt={name}
+          width={128}
+          height={128}
+          className={`w-32 h-32 rounded-full object-cover border-2 transition-all duration-300 shadow-lg ${
+            isSpotlight
+              ? 'opacity-100 scale-100'
+              : 'opacity-0 scale-75 group-hover/planet:opacity-100 group-hover/planet:scale-100'
+          }`}
+          style={{ borderColor: color, boxShadow: isSpotlight ? `0 0 16px ${color}60` : `0 0 12px ${color}40` }}
+        />
+        {/* Agent link - appears with avatar */}
+        <span className={`text-[9px] font-medium transition-all duration-300 whitespace-nowrap ${
           isSpotlight
-            ? 'opacity-100 scale-100'
-            : 'opacity-0 scale-75 group-hover/planet:opacity-100 group-hover/planet:scale-100'
-        }`}
-        style={{ borderColor: color, boxShadow: isSpotlight ? `0 0 16px ${color}60` : `0 0 12px ${color}40` }}
-      />
+            ? 'opacity-75'
+            : 'opacity-0 group-hover/planet:opacity-75'
+        }`} style={{ color: color }}>
+          {agentLink}
+        </span>
+      </div>
       <span className={`${dotSize} rounded-full flex-shrink-0`} style={{ background: color, boxShadow: `0 0 8px ${color}99` }} />
       <span className={`px-1.5 py-0.5 rounded-full border ${textSize} font-semibold whitespace-nowrap ${isOuter ? 'opacity-80' : ''}`} style={{ background: `${color}10`, borderColor: `${color}20`, color: color }}>
         {name} · {role}
@@ -119,10 +145,10 @@ export function FactoryHero() {
           <div className="flex-shrink-0 relative w-[320px] h-[320px] md:w-[500px] md:h-[500px] planetary-system">
             {/* Static orbit path guides */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="absolute w-[160px] h-[160px] md:w-[250px] md:h-[250px] rounded-full border border-white/[0.04]" />
-              <div className="absolute w-[200px] h-[200px] md:w-[320px] md:h-[320px] rounded-full border border-dashed border-white/[0.03]" />
-              <div className="absolute w-[240px] h-[240px] md:w-[390px] md:h-[390px] rounded-full border border-white/[0.02]" />
-              <div className="absolute w-[300px] h-[300px] md:w-[480px] md:h-[480px] rounded-full border border-dotted border-white/[0.015]" />
+              <div className="absolute w-[160px] h-[160px] md:w-[250px] md:h-[250px] rounded-full border border-[var(--orbit-line)]" />
+              <div className="absolute w-[200px] h-[200px] md:w-[320px] md:h-[320px] rounded-full border border-dashed border-[var(--orbit-line-dashed)]" />
+              <div className="absolute w-[240px] h-[240px] md:w-[390px] md:h-[390px] rounded-full border border-[var(--orbit-line-dashed)]" />
+              <div className="absolute w-[300px] h-[300px] md:w-[480px] md:h-[480px] rounded-full border border-dotted border-[var(--orbit-line-dashed)]" />
             </div>
 
             {/* Orbiting planets */}

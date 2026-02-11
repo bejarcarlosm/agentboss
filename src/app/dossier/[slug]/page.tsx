@@ -23,14 +23,14 @@ export default async function DossierPage({ params }: Props) {
   const next = DOSSIER_AGENTS[idx + 1];
 
   return (
-    <div className="min-h-screen bg-[#050505] relative overflow-hidden">
+    <div className="min-h-screen bg-[var(--background)] relative overflow-hidden">
       {/* Scan lines overlay */}
       <div className="dossier-scanlines" />
 
       {/* Top bar */}
-      <div className="border-b border-white/10 bg-black/50 backdrop-blur-sm relative z-10">
+      <div className="border-b border-[var(--border)] bg-[var(--overlay)] backdrop-blur-sm relative z-10">
         <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
-          <Link href="/#team" className="text-xs text-[var(--muted)] hover:text-white transition-colors">
+          <Link href="/#team" className="text-xs text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
             ← Volver al equipo
           </Link>
           <div className="flex items-center gap-2">
@@ -147,7 +147,7 @@ export default async function DossierPage({ params }: Props) {
               <span className="text-lg text-[var(--foreground)] font-semibold">
                 {agent.role}
               </span>
-              <span className="h-px flex-1 bg-white/10" />
+              <span className="h-px flex-1 bg-[var(--border)]" />
             </div>
 
             {/* Briefing */}
@@ -161,7 +161,7 @@ export default async function DossierPage({ params }: Props) {
             </div>
 
             {/* Quote */}
-            <div className="mb-8 p-4 rounded-lg bg-white/[0.02] border border-white/5">
+            <div className="mb-8 p-4 rounded-lg bg-[var(--surface)] border border-[var(--border)]">
               <p className="text-sm italic text-[var(--foreground)]">
                 &ldquo;{agent.quote}&rdquo;
               </p>
@@ -219,7 +219,7 @@ export default async function DossierPage({ params }: Props) {
                   {agent.responsibilities.map((resp) => (
                     <div
                       key={resp.title}
-                      className="p-4 rounded-lg border border-white/5 bg-white/[0.015]"
+                      className="p-4 rounded-lg border border-[var(--border)] bg-[var(--surface)]"
                     >
                       <h3
                         className="text-xs font-bold uppercase tracking-wide mb-3"
@@ -245,7 +245,7 @@ export default async function DossierPage({ params }: Props) {
             {agent.chatSlug ? (
               <Link
                 href={`/chat/${agent.chatSlug}`}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-sm text-[#0a0a0a] transition-all hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-sm text-[var(--text-on-accent)] transition-all hover:-translate-y-0.5"
                 style={{ background: agent.color }}
               >
                 Hablar con {agent.codename}

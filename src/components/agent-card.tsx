@@ -35,7 +35,7 @@ export function AgentCard({ agent, onToggleStatus, onDelete }: AgentCardProps) {
 
   return (
     <div
-      className="relative flex flex-col rounded-2xl overflow-hidden border border-[#2a2f14] bg-[#1a1f0a] agent-card-glow transition-all duration-300 min-w-[260px] max-w-[290px] snap-start flex-shrink-0"
+      className="relative flex flex-col rounded-2xl overflow-hidden border border-[var(--border-accent)] bg-[var(--card-bg)] agent-card-glow transition-all duration-300 min-w-[260px] max-w-[290px] snap-start flex-shrink-0"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -50,7 +50,7 @@ export function AgentCard({ agent, onToggleStatus, onDelete }: AgentCardProps) {
             e.preventDefault()
             onToggleStatus?.(agent.id)
           }}
-          className="w-7 h-7 rounded-full bg-black/60 backdrop-blur flex items-center justify-center text-xs hover:bg-black/80 transition-colors"
+          className="w-7 h-7 rounded-full bg-[var(--overlay)] backdrop-blur flex items-center justify-center text-xs hover:opacity-70 transition-colors"
           title={isActive ? "Pausar" : "Activar"}
         >
           {isActive ? "⏸" : "▶️"}
@@ -60,7 +60,7 @@ export function AgentCard({ agent, onToggleStatus, onDelete }: AgentCardProps) {
             e.preventDefault()
             onDelete?.(agent.id)
           }}
-          className="w-7 h-7 rounded-full bg-black/60 backdrop-blur flex items-center justify-center text-xs hover:bg-red-600/70 transition-colors"
+          className="w-7 h-7 rounded-full bg-[var(--overlay)] backdrop-blur flex items-center justify-center text-xs hover:bg-red-600/70 transition-colors"
           title="Eliminar"
         >
           🗑
@@ -70,7 +70,7 @@ export function AgentCard({ agent, onToggleStatus, onDelete }: AgentCardProps) {
       {/* Top section: Name + Status */}
       <div className="px-5 pt-5 pb-2">
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-lg font-bold text-[#c8e64c] leading-tight">
+          <h3 className="text-lg font-bold text-[var(--primary)] leading-tight">
             {agent.name}
           </h3>
           {isActive && (
@@ -80,7 +80,7 @@ export function AgentCard({ agent, onToggleStatus, onDelete }: AgentCardProps) {
             </div>
           )}
         </div>
-        <p className="text-xs text-[#71717a]">{agent.role}</p>
+        <p className="text-xs text-[var(--muted)]">{agent.role}</p>
       </div>
 
       {/* Avatar centered */}
@@ -94,18 +94,18 @@ export function AgentCard({ agent, onToggleStatus, onDelete }: AgentCardProps) {
             sizes="290px"
           />
         ) : (
-          <div className="w-20 h-20 rounded-full bg-[#252b12] flex items-center justify-center text-3xl">
+          <div className="w-20 h-20 rounded-full bg-[var(--secondary)] flex items-center justify-center text-3xl">
             🤖
           </div>
         )}
         {/* Subtle gradient overlay at bottom of image */}
-        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#1a1f0a] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[var(--card-bg)] to-transparent" />
       </div>
 
       {/* Capabilities checklist */}
       <div className="px-5 py-3 space-y-1.5 flex-1">
         {(agent.capabilities || []).slice(0, 4).map((cap, i) => (
-          <div key={i} className="flex items-center gap-2 text-sm text-[#e5e5e5]">
+          <div key={i} className="flex items-center gap-2 text-sm text-[var(--foreground)]">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0">
               <circle cx="8" cy="8" r="8" fill="#22c55e" />
               <path d="M5 8l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -119,13 +119,13 @@ export function AgentCard({ agent, onToggleStatus, onDelete }: AgentCardProps) {
       <div className="px-5 pb-5 pt-1 space-y-2">
         <Link
           href={`/agents/${agent.id}?tab=test`}
-          className="block w-full text-center text-sm font-bold py-2.5 rounded-lg transition-all bg-[#c8e64c] text-[#0a0a0a] hover:bg-[#d4f058] hover:shadow-lg hover:shadow-[#c8e64c]/20"
+          className="block w-full text-center text-sm font-bold py-2.5 rounded-lg transition-all bg-[var(--primary)] text-[var(--text-on-accent)] hover:bg-[var(--primary-hover)] hover:shadow-lg hover:shadow-[var(--primary)]/20"
         >
           Hablar
         </Link>
         <Link
           href={`/agents/${agent.id}`}
-          className="block text-center text-xs text-[#71717a] hover:text-[#c8e64c] transition-colors"
+          className="block text-center text-xs text-[var(--muted)] hover:text-[var(--primary)] transition-colors"
         >
           Configurar
         </Link>

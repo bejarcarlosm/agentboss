@@ -33,8 +33,8 @@ export function ChatMessage({ message, agentName, agentAvatar, agentColor }: Cha
       <div
         className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-line ${
           isAgent
-            ? 'bg-[#1a1a1a] text-[var(--foreground)] border border-[var(--border)]'
-            : 'text-[#0a0a0a] font-medium'
+            ? 'bg-[var(--surface-elevated)] text-[var(--foreground)] border border-[var(--border)]'
+            : 'text-[var(--text-on-accent)] font-medium'
         }`}
         style={!isAgent ? { background: agentColor } : undefined}
       >

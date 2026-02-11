@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* Default theme (fallback) */
 :root {
   --background: #0a0a0a;
   --foreground: #e5e5e5;
@@ -16,6 +17,74 @@
   --muted: #71717a;
   --card-bg: #1a1f0a;
   --card-bg-alt: #141414;
+  --surface: #0a0a0a;
+  --surface-elevated: #1a1a1a;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --text-on-accent: #ffffff;
+  --orbit-line: rgba(255, 255, 255, 0.04);
+  --orbit-line-dashed: rgba(255, 255, 255, 0.03);
+  --wave-bg-1: #0a0a0a;
+  --wave-bg-2: #0a1a1a;
+  --wave-bg-3: #0a0a1a;
+  --wave-bg-4: #0a1a0f;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --background: #0a0a0a;
+  --foreground: #e5e5e5;
+  --primary: #c8e64c;
+  --primary-hover: #d4f058;
+  --primary-dark: #a8c23a;
+  --secondary: #141414;
+  --accent: #c8e64c;
+  --success: #22c55e;
+  --warning: #eab308;
+  --error: #ef4444;
+  --border: #252525;
+  --border-accent: #3a3f1a;
+  --muted: #71717a;
+  --card-bg: #1a1f0a;
+  --card-bg-alt: #141414;
+  --surface: #0a0a0a;
+  --surface-elevated: #1a1a1a;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --text-on-accent: #ffffff;
+  --orbit-line: rgba(255, 255, 255, 0.04);
+  --orbit-line-dashed: rgba(255, 255, 255, 0.03);
+  --wave-bg-1: #0a0a0a;
+  --wave-bg-2: #0a1a1a;
+  --wave-bg-3: #0a0a1a;
+  --wave-bg-4: #0a1a0f;
+}
+
+/* Light theme */
+[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --primary: #c8e64c;
+  --primary-hover: #d4f058;
+  --primary-dark: #a8c23a;
+  --secondary: #f5f5f5;
+  --accent: #c8e64c;
+  --success: #22c55e;
+  --warning: #eab308;
+  --error: #ef4444;
+  --border: #e5e5e5;
+  --border-accent: #d4f058;
+  --muted: #6b7280;
+  --card-bg: #f0f4e0;
+  --card-bg-alt: #f5f5f5;
+  --surface: #f9f9f9;
+  --surface-elevated: #ffffff;
+  --overlay: rgba(0, 0, 0, 0.05);
+  --text-on-accent: #0a0a0a;
+  --orbit-line: rgba(0, 0, 0, 0.08);
+  --orbit-line-dashed: rgba(0, 0, 0, 0.06);
+  --wave-bg-1: #ffffff;
+  --wave-bg-2: #f0fafa;
+  --wave-bg-3: #f0f0fa;
+  --wave-bg-4: #f0faf0;
 }
 
 * {
@@ -357,11 +426,11 @@ body {
 .wave-gradient {
   background: linear-gradient(
     -45deg,
-    #0a0a0a,
-    #0a1a1a,
-    #0a0a1a,
-    #0a1a0f,
-    #0a0a0a
+    var(--wave-bg-1),
+    var(--wave-bg-2),
+    var(--wave-bg-3),
+    var(--wave-bg-4),
+    var(--wave-bg-1)
   );
   background-size: 400% 400%;
   animation: wave-gradient 12s ease infinite;
