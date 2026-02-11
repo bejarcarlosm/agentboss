@@ -15,9 +15,34 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_VOICE_BACKEND_URL || 'https://voice1
 const API_KEY = process.env.NEXT_PUBLIC_VOICE_API_KEY || '';
 
 // Silence detection config
-const SILENCE_THRESHOLD = 0.015; // RMS level below which we consider silence
-const SILENCE_DURATION_MS = 2000; // 2 seconds of silence to trigger transcription
-const MIN_RECORDING_MS = 1000; // Minimum 1 second of recording before silence detection kicks in
+const SILENCE_THRESHOLD = 0.015;
+const SILENCE_DURATION_MS = 2000;
+const MIN_RECORDING_MS = 1000;
+
+// SpeechRecognition type for browser compatibility
+interface SpeechRecognitionEvent extends Event {
+  results: SpeechRecognitionResultList;
+  resultIndex: number;
+}
+
+interface SpeechRecognitionInstance extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  start(): void;
+  stop(): void;
+  abort(): void;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onerror: ((event: Event & { error: string }) => void) | null;
+  onend: (() => void) | null;
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition: new () => SpeechRecognitionInstance;
+    webkitSpeechRecognition: new () => SpeechRecognitionInstance;
+  }
+}
 
 function getMessageCount(): number {
   if (typeof window === 'undefined') return 0;
@@ -44,7 +69,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
 
   const sessionIdRef = useRef<string | null>(null);
   const backendWsRef = useRef<WebSocket | null>(null);
-  const streamingWsRef = useRef<WebSocket | null>(null);
   const mediaStreamRef = useRef<MediaStream | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const playbackAudioContextRef = useRef<AudioContext | null>(null);
@@ -55,6 +79,8 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
   const recordingStartRef = useRef<number>(0);
   const silenceCheckRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  const speechRecognitionRef = useRef<SpeechRecognitionInstance | null>(null);
+  const finalTranscriptRef = useRef<string>('');
 
   const checkRateLimit = useCallback((): boolean => {
     if (isLiveMode) return false;
@@ -114,7 +140,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
             break;
           case 'transcription':
             setCurrentTranscript(msg.text);
-            // Only add message if not already present (avoids dupe when sent via text)
             setMessages(prev => {
               const last = prev[prev.length - 1];
               if (last?.role === 'user' && last?.content === msg.text) return prev;
@@ -127,10 +152,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
             setCurrentTranscript('');
             break;
           case 'speaking':
-            if (streamingWsRef.current) {
-              streamingWsRef.current.close();
-              streamingWsRef.current = null;
-            }
             if (msg.audioChunk) {
               setState('speaking');
               playAudio(msg.audioChunk);
@@ -167,6 +188,20 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     }
   }, [state, isLiveMode, checkRateLimit]);
 
+  const stopSpeechRecognition = useCallback(() => {
+    if (speechRecognitionRef.current) {
+      try {
+        speechRecognitionRef.current.onresult = null;
+        speechRecognitionRef.current.onerror = null;
+        speechRecognitionRef.current.onend = null;
+        speechRecognitionRef.current.abort();
+      } catch {
+        // ignore
+      }
+      speechRecognitionRef.current = null;
+    }
+  }, []);
+
   const stopMicrophone = useCallback(() => {
     if (recordingTimeoutRef.current) {
       clearTimeout(recordingTimeoutRef.current);
@@ -177,6 +212,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       silenceCheckRef.current = null;
     }
     silenceStartRef.current = null;
+    stopSpeechRecognition();
     if (scriptProcessorRef.current) {
       scriptProcessorRef.current.disconnect();
       scriptProcessorRef.current = null;
@@ -192,40 +228,32 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     setIsRecording(false);
     setAnalyser(null);
     analyserRef.current = null;
-  }, []);
+  }, [stopSpeechRecognition]);
 
   const stopRecording = useCallback(() => {
     stopMicrophone();
-    if (streamingWsRef.current) {
-      streamingWsRef.current.close();
-      streamingWsRef.current = null;
-    }
     setState('connected');
   }, [stopMicrophone]);
 
-  // Request transcription only (no AI processing)
+  // Request transcription using Web Speech API final result
   const requestTranscription = useCallback(() => {
-    if (streamingWsRef.current && streamingWsRef.current.readyState === WebSocket.OPEN) {
-      console.log('[Voice] Requesting transcribe_only');
-      streamingWsRef.current.send(JSON.stringify({ type: 'transcribe_only' }));
-      stopMicrophone();
-      setState('transcribing');
-      // Timeout: if no transcription response in 10s, go back to connected
-      setTimeout(() => {
-        setState(prev => {
-          if (prev === 'transcribing') {
-            console.log('[Voice] Transcription timeout, returning to connected');
-            if (streamingWsRef.current) {
-              streamingWsRef.current.close();
-              streamingWsRef.current = null;
-            }
-            return 'connected';
-          }
-          return prev;
-        });
-      }, 10000);
+    stopSpeechRecognition();
+    stopMicrophone();
+
+    const transcript = finalTranscriptRef.current.trim();
+    console.log('[Voice] Final transcript from Web Speech API:', transcript);
+
+    if (transcript.length > 0) {
+      setPendingTranscription(transcript);
+      setCurrentTranscript(transcript);
+      setState('review');
+    } else {
+      setPendingTranscription(null);
+      setCurrentTranscript('');
+      setState('connected');
     }
-  }, [stopMicrophone]);
+    finalTranscriptRef.current = '';
+  }, [stopMicrophone, stopSpeechRecognition]);
 
   const startRecording = useCallback(async () => {
     if (!sessionIdRef.current) {
@@ -239,12 +267,20 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       return;
     }
 
+    // Check if Web Speech API is available
+    const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognitionClass) {
+      setError('Tu navegador no soporta reconocimiento de voz. Usa Chrome o Edge.');
+      return;
+    }
+
     try {
       setState('recording');
       setIsRecording(true);
       setDemoTimeoutReached(false);
       setPendingTranscription(null);
       setCurrentTranscript('');
+      finalTranscriptRef.current = '';
 
       if (!playbackAudioContextRef.current) {
         playbackAudioContextRef.current = new AudioContext();
@@ -259,54 +295,43 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
 
       mediaStreamRef.current = stream;
 
-      const wsUrl = BACKEND_URL.replace('https://', 'wss://').replace('http://', 'ws://');
-      const streamingWsUrl = `${wsUrl}/api/streaming/ws?sessionId=${sessionIdRef.current}`;
-      console.log('[Voice] Opening streaming WS:', streamingWsUrl);
-      const streamingWs = new WebSocket(streamingWsUrl);
+      // Start Web Speech API for transcription
+      const recognition = new SpeechRecognitionClass();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'es-CL';
 
-      streamingWs.onopen = () => {
-        console.log('[Voice] Streaming WS connected');
-        // Reset recording start so silence detection doesn't trigger prematurely
-        recordingStartRef.current = Date.now();
-        silenceStartRef.current = null;
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
+        let interim = '';
+        let final = '';
+        for (let i = 0; i < event.results.length; i++) {
+          const result = event.results[i];
+          if (result.isFinal) {
+            final += result[0].transcript;
+          } else {
+            interim += result[0].transcript;
+          }
+        }
+        finalTranscriptRef.current = final;
+        setCurrentTranscript(final + interim);
       };
 
-      streamingWs.onmessage = (e) => {
-        try {
-          const msg = JSON.parse(e.data);
-          console.log('[Voice] Streaming msg:', msg);
-          const msgType = msg.type || msg.message_type;
-
-          if (msgType === 'transcription_ready') {
-            // Transcription received - show for review
-            if (msg.text && msg.text.trim().length > 0) {
-              setPendingTranscription(msg.text.trim());
-              setCurrentTranscript(msg.text.trim());
-              setState('review');
-            } else {
-              // Empty transcription - go back to connected
-              setPendingTranscription(null);
-              setState('connected');
-            }
-          } else if ((msgType === 'partial_transcript' || msgType === 'transcript') && msg.text) {
-            setCurrentTranscript(msg.text);
-          }
-        } catch {
-          console.log('[Voice] Streaming raw data:', e.data);
+      recognition.onerror = (event) => {
+        console.error('[Voice] Speech recognition error:', event.error);
+        if (event.error === 'not-allowed') {
+          setError('Permiso de microfono denegado');
         }
       };
 
-      streamingWs.onerror = (err) => {
-        console.error('[Voice] Streaming WS error:', err);
-        setError('Error en streaming de audio');
+      recognition.onend = () => {
+        console.log('[Voice] Speech recognition ended');
       };
 
-      streamingWs.onclose = (ev) => {
-        console.log('[Voice] Streaming WS closed:', ev.code, ev.reason);
-      };
+      recognition.start();
+      speechRecognitionRef.current = recognition;
+      console.log('[Voice] Web Speech API started (es-CL)');
 
-      streamingWsRef.current = streamingWs;
-
+      // Audio context for waveform visualization only (no streaming to backend)
       const audioContext = new AudioContext({ sampleRate: 16000 });
       audioContextRef.current = audioContext;
 
@@ -317,25 +342,10 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       setAnalyser(analyserNode);
       analyserRef.current = analyserNode;
 
+      // Connect analyser for waveform (processor needed to keep analyser active)
       const processor = audioContext.createScriptProcessor(4096, 1, 1);
-      let audioChunkCount = 0;
-      processor.onaudioprocess = (e) => {
-        if (!streamingWs || streamingWs.readyState !== WebSocket.OPEN) {
-          if (audioChunkCount === 0) console.log('[Voice] WS not open, skipping audio. State:', streamingWs?.readyState);
-          return;
-        }
-
-        const inputData = e.inputBuffer.getChannelData(0);
-        const pcmData = new Int16Array(inputData.length);
-        for (let i = 0; i < inputData.length; i++) {
-          const s = Math.max(-1, Math.min(1, inputData[i]));
-          pcmData[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
-        }
-        streamingWs.send(pcmData.buffer);
-        audioChunkCount++;
-        if (audioChunkCount === 1 || audioChunkCount % 50 === 0) {
-          console.log(`[Voice] Audio chunks sent: ${audioChunkCount}`);
-        }
+      processor.onaudioprocess = () => {
+        // No-op: just keeps the analyser active for waveform visualization
       };
 
       source.connect(analyserNode);
@@ -351,7 +361,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
         const node = analyserRef.current;
         if (!node) return;
 
-        // Don't check silence during first second of recording
         if (Date.now() - recordingStartRef.current < MIN_RECORDING_MS) return;
 
         const dataArray = new Float32Array(node.frequencyBinCount);
@@ -362,19 +371,18 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
           if (!silenceStartRef.current) {
             silenceStartRef.current = Date.now();
           } else if (Date.now() - silenceStartRef.current >= SILENCE_DURATION_MS) {
-            console.log('[Voice] Silence detected, requesting transcription');
+            console.log('[Voice] Silence detected, finalizing transcription');
             requestTranscription();
           }
         } else {
           silenceStartRef.current = null;
         }
-      }, 200); // Check every 200ms
+      }, 200);
 
       // Max timeout for demo/live mode
       const timeout = isLiveMode ? 300000 : 30000;
       recordingTimeoutRef.current = setTimeout(() => {
         setDemoTimeoutReached(true);
-        // On timeout, also request transcription instead of just stopping
         requestTranscription();
       }, timeout);
     } catch (err) {
@@ -390,11 +398,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     const text = pendingTranscription;
     setPendingTranscription(null);
     setCurrentTranscript('');
-    // Close streaming WS since we're done with it
-    if (streamingWsRef.current) {
-      streamingWsRef.current.close();
-      streamingWsRef.current = null;
-    }
     await sendTextMessage(text);
   }, [pendingTranscription]);
 
@@ -402,14 +405,10 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
   const cancelTranscription = useCallback(() => {
     setPendingTranscription(null);
     setCurrentTranscript('');
-    if (streamingWsRef.current) {
-      streamingWsRef.current.close();
-      streamingWsRef.current = null;
-    }
     setState('connected');
   }, []);
 
-  // Legacy sendMessage - now triggers transcribe_only flow
+  // Legacy sendMessage - now triggers transcription finalization
   const sendMessage = useCallback(() => {
     requestTranscription();
   }, [requestTranscription]);
