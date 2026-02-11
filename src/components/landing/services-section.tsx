@@ -8,7 +8,7 @@ const SERVICES_ES = [
   { icon: '🤖', title: 'Automatizaciones IA', description: 'Chatbots, extraccion de documentos, flujos automatizados. Integramos IA donde mas impacto genera.' },
   { icon: '🎨', title: 'Diseño UX/UI', description: 'Interfaces intuitivas y prototipos interactivos. Validamos ideas antes de construir para no desperdiciar recursos.' },
   { icon: '⚡', title: 'MVPs Rapidos', description: 'De la idea al producto funcional en semanas. Lanza rapido, valida con usuarios reales e itera.' },
-  { icon: '🔧', title: 'Consultoria Tech', description: 'Auditoria de codigo, arquitectura de sistemas, optimizacion de procesos. Tu CTO fractional bajo demanda.' },
+  { icon: '🔧', title: 'Consultoria Tech', description: 'Auditoria de codigo, arquitectura de sistemas y optimizacion de procesos. Tu CTO o Director de IA bajo demanda, con traspaso completo de la fabrica de software a tu equipo de IT.' },
 ];
 
 const SERVICES_EN = [
@@ -17,7 +17,7 @@ const SERVICES_EN = [
   { icon: '🤖', title: 'AI Automations', description: 'Chatbots, document extraction, automated workflows. We integrate AI where it generates the most impact.' },
   { icon: '🎨', title: 'UX/UI Design', description: 'Intuitive interfaces and interactive prototypes. We validate ideas before building to avoid wasting resources.' },
   { icon: '⚡', title: 'Rapid MVPs', description: 'From idea to working product in weeks. Launch fast, validate with real users, and iterate.' },
-  { icon: '🔧', title: 'Tech Consulting', description: 'Code audits, system architecture, process optimization. Your fractional CTO on demand.' },
+  { icon: '🔧', title: 'Tech Consulting', description: 'Code audits, system architecture, and process optimization. Your CTO or AI Director on demand, with full software factory handoff to your IT team.' },
 ];
 
 export function ServicesSection() {

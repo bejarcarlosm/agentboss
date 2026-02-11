@@ -7,16 +7,16 @@ import { useLocale } from 'next-intl';
 import { DynamicOrb } from '@/components/ui/dynamic-orb';
 
 const PLANETS_DATA = [
-  { id: 'pluto', color: '#22c55e', name: 'Pluto', role_es: 'QA', role_en: 'QA', avatar: '/agents/pluto.jpg', cssClass: 'planet-pluto', delay: undefined, dotSize: 'w-2 h-2', textSize: 'text-[9px]', orbit: 'inner' },
-  { id: 'mars', color: '#ef4444', name: 'Mars', role_es: 'Growth', role_en: 'Growth', avatar: '/agents/mars.jpg', cssClass: 'planet-mars', delay: '-8s', dotSize: 'w-2 h-2', textSize: 'text-[9px]', orbit: 'inner' },
-  { id: 'flux', color: '#06b6d4', name: 'Flux', role_es: 'Dev', role_en: 'Dev', avatar: '/agents/flux.jpg', cssClass: 'planet-flux', delay: '-5s', dotSize: 'w-2 h-2', textSize: 'text-[9px]', orbit: 'inner' },
-  { id: 'orion', color: '#f97316', name: 'Orion', role_es: 'Infra', role_en: 'Infra', avatar: '/agents/orion.jpg', cssClass: 'planet-orion', delay: '-14s', dotSize: 'w-2 h-2', textSize: 'text-[9px]', orbit: 'inner' },
-  { id: 'venus', color: '#a855f7', name: 'Venus', role_es: 'UX', role_en: 'UX', avatar: '/agents/venus.jpg', cssClass: 'planet-venus', delay: '-10s', dotSize: 'w-2 h-2', textSize: 'text-[9px]', orbit: 'inner' },
-  { id: 'nova', color: '#3b82f6', name: 'Nova', role_es: 'IA', role_en: 'AI', avatar: '/agents/nova.jpg', cssClass: 'planet-nova', delay: '-20s', dotSize: 'w-2 h-2', textSize: 'text-[9px]', orbit: 'inner' },
-  { id: 'atlas', color: '#2dd4bf', name: 'Atlas', role_es: 'PO', role_en: 'PO', avatar: '/agents/atlas.jpg', cssClass: 'planet-atlas', delay: '-26.67s', dotSize: 'w-2.5 h-2.5', textSize: 'text-[9px]', orbit: 'inner' },
-  { id: 'luna', color: '#10b981', name: 'Luna', role_es: 'Soporte', role_en: 'Support', avatar: '/agents/luna.jpg', cssClass: 'planet-luna', delay: '-16s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[8px]', orbit: 'outer' },
-  { id: 'sia', color: '#ec4899', name: 'Sia', role_es: 'Contenido', role_en: 'Content', avatar: '/agents/sia.jpg', cssClass: 'planet-sia', delay: '-30s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[8px]', orbit: 'outer' },
-  { id: 'saturn', color: '#8b5cf6', name: 'Saturn', role_es: 'Analytics', role_en: 'Analytics', avatar: '/agents/saturn.jpg', cssClass: 'planet-saturn', delay: '-40s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[8px]', orbit: 'outer' },
+  { id: 'pluto', color: '#22c55e', name: 'Pluto', role_es: 'QA', role_en: 'QA', avatar: '/agents/pluto.jpg', cssClass: 'planet-pluto', delay: undefined, dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'mars', color: '#ef4444', name: 'Mars', role_es: 'Growth', role_en: 'Growth', avatar: '/agents/mars.jpg', cssClass: 'planet-mars', delay: '-8s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'flux', color: '#06b6d4', name: 'Flux', role_es: 'Dev', role_en: 'Dev', avatar: '/agents/flux.jpg', cssClass: 'planet-flux', delay: '-5s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'orion', color: '#f97316', name: 'Orion', role_es: 'Infra', role_en: 'Infra', avatar: '/agents/orion.jpg', cssClass: 'planet-orion', delay: '-14s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'venus', color: '#a855f7', name: 'Venus', role_es: 'UX', role_en: 'UX', avatar: '/agents/venus.jpg', cssClass: 'planet-venus', delay: '-10s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'nova', color: '#3b82f6', name: 'Nova', role_es: 'IA', role_en: 'AI', avatar: '/agents/nova.jpg', cssClass: 'planet-nova', delay: '-20s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'atlas', color: '#2dd4bf', name: 'Atlas', role_es: 'PO', role_en: 'PO', avatar: '/agents/atlas.jpg', cssClass: 'planet-atlas', delay: '-26.67s', dotSize: 'w-2.5 h-2.5', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'luna', color: '#10b981', name: 'Luna', role_es: 'Soporte', role_en: 'Support', avatar: '/agents/luna.jpg', cssClass: 'planet-luna', delay: '-16s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[12px]', orbit: 'outer' },
+  { id: 'sia', color: '#ec4899', name: 'Sia', role_es: 'Contenido', role_en: 'Content', avatar: '/agents/sia.jpg', cssClass: 'planet-sia', delay: '-30s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[12px]', orbit: 'outer' },
+  { id: 'saturn', color: '#8b5cf6', name: 'Saturn', role_es: 'Analytics', role_en: 'Analytics', avatar: '/agents/saturn.jpg', cssClass: 'planet-saturn', delay: '-40s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[12px]', orbit: 'outer' },
 ] as const;
 
 interface PlanetProps {
