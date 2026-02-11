@@ -50,10 +50,7 @@ export function FactoryFooter() {
 
         <div className="pt-6 border-t border-[var(--border)] flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[var(--muted)]">
           <p>
-            &copy; 2026 AgentBoss by{' '}
-            <a href="https://carlosbejar.cl" target="_blank" rel="noopener noreferrer" className="text-[#2dd4bf] hover:underline">
-              Carlos Bejar
-            </a>
+            &copy; 2026 AgentBoss
           </p>
           <p className="text-xs">
             {t.copyright}

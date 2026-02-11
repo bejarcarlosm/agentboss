@@ -130,15 +130,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p className="text-center text-sm text-[var(--muted)] mt-8">
-          &copy; 2026 AgentBoss by{' '}
-          <a
-            href="https://carlosbejar.cl"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[var(--primary)] hover:underline"
-          >
-            Carlos Bejar
-          </a>
+          &copy; 2026 AgentBoss
         </p>
       </div>
     </div>
