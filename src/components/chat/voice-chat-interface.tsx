@@ -19,6 +19,18 @@ interface VoiceChatInterfaceProps {
   isLiveMode: boolean;
 }
 
+function linkifyText(text: string) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+  return parts.map((part, i) =>
+    urlRegex.test(part) ? (
+      <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="underline font-medium hover:opacity-80 break-all">
+        {part}
+      </a>
+    ) : part
+  );
+}
+
 export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProps) {
   const router = useRouter();
   const [textInput, setTextInput] = useState('');
@@ -171,7 +183,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
                   ? 'text-[var(--text-on-accent)]'
                   : 'bg-[var(--surface-elevated)] text-[var(--foreground)]'
               )} style={msg.role === 'user' ? { background: agent.color } : undefined}>
-                {msg.content}
+                {linkifyText(msg.content)}
               </div>
             </div>
           ))}
