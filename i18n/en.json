@@ -1,0 +1,34 @@
+{
+  "nav": {
+    "services": "Services",
+    "process": "Process",
+    "team": "Team",
+    "pipeline": "Pipeline",
+    "discovery": "Free Discovery"
+  },
+  "hero": {
+    "badge": "AI-Powered Software Factory",
+    "headline": "We build your software",
+    "headline_highlight": "in weeks, not months",
+    "description": "Your development team powered by AI agents. We create the apps, automations, and systems your business needs —",
+    "description_highlight": "3x more features in less time",
+    "description_end": "than a traditional factory.",
+    "subtext": "Free discovery · No commitment · Fixed price per MVP",
+    "cta_primary": "Start free discovery",
+    "cta_secondary": "How it works",
+    "stats": {
+      "speed": "10x",
+      "speed_label": "Faster than traditional development",
+      "features": "3x",
+      "features_label": "More features per sprint",
+      "mvp": "1-4",
+      "mvp_label": "Weeks to your MVP",
+      "agents": "36",
+      "agents_label": "Specialized AI agents"
+    }
+  },
+  "footer": {
+    "contact": "Contact",
+    "copyright": "© 2026 AgentBoss by"
+  }
+}

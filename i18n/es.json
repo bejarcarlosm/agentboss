@@ -1,0 +1,34 @@
+{
+  "nav": {
+    "services": "Servicios",
+    "process": "Proceso",
+    "team": "Equipo",
+    "pipeline": "Pipeline",
+    "discovery": "Discovery gratis"
+  },
+  "hero": {
+    "badge": "Fabrica de Software potenciada por IA",
+    "headline": "Construimos tu software",
+    "headline_highlight": "en semanas, no meses",
+    "description": "Tu equipo de desarrollo potenciado por agentes IA. Creamos las apps, automatizaciones y sistemas que tu negocio necesita —",
+    "description_highlight": "3x mas features en menos tiempo",
+    "description_end": "que una fabrica tradicional.",
+    "subtext": "Discovery gratuito · Sin compromiso · Precio fijo por MVP",
+    "cta_primary": "Iniciar discovery gratis",
+    "cta_secondary": "Como funciona",
+    "stats": {
+      "speed": "10x",
+      "speed_label": "Mas rapido que desarrollo tradicional",
+      "features": "3x",
+      "features_label": "Mas features por sprint",
+      "mvp": "1-4",
+      "mvp_label": "Semanas para tu MVP",
+      "agents": "36",
+      "agents_label": "Agentes IA especializados"
+    }
+  },
+  "footer": {
+    "contact": "Contacto",
+    "copyright": "© 2026 AgentBoss by"
+  }
+}
