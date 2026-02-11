@@ -13,8 +13,8 @@ export default function Home() {
       <FactoryNavbar />
       <FactoryHero />
       <ServicesSection />
-      <ProcessSection />
       <AgentShowcase />
+      <ProcessSection />
       <ValueProps />
       <CtaSection />
       <FactoryFooter />
