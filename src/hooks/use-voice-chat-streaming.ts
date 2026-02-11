@@ -210,6 +210,20 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       streamingWsRef.current.send(JSON.stringify({ type: 'transcribe_only' }));
       stopMicrophone();
       setState('transcribing');
+      // Timeout: if no transcription response in 10s, go back to connected
+      setTimeout(() => {
+        setState(prev => {
+          if (prev === 'transcribing') {
+            console.log('[Voice] Transcription timeout, returning to connected');
+            if (streamingWsRef.current) {
+              streamingWsRef.current.close();
+              streamingWsRef.current = null;
+            }
+            return 'connected';
+          }
+          return prev;
+        });
+      }, 10000);
     }
   }, [stopMicrophone]);
 
@@ -252,6 +266,9 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
 
       streamingWs.onopen = () => {
         console.log('[Voice] Streaming WS connected');
+        // Reset recording start so silence detection doesn't trigger prematurely
+        recordingStartRef.current = Date.now();
+        silenceStartRef.current = null;
       };
 
       streamingWs.onmessage = (e) => {
