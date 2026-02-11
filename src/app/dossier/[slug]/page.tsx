@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { DOSSIER_AGENTS, getDossierAgent } from '@/lib/dossier-data';
+import { DossierPlanetary } from '@/components/dossier/dossier-planetary';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -185,6 +186,26 @@ export default async function DossierPage({ params }: Props) {
                     {s}
                   </span>
                 ))}
+              </div>
+            </div>
+
+            {/* Constellation - MCP Tools & Related Areas */}
+            <div className="mb-10">
+              <h2 className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] mb-4 text-center">
+                Constelacion de trabajo
+              </h2>
+              <div className="flex justify-center">
+                <DossierPlanetary agent={agent} />
+              </div>
+              <div className="flex justify-center gap-8 mt-6 text-[9px] font-mono uppercase tracking-wider text-[var(--muted)]">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full border border-dashed" style={{ borderColor: `${agent.color}40` }} />
+                  MCP Tools
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full border border-dotted" style={{ borderColor: `${agent.color}25` }} />
+                  Areas relacionadas
+                </div>
               </div>
             </div>
 

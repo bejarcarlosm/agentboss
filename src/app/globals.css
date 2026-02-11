@@ -598,3 +598,51 @@ body {
 .dossier-photo-glow {
   animation: dossier-glow 4s ease-in-out infinite;
 }
+
+/* ============================================ */
+/* Dossier Planetary Orbit System               */
+/* ============================================ */
+
+.dossier-orbits {
+  --d-inner: 75px;
+  --d-mid: 95px;
+  --d-outer: 125px;
+  --d-far: 175px;
+}
+
+@media (min-width: 768px) {
+  .dossier-orbits {
+    --d-inner: 105px;
+    --d-mid: 135px;
+    --d-outer: 180px;
+    --d-far: 250px;
+  }
+}
+
+/* Inner orbit - MCP tools (faster, closer, orbit-crossing) */
+@keyframes dossier-inner {
+  0%   { transform: rotate(0deg)   translateX(var(--d-inner)) rotate(0deg); }
+  25%  { transform: rotate(90deg)  translateX(var(--d-mid))   rotate(-90deg); }
+  50%  { transform: rotate(180deg) translateX(var(--d-inner)) rotate(-180deg); }
+  75%  { transform: rotate(270deg) translateX(var(--d-mid))   rotate(-270deg); }
+  100% { transform: rotate(360deg) translateX(var(--d-inner)) rotate(-360deg); }
+}
+
+/* Outer orbit - Business areas (slower, farther, gentle crossing) */
+@keyframes dossier-outer {
+  0%   { transform: rotate(0deg)   translateX(var(--d-outer)) rotate(0deg); }
+  25%  { transform: rotate(90deg)  translateX(var(--d-far))   rotate(-90deg); }
+  50%  { transform: rotate(180deg) translateX(var(--d-outer)) rotate(-180deg); }
+  75%  { transform: rotate(270deg) translateX(var(--d-far))   rotate(-270deg); }
+  100% { transform: rotate(360deg) translateX(var(--d-outer)) rotate(-360deg); }
+}
+
+.dossier-orbit-inner {
+  animation: dossier-inner 24s linear infinite;
+  will-change: transform;
+}
+
+.dossier-orbit-outer {
+  animation: dossier-outer 40s linear infinite;
+  will-change: transform;
+}

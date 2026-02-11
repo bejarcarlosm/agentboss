@@ -2,6 +2,11 @@
 // DOSSIER DATA - Mission Impossible Style
 // ============================================
 
+export interface OrbitItem {
+  name: string;
+  color: string;
+}
+
 export interface DossierAgent {
   slug: string;
   codename: string;
@@ -13,6 +18,8 @@ export interface DossierAgent {
   responsibilities: { title: string; items: string[] }[];
   techStack: string[];
   specialties: string[];
+  mcpTools: OrbitItem[];      // inner orbit: MCP tools they work with
+  relatedAreas: OrbitItem[];  // outer orbit: business areas / roles
   stats: {
     speed: number;      // 1-100
     precision: number;
@@ -72,6 +79,21 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     ],
     techStack: ['Next.js / React', 'Supabase / Firebase', 'Tailwind CSS', 'Vercel AI SDK', 'Stripe / Lemonsqueezy', 'TypeScript'],
     specialties: ['Discovery de producto', 'User Stories', 'Priorizacion de backlog', 'Prototipado rapido', 'Roadmap estrategico', 'Stakeholder management'],
+    mcpTools: [
+      { name: 'Jira', color: '#0052CC' },
+      { name: 'Figma', color: '#F24E1E' },
+      { name: 'Notion', color: '#FFFFFF' },
+      { name: 'Slack', color: '#4A154B' },
+      { name: 'Linear', color: '#5E6AD2' },
+    ],
+    relatedAreas: [
+      { name: 'Producto', color: '#2dd4bf' },
+      { name: 'Operaciones', color: '#f97316' },
+      { name: 'Finanzas', color: '#eab308' },
+      { name: 'Legal', color: '#94a3b8' },
+      { name: 'Desarrollo', color: '#06b6d4' },
+      { name: 'Diseno UX', color: '#a855f7' },
+    ],
     stats: { speed: 85, precision: 90, creativity: 75, autonomy: 95 },
     quote: 'Antes de construir, necesito entender tu negocio. Entregar gana a la perfeccion.',
     chatSlug: 'product-owner',
@@ -124,6 +146,21 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     ],
     techStack: ['Figma / Sketch', 'Tailwind CSS', 'Shadcn/ui', 'Framer Motion', 'Radix UI', 'Heroicons'],
     specialties: ['Diseno de interfaces', 'Wireframing', 'Prototipado rapido', 'Sistemas de diseno', 'Investigacion UX', 'Mobile-first'],
+    mcpTools: [
+      { name: 'Figma', color: '#F24E1E' },
+      { name: 'Storybook', color: '#FF4785' },
+      { name: 'Maze', color: '#4353FF' },
+      { name: 'Hotjar', color: '#FD3A5C' },
+      { name: 'Miro', color: '#FFD02F' },
+    ],
+    relatedAreas: [
+      { name: 'Producto', color: '#2dd4bf' },
+      { name: 'Frontend', color: '#06b6d4' },
+      { name: 'Marketing', color: '#ef4444' },
+      { name: 'Contenido', color: '#ec4899' },
+      { name: 'Investigacion', color: '#8b5cf6' },
+      { name: 'Accesibilidad', color: '#10b981' },
+    ],
     stats: { speed: 80, precision: 85, creativity: 98, autonomy: 80 },
     quote: 'La belleza sin usabilidad es decoracion. La usabilidad sin belleza es ingenieria.',
     chatSlug: 'ux-designer',
@@ -176,6 +213,21 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     ],
     techStack: ['Node.js / Python / Go', 'React / Next.js', 'PostgreSQL / MongoDB / Redis', 'RabbitMQ / Kafka', 'Docker / Kubernetes', 'AWS / GCP / Vercel'],
     specialties: ['React & Next.js', 'TypeScript', 'APIs RESTful', 'Base de datos', 'Arquitectura de sistemas', 'Code review'],
+    mcpTools: [
+      { name: 'GitHub', color: '#FFFFFF' },
+      { name: 'Docker', color: '#2496ED' },
+      { name: 'PostgreSQL', color: '#4169E1' },
+      { name: 'Redis', color: '#DC382D' },
+      { name: 'Vercel', color: '#FFFFFF' },
+    ],
+    relatedAreas: [
+      { name: 'Backend', color: '#06b6d4' },
+      { name: 'Frontend', color: '#3b82f6' },
+      { name: 'DevOps', color: '#f97316' },
+      { name: 'QA Testing', color: '#22c55e' },
+      { name: 'Arquitectura', color: '#8b5cf6' },
+      { name: 'Seguridad', color: '#ef4444' },
+    ],
     stats: { speed: 95, precision: 92, creativity: 70, autonomy: 90 },
     quote: 'El mejor codigo es el que no necesita comentarios.',
   },
@@ -227,6 +279,21 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     ],
     techStack: ['OpenAI / Anthropic / Llama', 'PyTorch / TensorFlow', 'Pinecone / Weaviate / Chroma', 'Vercel AI SDK', 'MLflow / Weights & Biases', 'ONNX / TorchServe'],
     specialties: ['Integracion de LLMs', 'Prompt engineering', 'RAG systems', 'Automatizacion IA', 'Vision computacional', 'Agentes autonomos'],
+    mcpTools: [
+      { name: 'OpenAI', color: '#00A67E' },
+      { name: 'Anthropic', color: '#D4A574' },
+      { name: 'Pinecone', color: '#000000' },
+      { name: 'Jupyter', color: '#F37626' },
+      { name: 'W&B', color: '#FFBE00' },
+    ],
+    relatedAreas: [
+      { name: 'Datos', color: '#8b5cf6' },
+      { name: 'Backend', color: '#06b6d4' },
+      { name: 'Producto', color: '#2dd4bf' },
+      { name: 'Investigacion', color: '#3b82f6' },
+      { name: 'MLOps', color: '#f97316' },
+      { name: 'Etica IA', color: '#10b981' },
+    ],
     stats: { speed: 75, precision: 88, creativity: 95, autonomy: 98 },
     quote: 'La IA no reemplaza al humano. Lo potencia.',
   },
@@ -278,6 +345,21 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     ],
     techStack: ['Playwright / Cypress', 'Jest / Testing Library', 'Istanbul (Cobertura)', 'Datadog / New Relic', 'GitHub Actions CI', 'Mutation Testing'],
     specialties: ['Testing automatizado', 'QA Six Sigma', 'Testing de APIs', 'Performance testing', 'Security testing', 'Analisis de cobertura'],
+    mcpTools: [
+      { name: 'Playwright', color: '#2EAD33' },
+      { name: 'Jest', color: '#C21325' },
+      { name: 'Sentry', color: '#362D59' },
+      { name: 'Datadog', color: '#632CA6' },
+      { name: 'GitHub Actions', color: '#2088FF' },
+    ],
+    relatedAreas: [
+      { name: 'Desarrollo', color: '#06b6d4' },
+      { name: 'Producto', color: '#2dd4bf' },
+      { name: 'DevOps', color: '#f97316' },
+      { name: 'Seguridad', color: '#ef4444' },
+      { name: 'Performance', color: '#eab308' },
+      { name: 'Release', color: '#3b82f6' },
+    ],
     stats: { speed: 70, precision: 99, creativity: 60, autonomy: 85 },
     quote: 'Si no esta testeado, no existe.',
     chatSlug: 'black-belt',
@@ -330,6 +412,21 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     ],
     techStack: ['GitHub Actions / GitLab CI', 'Docker / Kubernetes', 'Terraform / Pulumi', 'Datadog / Prometheus', 'AWS / GCP / Coolify', 'ELK Stack / CloudWatch'],
     specialties: ['CI/CD Pipelines', 'Docker & containers', 'Monitoreo & alertas', 'Auto-scaling', 'Seguridad de sistemas', 'Cloud architecture'],
+    mcpTools: [
+      { name: 'Docker', color: '#2496ED' },
+      { name: 'Terraform', color: '#7B42BC' },
+      { name: 'Kubernetes', color: '#326CE5' },
+      { name: 'Datadog', color: '#632CA6' },
+      { name: 'AWS', color: '#FF9900' },
+    ],
+    relatedAreas: [
+      { name: 'Backend', color: '#06b6d4' },
+      { name: 'Seguridad', color: '#ef4444' },
+      { name: 'Desarrollo', color: '#3b82f6' },
+      { name: 'Operaciones', color: '#f97316' },
+      { name: 'Costos', color: '#eab308' },
+      { name: 'Compliance', color: '#94a3b8' },
+    ],
     stats: { speed: 80, precision: 95, creativity: 55, autonomy: 92 },
     quote: 'El mejor deploy es el que nadie nota.',
   },
@@ -381,6 +478,21 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     ],
     techStack: ['Google Analytics 4', 'Mixpanel / Amplitude', 'Optimizely / LaunchDarkly', 'Adjust / AppsFlyer', 'Hotjar / FullStory', 'Stripe Analytics'],
     specialties: ['Growth hacking', 'Lanzamiento de producto', 'SEO & ASO', 'Funnels de conversion', 'A/B testing', 'Marketing viral'],
+    mcpTools: [
+      { name: 'Google Analytics', color: '#E37400' },
+      { name: 'Mixpanel', color: '#7856FF' },
+      { name: 'SEMrush', color: '#FF642D' },
+      { name: 'Mailchimp', color: '#FFE01B' },
+      { name: 'Optimizely', color: '#0037FF' },
+    ],
+    relatedAreas: [
+      { name: 'Marketing', color: '#ef4444' },
+      { name: 'Producto', color: '#2dd4bf' },
+      { name: 'Contenido', color: '#ec4899' },
+      { name: 'Ventas', color: '#eab308' },
+      { name: 'Datos', color: '#8b5cf6' },
+      { name: 'Comunidad', color: '#10b981' },
+    ],
     stats: { speed: 90, precision: 75, creativity: 92, autonomy: 88 },
     quote: 'No construyas y esperes. Lanza y conquista.',
   },
@@ -433,6 +545,21 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     ],
     techStack: ['Intercom / Zendesk', 'Help Scout', 'Chatbots IA', 'Loom (videos)', 'Typeform (encuestas)', 'Notion (documentacion)'],
     specialties: ['Atencion al cliente', 'Gestion de tickets', 'FAQ automatizado', 'Onboarding de usuarios', 'Retencion', 'NPS tracking'],
+    mcpTools: [
+      { name: 'Intercom', color: '#6AFDEF' },
+      { name: 'Zendesk', color: '#03363D' },
+      { name: 'Notion', color: '#FFFFFF' },
+      { name: 'Loom', color: '#625DF5' },
+      { name: 'Typeform', color: '#262627' },
+    ],
+    relatedAreas: [
+      { name: 'Producto', color: '#2dd4bf' },
+      { name: 'Desarrollo', color: '#06b6d4' },
+      { name: 'Marketing', color: '#ef4444' },
+      { name: 'Operaciones', color: '#f97316' },
+      { name: 'Comunidad', color: '#10b981' },
+      { name: 'Ventas', color: '#eab308' },
+    ],
     stats: { speed: 92, precision: 85, creativity: 65, autonomy: 80 },
     quote: 'Un cliente feliz es el mejor marketing.',
   },
@@ -484,6 +611,21 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     ],
     techStack: ['WordPress / Ghost', 'Canva / Figma', 'Ahrefs / SEMrush', 'Buffer / Hootsuite', 'Mailchimp / ConvertKit', 'Google Analytics'],
     specialties: ['Copywriting', 'Guiones de video', 'SEO de contenido', 'Redes sociales', 'Email marketing', 'Estrategia de marca'],
+    mcpTools: [
+      { name: 'WordPress', color: '#21759B' },
+      { name: 'Canva', color: '#00C4CC' },
+      { name: 'Ahrefs', color: '#FF8C00' },
+      { name: 'Buffer', color: '#168EEA' },
+      { name: 'ConvertKit', color: '#FB6970' },
+    ],
+    relatedAreas: [
+      { name: 'Marketing', color: '#ef4444' },
+      { name: 'Diseno', color: '#a855f7' },
+      { name: 'SEO', color: '#eab308' },
+      { name: 'Redes Sociales', color: '#ec4899' },
+      { name: 'Producto', color: '#2dd4bf' },
+      { name: 'Marca', color: '#3b82f6' },
+    ],
     stats: { speed: 88, precision: 78, creativity: 98, autonomy: 85 },
     quote: 'Las palabras correctas mueven montanas.',
   },
@@ -535,6 +677,21 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     ],
     techStack: ['Mixpanel / Amplitude', 'Google Analytics 4', 'Tableau / Looker', 'RevenueCat / Stripe', 'Hotjar / FullStory', 'Python / SQL'],
     specialties: ['Business intelligence', 'Dashboards & reportes', 'Analisis de metricas', 'Prediccion de tendencias', 'KPIs & OKRs', 'Data storytelling'],
+    mcpTools: [
+      { name: 'Mixpanel', color: '#7856FF' },
+      { name: 'Tableau', color: '#E97627' },
+      { name: 'BigQuery', color: '#4285F4' },
+      { name: 'Looker', color: '#4285F4' },
+      { name: 'Python', color: '#3776AB' },
+    ],
+    relatedAreas: [
+      { name: 'Producto', color: '#2dd4bf' },
+      { name: 'Marketing', color: '#ef4444' },
+      { name: 'Finanzas', color: '#eab308' },
+      { name: 'Operaciones', color: '#f97316' },
+      { name: 'Growth', color: '#22c55e' },
+      { name: 'Ejecutivos', color: '#8b5cf6' },
+    ],
     stats: { speed: 70, precision: 96, creativity: 72, autonomy: 90 },
     quote: 'Sin datos, solo eres una persona mas con una opinion.',
   },
