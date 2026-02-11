@@ -467,3 +467,32 @@ body {
   animation: planet-atlas 40s linear infinite;
   will-change: transform;
 }
+
+/* ============================================ */
+/* Dossier - Mission Impossible Style           */
+/* ============================================ */
+
+/* CRT scan lines overlay */
+.dossier-scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+}
+
+/* Photo glow pulse */
+@keyframes dossier-glow {
+  0%, 100% { box-shadow: 0 0 20px var(--glow-color, rgba(45,212,191,0.2)); }
+  50% { box-shadow: 0 0 40px var(--glow-color, rgba(45,212,191,0.3)), 0 0 80px var(--glow-color, rgba(45,212,191,0.1)); }
+}
+
+.dossier-photo-glow {
+  animation: dossier-glow 4s ease-in-out infinite;
+}
