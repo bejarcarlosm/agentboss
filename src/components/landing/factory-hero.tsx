@@ -65,108 +65,108 @@ export function FactoryHero() {
               <div className="absolute w-[300px] h-[300px] md:w-[480px] md:h-[480px] rounded-full border border-dotted border-white/[0.015]" />
             </div>
 
-            {/* Orbiting planets - 7 agents */}
+            {/* Orbiting planets - all clickable to dossier */}
             <div className="absolute inset-0 flex items-center justify-center">
               {/* Pluto QA - 20s */}
               <div className="absolute planet-pluto">
-                <div className="flex items-center gap-1.5">
+                <Link href="/dossier/pluto" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
                   <span className="w-2 h-2 rounded-full bg-[#22c55e] shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#22c55e]/10 border border-[#22c55e]/20 text-[9px] font-semibold text-[#22c55e] whitespace-nowrap">
                     Pluto · QA
                   </span>
-                </div>
+                </Link>
               </div>
 
               {/* Mars Growth - 22s */}
               <div className="absolute planet-mars" style={{ animationDelay: '-8s' }}>
-                <div className="flex items-center gap-1.5">
+                <Link href="/dossier/mars" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
                   <span className="w-2 h-2 rounded-full bg-[#ef4444] shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#ef4444]/10 border border-[#ef4444]/20 text-[9px] font-semibold text-[#ef4444] whitespace-nowrap">
                     Mars · Growth
                   </span>
-                </div>
+                </Link>
               </div>
 
               {/* Flux Dev - 25s */}
               <div className="absolute planet-flux" style={{ animationDelay: '-5s' }}>
-                <div className="flex items-center gap-1.5">
+                <Link href="/dossier/flux" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
                   <span className="w-2 h-2 rounded-full bg-[#06b6d4] shadow-[0_0_8px_rgba(6,182,212,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#06b6d4]/10 border border-[#06b6d4]/20 text-[9px] font-semibold text-[#06b6d4] whitespace-nowrap">
                     Flux · Dev
                   </span>
-                </div>
+                </Link>
               </div>
 
               {/* Orion Infra - 28s */}
               <div className="absolute planet-orion" style={{ animationDelay: '-14s' }}>
-                <div className="flex items-center gap-1.5">
+                <Link href="/dossier/orion" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
                   <span className="w-2 h-2 rounded-full bg-[#f97316] shadow-[0_0_8px_rgba(249,115,22,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#f97316]/10 border border-[#f97316]/20 text-[9px] font-semibold text-[#f97316] whitespace-nowrap">
                     Orion · Infra
                   </span>
-                </div>
+                </Link>
               </div>
 
               {/* Venus UX - 30s */}
               <div className="absolute planet-venus" style={{ animationDelay: '-10s' }}>
-                <div className="flex items-center gap-1.5">
+                <Link href="/dossier/venus" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
                   <span className="w-2 h-2 rounded-full bg-[#a855f7] shadow-[0_0_8px_rgba(168,85,247,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#a855f7]/10 border border-[#a855f7]/20 text-[9px] font-semibold text-[#a855f7] whitespace-nowrap">
                     Venus · UX
                   </span>
-                </div>
+                </Link>
               </div>
 
               {/* Nova AI - 35s */}
               <div className="absolute planet-nova" style={{ animationDelay: '-20s' }}>
-                <div className="flex items-center gap-1.5">
+                <Link href="/dossier/nova" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
                   <span className="w-2 h-2 rounded-full bg-[#3b82f6] shadow-[0_0_8px_rgba(59,130,246,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#3b82f6]/10 border border-[#3b82f6]/20 text-[9px] font-semibold text-[#3b82f6] whitespace-nowrap">
                     Nova · AI
                   </span>
-                </div>
+                </Link>
               </div>
 
               {/* Atlas PO - 40s */}
               <div className="absolute planet-atlas" style={{ animationDelay: '-26.67s' }}>
-                <div className="flex items-center gap-1.5">
+                <Link href="/dossier/atlas" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#2dd4bf] shadow-[0_0_10px_rgba(45,212,191,0.6)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#2dd4bf]/10 border border-[#2dd4bf]/20 text-[9px] font-semibold text-[#2dd4bf] whitespace-nowrap">
                     Atlas · PO
                   </span>
-                </div>
+                </Link>
               </div>
 
               {/* === Business orbit (far, slow) === */}
 
               {/* Luna Support - 48s */}
               <div className="absolute planet-luna" style={{ animationDelay: '-16s' }}>
-                <div className="flex items-center gap-1.5">
+                <Link href="/dossier/luna" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] shadow-[0_0_6px_rgba(16,185,129,0.5)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#10b981]/10 border border-[#10b981]/15 text-[8px] font-semibold text-[#10b981]/80 whitespace-nowrap">
                     Luna · Soporte
                   </span>
-                </div>
+                </Link>
               </div>
 
               {/* Sia Content - 52s */}
               <div className="absolute planet-sia" style={{ animationDelay: '-30s' }}>
-                <div className="flex items-center gap-1.5">
+                <Link href="/dossier/sia" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#ec4899] shadow-[0_0_6px_rgba(236,72,153,0.5)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#ec4899]/10 border border-[#ec4899]/15 text-[8px] font-semibold text-[#ec4899]/80 whitespace-nowrap">
                     Sia · Contenido
                   </span>
-                </div>
+                </Link>
               </div>
 
               {/* Saturn Analytics - 56s */}
               <div className="absolute planet-saturn" style={{ animationDelay: '-40s' }}>
-                <div className="flex items-center gap-1.5">
+                <Link href="/dossier/saturn" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6] shadow-[0_0_6px_rgba(139,92,246,0.5)] flex-shrink-0" />
                   <span className="px-1.5 py-0.5 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/15 text-[8px] font-semibold text-[#8b5cf6]/80 whitespace-nowrap">
                     Saturn · Analytics
                   </span>
-                </div>
+                </Link>
               </div>
             </div>
 

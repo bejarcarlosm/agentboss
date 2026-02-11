@@ -109,6 +109,43 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     stats: { speed: 90, precision: 75, creativity: 92, autonomy: 88 },
     quote: 'No construyas y esperes. Lanza y conquista.',
   },
+  // === Business orbit ===
+  {
+    slug: 'luna',
+    codename: 'LUNA',
+    role: 'Customer Support',
+    status: 'STANDBY',
+    color: '#10b981',
+    avatar: '/agents/luna.jpg',
+    briefing: 'Agente de soporte al cliente con empatia infinita. Resuelve dudas, gestiona tickets y mantiene a los usuarios felices. Primera linea de defensa para la retencion de clientes.',
+    specialties: ['Atencion al cliente', 'Gestion de tickets', 'FAQ automatizado', 'Onboarding de usuarios', 'Retencion', 'NPS tracking'],
+    stats: { speed: 92, precision: 85, creativity: 65, autonomy: 80 },
+    quote: 'Un cliente feliz es el mejor marketing.',
+  },
+  {
+    slug: 'sia',
+    codename: 'SIA',
+    role: 'Content Creator',
+    status: 'STANDBY',
+    color: '#ec4899',
+    avatar: '/agents/sia.jpg',
+    briefing: 'Creadora de contenido multiplataforma. Escribe copy, genera guiones de video, diseña estrategias de contenido y mantiene la voz de marca consistente en todos los canales.',
+    specialties: ['Copywriting', 'Guiones de video', 'SEO de contenido', 'Redes sociales', 'Email marketing', 'Estrategia de marca'],
+    stats: { speed: 88, precision: 78, creativity: 98, autonomy: 85 },
+    quote: 'Las palabras correctas mueven montanas.',
+  },
+  {
+    slug: 'saturn',
+    codename: 'SATURN',
+    role: 'Data Analytics',
+    status: 'STANDBY',
+    color: '#8b5cf6',
+    avatar: '/agents/saturn.jpg',
+    briefing: 'Analista de datos obsesionado con las metricas. Transforma datos crudos en insights accionables, construye dashboards y detecta patrones que impulsan decisiones de negocio.',
+    specialties: ['Business intelligence', 'Dashboards & reportes', 'Analisis de metricas', 'Prediccion de tendencias', 'KPIs & OKRs', 'Data storytelling'],
+    stats: { speed: 70, precision: 96, creativity: 72, autonomy: 90 },
+    quote: 'Sin datos, solo eres una persona mas con una opinion.',
+  },
 ];
 
 export function getDossierAgent(slug: string): DossierAgent | undefined {
