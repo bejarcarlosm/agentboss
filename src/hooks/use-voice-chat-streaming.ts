@@ -453,6 +453,14 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     }
 
     try {
+      // Unlock audio context during user gesture (click on send button)
+      if (!playbackAudioContextRef.current || playbackAudioContextRef.current.state === 'closed') {
+        playbackAudioContextRef.current = new AudioContext();
+      }
+      if (playbackAudioContextRef.current.state === 'suspended') {
+        await playbackAudioContextRef.current.resume();
+      }
+
       setState('processing');
       setMessages(prev => [...prev, { role: 'user', content: text }]);
       persistMessage('user', text);
@@ -513,7 +521,33 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
         bytes[i] = binaryString.charCodeAt(i);
       }
 
-      // Use Audio element for all platforms (more reliable than AudioContext)
+      // Try AudioContext first (unlocked during user gesture in startRecording)
+      if (playbackAudioContextRef.current && playbackAudioContextRef.current.state !== 'closed') {
+        const ctx = playbackAudioContextRef.current;
+        if (ctx.state === 'suspended') await ctx.resume();
+
+        // Copy buffer since decodeAudioData detaches it
+        const bufferCopy = bytes.buffer.slice(0);
+        const audioBuffer = await ctx.decodeAudioData(bufferCopy);
+        const source = ctx.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(ctx.destination);
+        source.onended = done;
+        source.start(0);
+        console.log('[Voice] Playing audio via AudioContext');
+        return;
+      }
+    } catch (e) {
+      console.warn('[Voice] AudioContext playback failed, falling back to Audio element', e);
+    }
+
+    // Fallback: Audio element (may not work on mobile without user gesture)
+    try {
+      const binaryString = atob(base64Audio);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
       const blob = new Blob([bytes.buffer], { type: 'audio/mpeg' });
       const blobUrl = URL.createObjectURL(blob);
       const audio = new Audio(blobUrl);
@@ -521,6 +555,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       audio.onended = () => { done(); URL.revokeObjectURL(blobUrl); };
       audio.onerror = () => { done(); URL.revokeObjectURL(blobUrl); };
       audio.play().catch(() => { done(); URL.revokeObjectURL(blobUrl); });
+      console.log('[Voice] Playing audio via Audio element fallback');
     } catch {
       done();
     }
