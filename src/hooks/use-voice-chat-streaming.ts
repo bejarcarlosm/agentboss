@@ -7,7 +7,7 @@ interface Message {
   content: string;
 }
 
-type ConversationState = 'idle' | 'connecting' | 'connected' | 'recording' | 'transcribing' | 'review' | 'processing' | 'speaking' | 'error';
+type ConversationState = 'idle' | 'connecting' | 'connected' | 'recording' | 'processing' | 'speaking' | 'error';
 
 const MAX_MESSAGES_DEMO = 5;
 
@@ -19,7 +19,6 @@ const SILENCE_THRESHOLD = 0.015;
 const SILENCE_DURATION_MS = 2000;
 const MIN_RECORDING_MS = 1000;
 
-// SpeechRecognition type for browser compatibility
 interface SpeechRecognitionEvent extends Event {
   results: SpeechRecognitionResultList;
   resultIndex: number;
@@ -60,12 +59,12 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
   const [state, setState] = useState<ConversationState>('idle');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentTranscript, setCurrentTranscript] = useState('');
-  const [pendingTranscription, setPendingTranscription] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [demoTimeoutReached, setDemoTimeoutReached] = useState(false);
   const [rateLimitReached, setRateLimitReached] = useState(false);
+  const [readyToSend, setReadyToSend] = useState(false);
 
   const sessionIdRef = useRef<string | null>(null);
   const backendWsRef = useRef<WebSocket | null>(null);
@@ -124,7 +123,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
 
       const wsUrl = BACKEND_URL.replace('https://', 'wss://').replace('http://', 'ws://');
       console.log('[Voice] Session created:', sessionData.sessionId);
-      console.log('[Voice] Opening chat WS');
       const backendWs = new WebSocket(`${wsUrl}/api/chat/ws?sessionId=${sessionIdRef.current}`);
 
       backendWs.onmessage = (e) => {
@@ -226,34 +224,30 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       mediaStreamRef.current = null;
     }
     setIsRecording(false);
+    setReadyToSend(false);
     setAnalyser(null);
     analyserRef.current = null;
   }, [stopSpeechRecognition]);
 
   const stopRecording = useCallback(() => {
     stopMicrophone();
+    setCurrentTranscript('');
+    finalTranscriptRef.current = '';
     setState('connected');
   }, [stopMicrophone]);
 
-  // Request transcription using Web Speech API final result
-  const requestTranscription = useCallback(() => {
-    stopSpeechRecognition();
+  // Send the current transcript and stop recording
+  const confirmSend = useCallback(async () => {
+    const text = (finalTranscriptRef.current || currentTranscript).trim();
+    if (!text) return;
+
     stopMicrophone();
-
-    const transcript = finalTranscriptRef.current.trim();
-    console.log('[Voice] Final transcript from Web Speech API:', transcript);
-
-    if (transcript.length > 0) {
-      setPendingTranscription(transcript);
-      setCurrentTranscript(transcript);
-      setState('review');
-    } else {
-      setPendingTranscription(null);
-      setCurrentTranscript('');
-      setState('connected');
-    }
+    setCurrentTranscript('');
+    setReadyToSend(false);
     finalTranscriptRef.current = '';
-  }, [stopMicrophone, stopSpeechRecognition]);
+
+    await sendTextMessage(text);
+  }, [currentTranscript, stopMicrophone]);
 
   const startRecording = useCallback(async () => {
     if (!sessionIdRef.current) {
@@ -267,7 +261,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       return;
     }
 
-    // Check if Web Speech API is available
     const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognitionClass) {
       setError('Tu navegador no soporta reconocimiento de voz. Usa Chrome o Edge.');
@@ -278,7 +271,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       setState('recording');
       setIsRecording(true);
       setDemoTimeoutReached(false);
-      setPendingTranscription(null);
+      setReadyToSend(false);
       setCurrentTranscript('');
       finalTranscriptRef.current = '';
 
@@ -295,7 +288,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
 
       mediaStreamRef.current = stream;
 
-      // Start Web Speech API for transcription
+      // Web Speech API for real-time transcription
       const recognition = new SpeechRecognitionClass();
       recognition.continuous = true;
       recognition.interimResults = true;
@@ -331,7 +324,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       speechRecognitionRef.current = recognition;
       console.log('[Voice] Web Speech API started (es-CL)');
 
-      // Audio context for waveform visualization only (no streaming to backend)
+      // Audio context for waveform visualization
       const audioContext = new AudioContext({ sampleRate: 16000 });
       audioContextRef.current = audioContext;
 
@@ -342,18 +335,15 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       setAnalyser(analyserNode);
       analyserRef.current = analyserNode;
 
-      // Connect analyser for waveform (processor needed to keep analyser active)
       const processor = audioContext.createScriptProcessor(4096, 1, 1);
-      processor.onaudioprocess = () => {
-        // No-op: just keeps the analyser active for waveform visualization
-      };
+      processor.onaudioprocess = () => { /* keeps analyser active */ };
 
       source.connect(analyserNode);
       analyserNode.connect(processor);
       processor.connect(audioContext.destination);
       scriptProcessorRef.current = processor;
 
-      // Silence detection interval
+      // Silence detection - only toggles readyToSend, doesn't stop recording
       recordingStartRef.current = Date.now();
       silenceStartRef.current = null;
 
@@ -371,47 +361,32 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
           if (!silenceStartRef.current) {
             silenceStartRef.current = Date.now();
           } else if (Date.now() - silenceStartRef.current >= SILENCE_DURATION_MS) {
-            console.log('[Voice] Silence detected, finalizing transcription');
-            requestTranscription();
+            // Show send button but keep recording
+            setReadyToSend(true);
           }
         } else {
+          // User is speaking again - hide send button
           silenceStartRef.current = null;
+          setReadyToSend(false);
         }
       }, 200);
 
-      // Max timeout for demo/live mode
+      // Max timeout
       const timeout = isLiveMode ? 300000 : 30000;
       recordingTimeoutRef.current = setTimeout(() => {
         setDemoTimeoutReached(true);
-        requestTranscription();
+        setReadyToSend(true);
       }, timeout);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Recording failed');
       setState('error');
       setIsRecording(false);
     }
-  }, [stopMicrophone, requestTranscription, isLiveMode, checkRateLimit]);
+  }, [stopMicrophone, isLiveMode, checkRateLimit]);
 
-  // Confirm and send the pending transcription
-  const confirmSend = useCallback(async () => {
-    if (!pendingTranscription) return;
-    const text = pendingTranscription;
-    setPendingTranscription(null);
-    setCurrentTranscript('');
-    await sendTextMessage(text);
-  }, [pendingTranscription]);
-
-  // Cancel pending transcription and go back to connected
-  const cancelTranscription = useCallback(() => {
-    setPendingTranscription(null);
-    setCurrentTranscript('');
-    setState('connected');
-  }, []);
-
-  // Legacy sendMessage - now triggers transcription finalization
   const sendMessage = useCallback(() => {
-    requestTranscription();
-  }, [requestTranscription]);
+    confirmSend();
+  }, [confirmSend]);
 
   const sendTextMessage = useCallback(async (text: string) => {
     if (!sessionIdRef.current) {
@@ -463,7 +438,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     setState('idle');
     setMessages([]);
     setCurrentTranscript('');
-    setPendingTranscription(null);
     setError(null);
   }, [stopRecording]);
 
@@ -483,7 +457,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
 
         audio.onended = () => { setState('connected'); URL.revokeObjectURL(blobUrl); };
         audio.onerror = () => { setState('connected'); URL.revokeObjectURL(blobUrl); };
-
         audio.play().catch(() => { setState('connected'); URL.revokeObjectURL(blobUrl); });
       } else {
         if (!playbackAudioContextRef.current) {
@@ -518,7 +491,6 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     state,
     messages,
     currentTranscript,
-    pendingTranscription,
     error,
     connect,
     disconnect,
@@ -527,9 +499,9 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     sendMessage,
     sendTextMessage,
     confirmSend,
-    cancelTranscription,
     isRecording,
     analyser,
+    readyToSend,
     demoTimeoutReached,
     rateLimitReached,
     remainingMessages: isLiveMode ? Infinity : Math.max(0, MAX_MESSAGES_DEMO - getMessageCount()),
