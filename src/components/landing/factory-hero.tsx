@@ -1,7 +1,39 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { DynamicOrb } from '@/components/ui/dynamic-orb';
+
+interface PlanetProps {
+  href: string;
+  color: string;
+  name: string;
+  role: string;
+  avatar: string;
+  dotSize?: string;
+  textSize?: string;
+  opacity?: string;
+}
+
+function Planet({ href, color, name, role, avatar, dotSize = 'w-2 h-2', textSize = 'text-[9px]', opacity = '' }: PlanetProps) {
+  return (
+    <Link href={href} className="group/planet relative flex items-center gap-1.5 hover:scale-110 transition-transform">
+      {/* Avatar tooltip on hover */}
+      <Image
+        src={avatar}
+        alt={name}
+        width={32}
+        height={32}
+        className="w-8 h-8 rounded-full object-cover border-2 opacity-0 group-hover/planet:opacity-100 scale-75 group-hover/planet:scale-100 transition-all duration-200 absolute -top-10 left-1/2 -translate-x-1/2 shadow-lg pointer-events-none"
+        style={{ borderColor: color, boxShadow: `0 0 12px ${color}40` }}
+      />
+      <span className={`${dotSize} rounded-full flex-shrink-0`} style={{ background: color, boxShadow: `0 0 8px ${color}99` }} />
+      <span className={`px-1.5 py-0.5 rounded-full border ${textSize} font-semibold whitespace-nowrap ${opacity}`} style={{ background: `${color}10`, borderColor: `${color}20`, color: color }}>
+        {name} · {role}
+      </span>
+    </Link>
+  );
+}
 
 export function FactoryHero() {
   return (
@@ -69,104 +101,54 @@ export function FactoryHero() {
             <div className="absolute inset-0 flex items-center justify-center">
               {/* Pluto QA - 20s */}
               <div className="absolute planet-pluto">
-                <Link href="/dossier/pluto" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
-                  <span className="w-2 h-2 rounded-full bg-[#22c55e] shadow-[0_0_8px_rgba(34,197,94,0.6)] flex-shrink-0" />
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#22c55e]/10 border border-[#22c55e]/20 text-[9px] font-semibold text-[#22c55e] whitespace-nowrap">
-                    Pluto · QA
-                  </span>
-                </Link>
+                <Planet href="/dossier/pluto" color="#22c55e" name="Pluto" role="QA" avatar="/agents/pluto.jpg" />
               </div>
 
               {/* Mars Growth - 22s */}
               <div className="absolute planet-mars" style={{ animationDelay: '-8s' }}>
-                <Link href="/dossier/mars" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
-                  <span className="w-2 h-2 rounded-full bg-[#ef4444] shadow-[0_0_8px_rgba(239,68,68,0.6)] flex-shrink-0" />
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#ef4444]/10 border border-[#ef4444]/20 text-[9px] font-semibold text-[#ef4444] whitespace-nowrap">
-                    Mars · Growth
-                  </span>
-                </Link>
+                <Planet href="/dossier/mars" color="#ef4444" name="Mars" role="Growth" avatar="/agents/mars.jpg" />
               </div>
 
               {/* Flux Dev - 25s */}
               <div className="absolute planet-flux" style={{ animationDelay: '-5s' }}>
-                <Link href="/dossier/flux" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
-                  <span className="w-2 h-2 rounded-full bg-[#06b6d4] shadow-[0_0_8px_rgba(6,182,212,0.6)] flex-shrink-0" />
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#06b6d4]/10 border border-[#06b6d4]/20 text-[9px] font-semibold text-[#06b6d4] whitespace-nowrap">
-                    Flux · Dev
-                  </span>
-                </Link>
+                <Planet href="/dossier/flux" color="#06b6d4" name="Flux" role="Dev" avatar="/agents/flux.jpg" />
               </div>
 
               {/* Orion Infra - 28s */}
               <div className="absolute planet-orion" style={{ animationDelay: '-14s' }}>
-                <Link href="/dossier/orion" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
-                  <span className="w-2 h-2 rounded-full bg-[#f97316] shadow-[0_0_8px_rgba(249,115,22,0.6)] flex-shrink-0" />
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#f97316]/10 border border-[#f97316]/20 text-[9px] font-semibold text-[#f97316] whitespace-nowrap">
-                    Orion · Infra
-                  </span>
-                </Link>
+                <Planet href="/dossier/orion" color="#f97316" name="Orion" role="Infra" avatar="/agents/orion.jpg" />
               </div>
 
               {/* Venus UX - 30s */}
               <div className="absolute planet-venus" style={{ animationDelay: '-10s' }}>
-                <Link href="/dossier/venus" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
-                  <span className="w-2 h-2 rounded-full bg-[#a855f7] shadow-[0_0_8px_rgba(168,85,247,0.6)] flex-shrink-0" />
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#a855f7]/10 border border-[#a855f7]/20 text-[9px] font-semibold text-[#a855f7] whitespace-nowrap">
-                    Venus · UX
-                  </span>
-                </Link>
+                <Planet href="/dossier/venus" color="#a855f7" name="Venus" role="UX" avatar="/agents/venus.jpg" />
               </div>
 
               {/* Nova AI - 35s */}
               <div className="absolute planet-nova" style={{ animationDelay: '-20s' }}>
-                <Link href="/dossier/nova" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
-                  <span className="w-2 h-2 rounded-full bg-[#3b82f6] shadow-[0_0_8px_rgba(59,130,246,0.6)] flex-shrink-0" />
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#3b82f6]/10 border border-[#3b82f6]/20 text-[9px] font-semibold text-[#3b82f6] whitespace-nowrap">
-                    Nova · AI
-                  </span>
-                </Link>
+                <Planet href="/dossier/nova" color="#3b82f6" name="Nova" role="AI" avatar="/agents/nova.jpg" />
               </div>
 
               {/* Atlas PO - 40s */}
               <div className="absolute planet-atlas" style={{ animationDelay: '-26.67s' }}>
-                <Link href="/dossier/atlas" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#2dd4bf] shadow-[0_0_10px_rgba(45,212,191,0.6)] flex-shrink-0" />
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#2dd4bf]/10 border border-[#2dd4bf]/20 text-[9px] font-semibold text-[#2dd4bf] whitespace-nowrap">
-                    Atlas · PO
-                  </span>
-                </Link>
+                <Planet href="/dossier/atlas" color="#2dd4bf" name="Atlas" role="PO" avatar="/agents/atlas.jpg" dotSize="w-2.5 h-2.5" />
               </div>
 
               {/* === Business orbit (far, slow) === */}
 
               {/* Luna Support - 48s */}
               <div className="absolute planet-luna" style={{ animationDelay: '-16s' }}>
-                <Link href="/dossier/luna" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] shadow-[0_0_6px_rgba(16,185,129,0.5)] flex-shrink-0" />
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#10b981]/10 border border-[#10b981]/15 text-[8px] font-semibold text-[#10b981]/80 whitespace-nowrap">
-                    Luna · Soporte
-                  </span>
-                </Link>
+                <Planet href="/dossier/luna" color="#10b981" name="Luna" role="Soporte" avatar="/agents/luna.jpg" dotSize="w-1.5 h-1.5" textSize="text-[8px]" opacity="opacity-80" />
               </div>
 
               {/* Sia Content - 52s */}
               <div className="absolute planet-sia" style={{ animationDelay: '-30s' }}>
-                <Link href="/dossier/sia" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#ec4899] shadow-[0_0_6px_rgba(236,72,153,0.5)] flex-shrink-0" />
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#ec4899]/10 border border-[#ec4899]/15 text-[8px] font-semibold text-[#ec4899]/80 whitespace-nowrap">
-                    Sia · Contenido
-                  </span>
-                </Link>
+                <Planet href="/dossier/sia" color="#ec4899" name="Sia" role="Contenido" avatar="/agents/sia.jpg" dotSize="w-1.5 h-1.5" textSize="text-[8px]" opacity="opacity-80" />
               </div>
 
               {/* Saturn Analytics - 56s */}
               <div className="absolute planet-saturn" style={{ animationDelay: '-40s' }}>
-                <Link href="/dossier/saturn" className="flex items-center gap-1.5 hover:scale-110 transition-transform">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#8b5cf6] shadow-[0_0_6px_rgba(139,92,246,0.5)] flex-shrink-0" />
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/15 text-[8px] font-semibold text-[#8b5cf6]/80 whitespace-nowrap">
-                    Saturn · Analytics
-                  </span>
-                </Link>
+                <Planet href="/dossier/saturn" color="#8b5cf6" name="Saturn" role="Analytics" avatar="/agents/saturn.jpg" dotSize="w-1.5 h-1.5" textSize="text-[8px]" opacity="opacity-80" />
               </div>
             </div>
 

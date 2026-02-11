@@ -7,12 +7,17 @@ interface Message {
   content: string;
 }
 
-type ConversationState = 'idle' | 'connecting' | 'connected' | 'recording' | 'processing' | 'speaking' | 'error';
+type ConversationState = 'idle' | 'connecting' | 'connected' | 'recording' | 'transcribing' | 'review' | 'processing' | 'speaking' | 'error';
 
 const MAX_MESSAGES_DEMO = 5;
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_VOICE_BACKEND_URL || 'https://voice11labs.agentboss.cl';
 const API_KEY = process.env.NEXT_PUBLIC_VOICE_API_KEY || '';
+
+// Silence detection config
+const SILENCE_THRESHOLD = 0.015; // RMS level below which we consider silence
+const SILENCE_DURATION_MS = 2000; // 2 seconds of silence to trigger transcription
+const MIN_RECORDING_MS = 1000; // Minimum 1 second of recording before silence detection kicks in
 
 function getMessageCount(): number {
   if (typeof window === 'undefined') return 0;
@@ -30,6 +35,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
   const [state, setState] = useState<ConversationState>('idle');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentTranscript, setCurrentTranscript] = useState('');
+  const [pendingTranscription, setPendingTranscription] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
@@ -45,6 +51,10 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
   const scriptProcessorRef = useRef<ScriptProcessorNode | null>(null);
   const isConnectingRef = useRef(false);
   const recordingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const silenceStartRef = useRef<number | null>(null);
+  const recordingStartRef = useRef<number>(0);
+  const silenceCheckRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
 
   const checkRateLimit = useCallback((): boolean => {
     if (isLiveMode) return false;
@@ -125,12 +135,10 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
               setState('speaking');
               playAudio(msg.audioChunk);
             } else {
-              // TTS failed but text response was sent - go back to connected
               setState('connected');
             }
             break;
           case 'error':
-            // Don't break session on non-critical errors (e.g. TTS failure after text was sent)
             if (msg.message === 'processing_failed' && messages.length > 0) {
               setState('connected');
             } else {
@@ -164,6 +172,11 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       clearTimeout(recordingTimeoutRef.current);
       recordingTimeoutRef.current = null;
     }
+    if (silenceCheckRef.current) {
+      clearInterval(silenceCheckRef.current);
+      silenceCheckRef.current = null;
+    }
+    silenceStartRef.current = null;
     if (scriptProcessorRef.current) {
       scriptProcessorRef.current.disconnect();
       scriptProcessorRef.current = null;
@@ -178,6 +191,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     }
     setIsRecording(false);
     setAnalyser(null);
+    analyserRef.current = null;
   }, []);
 
   const stopRecording = useCallback(() => {
@@ -187,6 +201,16 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       streamingWsRef.current = null;
     }
     setState('connected');
+  }, [stopMicrophone]);
+
+  // Request transcription only (no AI processing)
+  const requestTranscription = useCallback(() => {
+    if (streamingWsRef.current && streamingWsRef.current.readyState === WebSocket.OPEN) {
+      console.log('[Voice] Requesting transcribe_only');
+      streamingWsRef.current.send(JSON.stringify({ type: 'transcribe_only' }));
+      stopMicrophone();
+      setState('transcribing');
+    }
   }, [stopMicrophone]);
 
   const startRecording = useCallback(async () => {
@@ -205,6 +229,8 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       setState('recording');
       setIsRecording(true);
       setDemoTimeoutReached(false);
+      setPendingTranscription(null);
+      setCurrentTranscript('');
 
       if (!playbackAudioContextRef.current) {
         playbackAudioContextRef.current = new AudioContext();
@@ -233,7 +259,19 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
           const msg = JSON.parse(e.data);
           console.log('[Voice] Streaming msg:', msg);
           const msgType = msg.type || msg.message_type;
-          if ((msgType === 'partial_transcript' || msgType === 'transcript') && msg.text) {
+
+          if (msgType === 'transcription_ready') {
+            // Transcription received - show for review
+            if (msg.text && msg.text.trim().length > 0) {
+              setPendingTranscription(msg.text.trim());
+              setCurrentTranscript(msg.text.trim());
+              setState('review');
+            } else {
+              // Empty transcription - go back to connected
+              setPendingTranscription(null);
+              setState('connected');
+            }
+          } else if ((msgType === 'partial_transcript' || msgType === 'transcript') && msg.text) {
             setCurrentTranscript(msg.text);
           }
         } catch {
@@ -260,6 +298,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       analyserNode.fftSize = 256;
       analyserNode.smoothingTimeConstant = 0.8;
       setAnalyser(analyserNode);
+      analyserRef.current = analyserNode;
 
       const processor = audioContext.createScriptProcessor(4096, 1, 1);
       let audioChunkCount = 0;
@@ -287,31 +326,76 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
       processor.connect(audioContext.destination);
       scriptProcessorRef.current = processor;
 
-      // 30s timeout for demo mode
+      // Silence detection interval
+      recordingStartRef.current = Date.now();
+      silenceStartRef.current = null;
+
+      silenceCheckRef.current = setInterval(() => {
+        const node = analyserRef.current;
+        if (!node) return;
+
+        // Don't check silence during first second of recording
+        if (Date.now() - recordingStartRef.current < MIN_RECORDING_MS) return;
+
+        const dataArray = new Float32Array(node.frequencyBinCount);
+        node.getFloatTimeDomainData(dataArray);
+        const rms = Math.sqrt(dataArray.reduce((sum, val) => sum + val * val, 0) / dataArray.length);
+
+        if (rms < SILENCE_THRESHOLD) {
+          if (!silenceStartRef.current) {
+            silenceStartRef.current = Date.now();
+          } else if (Date.now() - silenceStartRef.current >= SILENCE_DURATION_MS) {
+            console.log('[Voice] Silence detected, requesting transcription');
+            requestTranscription();
+          }
+        } else {
+          silenceStartRef.current = null;
+        }
+      }, 200); // Check every 200ms
+
+      // Max timeout for demo/live mode
       const timeout = isLiveMode ? 300000 : 30000;
       recordingTimeoutRef.current = setTimeout(() => {
         setDemoTimeoutReached(true);
-        stopMicrophone();
-        if (streamingWsRef.current) {
-          streamingWsRef.current.close();
-          streamingWsRef.current = null;
-        }
-        setState('connected');
+        // On timeout, also request transcription instead of just stopping
+        requestTranscription();
       }, timeout);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Recording failed');
       setState('error');
       setIsRecording(false);
     }
-  }, [stopMicrophone, isLiveMode, checkRateLimit]);
+  }, [stopMicrophone, requestTranscription, isLiveMode, checkRateLimit]);
 
-  const sendMessage = useCallback(() => {
-    if (streamingWsRef.current && streamingWsRef.current.readyState === WebSocket.OPEN) {
-      streamingWsRef.current.send(JSON.stringify({ type: 'force_commit' }));
-      stopMicrophone();
-      setState('processing');
+  // Confirm and send the pending transcription
+  const confirmSend = useCallback(async () => {
+    if (!pendingTranscription) return;
+    const text = pendingTranscription;
+    setPendingTranscription(null);
+    setCurrentTranscript('');
+    // Close streaming WS since we're done with it
+    if (streamingWsRef.current) {
+      streamingWsRef.current.close();
+      streamingWsRef.current = null;
     }
-  }, [stopMicrophone]);
+    await sendTextMessage(text);
+  }, [pendingTranscription]);
+
+  // Cancel pending transcription and go back to connected
+  const cancelTranscription = useCallback(() => {
+    setPendingTranscription(null);
+    setCurrentTranscript('');
+    if (streamingWsRef.current) {
+      streamingWsRef.current.close();
+      streamingWsRef.current = null;
+    }
+    setState('connected');
+  }, []);
+
+  // Legacy sendMessage - now triggers transcribe_only flow
+  const sendMessage = useCallback(() => {
+    requestTranscription();
+  }, [requestTranscription]);
 
   const sendTextMessage = useCallback(async (text: string) => {
     if (!sessionIdRef.current) {
@@ -363,6 +447,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     setState('idle');
     setMessages([]);
     setCurrentTranscript('');
+    setPendingTranscription(null);
     setError(null);
   }, [stopRecording]);
 
@@ -417,6 +502,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     state,
     messages,
     currentTranscript,
+    pendingTranscription,
     error,
     connect,
     disconnect,
@@ -424,6 +510,8 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     stopRecording,
     sendMessage,
     sendTextMessage,
+    confirmSend,
+    cancelTranscription,
     isRecording,
     analyser,
     demoTimeoutReached,

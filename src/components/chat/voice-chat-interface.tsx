@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import type { FactoryAgent } from '@/lib/factory-types';
 import { useVoiceChatStreaming } from '@/hooks/use-voice-chat-streaming';
 import { AudioWaveform } from '@/components/ui/audio-waveform';
-import { Mic, MicOff, Keyboard, ArrowUp, Loader2, ArrowLeft, X } from 'lucide-react';
+import { Mic, ArrowUp, Loader2, ArrowLeft, RotateCcw, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Orb = dynamic(
@@ -28,6 +28,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     state,
     messages,
     currentTranscript,
+    pendingTranscription,
     error,
     connect,
     disconnect,
@@ -35,6 +36,8 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     stopRecording,
     sendMessage,
     sendTextMessage,
+    confirmSend,
+    cancelTranscription,
     isRecording,
     analyser,
     demoTimeoutReached,
@@ -50,6 +53,15 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     'infrastructure': 'Uranus',
   };
 
+  // Agent welcome presentations
+  const agentWelcome: Record<string, string> = {
+    'product-owner': `Hola! Soy Atlas, Product Owner de AgentBoss. Mi trabajo es entender tu negocio y traducir tus ideas en software funcional. Trabajo siempre bajo la supervision del lider de proyecto humano de AgentBoss — el toma las decisiones finales, yo ejecuto.\n\nToca el orbe o escribe para empezar a conversar. Te puedo ayudar con discovery de producto, user stories y planificacion de tu MVP.`,
+    'ux-designer': `Hola! Soy Venus, disenadora UX/UI de AgentBoss. Me encargo de que tu producto se vea y se sienta increible para tus usuarios. Todo lo que hago esta supervisado por el lider de proyecto humano de AgentBoss.\n\nToca el orbe o escribe para conversar. Te ayudo con wireframes, flujos de usuario y diseno de interfaces.`,
+    'black-belt': `Hola! Soy Pluto, Black Belt de QA en AgentBoss. Mi mision es asegurar que todo funcione perfecto antes de que llegue a tus usuarios. Siempre trabajo bajo la supervision del lider de proyecto humano de AgentBoss.\n\nToca el orbe o escribe para conversar. Puedo ayudarte con estrategia de testing, criterios de calidad y validacion de producto.`,
+    'developer': `Hola! Soy Earth, Developer de AgentBoss. Me encargo de construir el codigo que hace realidad las ideas. Trabajo bajo la supervision del lider de proyecto humano de AgentBoss.\n\nToca el orbe o escribe para conversar. Te ayudo con arquitectura, implementacion y decisiones tecnicas.`,
+    'infrastructure': `Hola! Soy Uranus, experto en infraestructura de AgentBoss. Me aseguro de que todo funcione en produccion de forma rapida y confiable. Siempre bajo la supervision del lider de proyecto humano de AgentBoss.\n\nToca el orbe o escribe para conversar. Te ayudo con deploy, hosting y escalabilidad.`,
+  };
+
   useEffect(() => {
     const agentName = agentNameMap[agent.slug] || agent.name;
     connect(agentName.toLowerCase());
@@ -59,7 +71,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, currentTranscript]);
+  }, [messages, currentTranscript, pendingTranscription]);
 
   const orbState = state === 'processing' ? 'thinking' as const
     : state === 'speaking' ? 'talking' as const
@@ -76,7 +88,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
   const rgb = hexToRgb(agent.color);
   const color2 = `#${Math.min(255, rgb.r + 40).toString(16).padStart(2, '0')}${Math.min(255, rgb.g + 40).toString(16).padStart(2, '0')}${Math.min(255, rgb.b + 40).toString(16).padStart(2, '0')}`;
 
-  const isActive = state === 'connected' || state === 'recording' || state === 'processing' || state === 'speaking';
+  const isActive = state === 'connected' || state === 'recording' || state === 'processing' || state === 'speaking' || state === 'review' || state === 'transcribing';
 
   const handleSendText = () => {
     if (textInput.trim() && !rateLimitReached) {
@@ -87,19 +99,23 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
 
   const statusText = rateLimitReached
     ? 'Limite de demo alcanzado'
+    : state === 'review'
+    ? 'Revisa tu mensaje y envialo'
+    : state === 'transcribing'
+    ? 'Transcribiendo tu mensaje...'
     : isRecording
-    ? 'Escuchando... toca para enviar'
+    ? 'Escuchando...'
     : state === 'processing'
     ? `${agent.name} esta pensando...`
     : state === 'speaking'
     ? `${agent.name} esta respondiendo...`
     : state === 'connecting'
     ? `Conectando con ${agent.name}...`
-    : 'Click para empezar a hablar con el agente';
+    : 'Toca el microfono para hablar';
 
   return (
     <div className="flex flex-col h-screen bg-[var(--background)]">
-      {/* Header - Inspired by carlosbejar.cl: large avatar + name + role */}
+      {/* Header */}
       <div className="flex items-center gap-4 px-5 py-4 border-b border-[var(--border)]">
         <button onClick={() => router.back()} className="p-1.5 hover:bg-white/5 rounded-lg transition-colors">
           <ArrowLeft className="w-5 h-5 text-[var(--muted)]" />
@@ -139,9 +155,9 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
           </p>
         </div>
       )}
-      {demoTimeoutReached && (
+      {demoTimeoutReached && state !== 'review' && state !== 'transcribing' && (
         <div className="mx-4 mt-3 rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 text-center">
-          <p className="text-amber-400 text-sm">Tiempo de grabacion agotado. Presiona el microfono para grabar de nuevo.</p>
+          <p className="text-amber-400 text-sm">Tiempo de grabacion agotado.</p>
         </div>
       )}
 
@@ -160,7 +176,8 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
               </div>
             </div>
           ))}
-          {currentTranscript && (
+          {/* Show current transcript while recording (not in review) */}
+          {currentTranscript && state === 'recording' && (
             <div className="flex justify-end">
               <div className="max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed text-white/70 italic" style={{ background: `${agent.color}80` }}>
                 {currentTranscript}...
@@ -171,15 +188,43 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
         </div>
       )}
 
-      {/* Live transcript when no messages yet */}
-      {currentTranscript && messages.length === 0 && (
-        <div className="mx-4 mt-3 rounded-lg p-3 border" style={{ borderColor: `${agent.color}30`, background: `${agent.color}08` }}>
-          <p className="text-sm text-[var(--foreground)] italic">{currentTranscript}...</p>
+      {/* Pending transcription review */}
+      {pendingTranscription && state === 'review' && (
+        <div className="mx-4 mt-3 rounded-xl p-4 border-2 animate-in fade-in slide-in-from-bottom-2 duration-300" style={{ borderColor: agent.color, background: `${agent.color}10` }}>
+          <p className="text-xs font-medium mb-2" style={{ color: agent.color }}>Tu mensaje:</p>
+          <p className="text-sm text-[var(--foreground)] leading-relaxed">{pendingTranscription}</p>
         </div>
       )}
 
-      {/* Orb / Waveform - centered in remaining space */}
-      <div className="flex-1 flex items-center justify-center">
+      {/* Transcribing indicator */}
+      {state === 'transcribing' && (
+        <div className="mx-4 mt-3 rounded-xl p-4 border border-[var(--border)] bg-[#0a0a0a] flex items-center justify-center gap-2">
+          <Loader2 className="h-4 w-4 animate-spin" style={{ color: agent.color }} />
+          <span className="text-sm text-[var(--muted)]">Transcribiendo...</span>
+        </div>
+      )}
+
+      {/* Agent welcome + Orb area */}
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 overflow-y-auto px-4">
+        {/* Welcome presentation - shown when connected and no messages yet */}
+        {messages.length === 0 && state !== 'connecting' && state !== 'recording' && state !== 'transcribing' && agentWelcome[agent.slug] && (
+          <div className="max-w-sm w-full rounded-xl p-4 bg-[#0a0a0a] border border-[var(--border)]">
+            <div className="flex items-start gap-3">
+              <img
+                src={agent.avatar}
+                alt={agent.name}
+                className="w-8 h-8 rounded-full object-cover border flex-shrink-0"
+                style={{ borderColor: agent.color }}
+              />
+              <div>
+                <p className="text-xs font-semibold mb-1.5" style={{ color: agent.color }}>{agent.name}</p>
+                <p className="text-xs text-[var(--muted)] leading-relaxed whitespace-pre-line">{agentWelcome[agent.slug]}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Orb / Waveform */}
         {state === 'connecting' ? (
           <div className="flex flex-col items-center gap-3">
             <Loader2 className="h-8 w-8 animate-spin" style={{ color: agent.color }} />
@@ -193,10 +238,10 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
           <div
             className={cn(
               'transition-transform duration-200',
-              isActive && !isRecording && !rateLimitReached && 'cursor-pointer hover:scale-110 active:scale-95'
+              state === 'connected' && !rateLimitReached && 'cursor-pointer hover:scale-110 active:scale-95'
             )}
             onClick={() => {
-              if (isActive && !isRecording && !rateLimitReached && state === 'connected') {
+              if (state === 'connected' && !rateLimitReached) {
                 startRecording();
               }
             }}
@@ -210,86 +255,132 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
         )}
       </div>
 
-      {/* Bottom controls - Inspired by carlosbejar.cl */}
+      {/* Bottom controls */}
       <div className="mx-4 mb-4 space-y-2">
-        {/* Control bar: mic + send + status */}
-        <div className="rounded-xl border border-[var(--border)] bg-[#0a0a0a] p-2.5">
-          <div className="flex items-center gap-2">
-            {/* Mic button - start recording */}
-            <button
-              onClick={() => {
-                if (!isRecording && state === 'connected' && !rateLimitReached) {
-                  startRecording();
-                }
-              }}
-              disabled={isRecording || state === 'processing' || state === 'speaking' || rateLimitReached || !isActive}
-              className={cn(
-                'p-2.5 rounded-lg transition-all flex-shrink-0',
-                isRecording
-                  ? 'bg-red-500/20 text-red-400 animate-pulse'
-                  : state === 'connected' && !rateLimitReached
-                  ? 'text-white hover:scale-105'
-                  : 'text-[var(--muted)] opacity-50'
-              )}
-              style={!isRecording && state === 'connected' && !rateLimitReached ? { background: agent.color } : undefined}
-            >
-              <Mic className="w-5 h-5" />
-            </button>
-
-            {/* Status text */}
-            <p className="flex-1 text-xs text-[var(--muted)] text-center">
-              {statusText}
-            </p>
-
-            {/* Send button - visible during recording */}
-            {isRecording && (
+        {/* Review controls - shown when transcription is ready */}
+        {state === 'review' && pendingTranscription && (
+          <div className="rounded-xl border-2 p-3 animate-in fade-in slide-in-from-bottom-2 duration-300" style={{ borderColor: agent.color, background: `${agent.color}08` }}>
+            <div className="flex items-center gap-2">
+              {/* Re-record button */}
               <button
-                onClick={() => sendMessage()}
-                className="px-4 py-2 rounded-lg bg-red-500 text-white text-sm font-medium transition-all hover:bg-red-600 hover:scale-105 flex-shrink-0 flex items-center gap-1.5"
+                onClick={() => {
+                  cancelTranscription();
+                  // Small delay to let state settle, then start recording
+                  setTimeout(() => startRecording(), 100);
+                }}
+                className="p-2.5 rounded-lg text-[var(--muted)] hover:text-white hover:bg-white/10 transition-all flex-shrink-0 flex items-center gap-1.5"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span className="text-xs">Regrabar</span>
+              </button>
+
+              {/* Status text */}
+              <p className="flex-1 text-xs text-center font-medium" style={{ color: agent.color }}>
+                Ahora puedes enviar tu mensaje
+              </p>
+
+              {/* Send button - agent color */}
+              <button
+                onClick={() => confirmSend()}
+                className="px-5 py-2.5 rounded-lg text-white text-sm font-medium transition-all hover:scale-105 hover:brightness-110 flex-shrink-0 flex items-center gap-1.5"
+                style={{ background: agent.color }}
               >
                 <ArrowUp className="w-4 h-4" />
                 Enviar
               </button>
-            )}
-
-            {/* Stop button - visible during recording */}
-            {isRecording && (
-              <button
-                onClick={() => stopRecording()}
-                className="p-2.5 rounded-lg text-[var(--muted)] hover:text-white hover:bg-white/10 transition-all flex-shrink-0"
-                title="Cancelar grabacion"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Text input - always visible */}
-        <div className="rounded-xl border border-[var(--border)] bg-[#0a0a0a] flex items-center gap-2 p-2.5">
-          <input
-            type="text"
-            value={textInput}
-            onChange={(e) => setTextInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSendText();
-              }
-            }}
-            placeholder="Escribe tu mensaje..."
-            className="flex-1 bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted)] outline-none"
-            disabled={rateLimitReached || !isActive}
-          />
-          <button
-            onClick={handleSendText}
-            disabled={!textInput.trim() || rateLimitReached || !isActive}
-            className="p-2 rounded-lg text-white disabled:opacity-30 transition-all hover:scale-105 flex-shrink-0"
-            style={{ background: agent.color }}
-          >
-            <ArrowUp className="w-4 h-4" />
-          </button>
-        </div>
+        {/* Recording controls */}
+        {state !== 'review' && (
+          <div className="rounded-xl border border-[var(--border)] bg-[#0a0a0a] p-2.5">
+            <div className="flex items-center gap-2">
+              {/* Mic button */}
+              <button
+                onClick={() => {
+                  if (!isRecording && state === 'connected' && !rateLimitReached) {
+                    startRecording();
+                  }
+                }}
+                disabled={isRecording || state === 'processing' || state === 'speaking' || state === 'transcribing' || rateLimitReached || !isActive}
+                className={cn(
+                  'p-2.5 rounded-lg transition-all flex-shrink-0',
+                  isRecording
+                    ? 'animate-pulse'
+                    : state === 'connected' && !rateLimitReached
+                    ? 'text-white hover:scale-105'
+                    : 'text-[var(--muted)] opacity-50'
+                )}
+                style={
+                  isRecording
+                    ? { background: `${agent.color}30`, color: agent.color }
+                    : state === 'connected' && !rateLimitReached
+                    ? { background: agent.color }
+                    : undefined
+                }
+              >
+                <Mic className="w-5 h-5" />
+              </button>
+
+              {/* Status text */}
+              <p className="flex-1 text-xs text-[var(--muted)] text-center">
+                {statusText}
+              </p>
+
+              {/* Send button while recording - agent color */}
+              {isRecording && (
+                <button
+                  onClick={() => sendMessage()}
+                  className="px-4 py-2 rounded-lg text-white text-sm font-medium transition-all hover:scale-105 hover:brightness-110 flex-shrink-0 flex items-center gap-1.5"
+                  style={{ background: agent.color }}
+                >
+                  <ArrowUp className="w-4 h-4" />
+                  Listo
+                </button>
+              )}
+
+              {/* Cancel recording */}
+              {isRecording && (
+                <button
+                  onClick={() => stopRecording()}
+                  className="p-2.5 rounded-lg text-[var(--muted)] hover:text-white hover:bg-white/10 transition-all flex-shrink-0"
+                  title="Cancelar grabacion"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Text input - hidden during review */}
+        {state !== 'review' && (
+          <div className="rounded-xl border border-[var(--border)] bg-[#0a0a0a] flex items-center gap-2 p-2.5">
+            <input
+              type="text"
+              value={textInput}
+              onChange={(e) => setTextInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleSendText();
+                }
+              }}
+              placeholder="Escribe tu mensaje..."
+              className="flex-1 bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted)] outline-none"
+              disabled={rateLimitReached || !isActive || isRecording || state === 'transcribing'}
+            />
+            <button
+              onClick={handleSendText}
+              disabled={!textInput.trim() || rateLimitReached || !isActive || isRecording || state === 'transcribing'}
+              className="p-2 rounded-lg text-white disabled:opacity-30 transition-all hover:scale-105 flex-shrink-0"
+              style={{ background: agent.color }}
+            >
+              <ArrowUp className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
