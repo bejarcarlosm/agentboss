@@ -38,7 +38,7 @@ function Planet({ href, color, name, role, avatar, dotSize = 'w-2 h-2', textSize
       {/* Avatar - shown on hover OR when spotlight is active */}
       <div className="absolute -top-[9rem] left-1/2 -translate-x-1/2 pointer-events-none">
         <div
-          className={`w-32 h-32 rounded-full overflow-hidden border-2 transition-all duration-300 shadow-lg !pointer-events-auto cursor-pointer flex-shrink-0 ${
+          className={`w-24 h-36 rounded-[50%] overflow-hidden border-2 transition-all duration-300 shadow-lg !pointer-events-auto cursor-pointer flex-shrink-0 ${
             isSpotlight
               ? 'opacity-100 scale-100'
               : 'opacity-0 scale-75 group-hover/planet:opacity-100 group-hover/planet:scale-100'
