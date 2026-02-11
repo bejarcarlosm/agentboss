@@ -7,7 +7,7 @@ export function ValueProps() {
             Fabrica tradicional vs <span className="text-[#2dd4bf]">AgentBoss</span>
           </h2>
           <p className="text-[var(--muted)] max-w-xl mx-auto">
-            Mismo resultado profesional. Fraccion del tiempo y costo.
+            Mismo presupuesto. 3x mas features entregados.
           </p>
         </div>
 
@@ -36,7 +36,7 @@ export function ValueProps() {
 const COMPARISONS = [
   { label: 'Discovery', traditional: '2-4 semanas', agentboss: '1-2 dias' },
   { label: 'Tiempo a MVP', traditional: '8-16 semanas', agentboss: '1-4 semanas' },
-  { label: 'Costo promedio MVP', traditional: '$15,000 - $50,000', agentboss: '$3,000 - $10,000' },
+  { label: 'Features por sprint', traditional: '3-5 features', agentboss: '10-15 features' },
   { label: 'Disponibilidad', traditional: 'Horario oficina', agentboss: '24/7' },
   { label: 'Costo discovery', traditional: 'Cobrado', agentboss: 'Gratis' },
   { label: 'Iteraciones', traditional: 'Limitadas por contrato', agentboss: 'Ilimitadas en discovery' },

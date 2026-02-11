@@ -31,7 +31,7 @@ export function FactoryHero() {
             {/* Value prop */}
             <p className="text-lg text-[var(--muted)] leading-relaxed mb-4">
               Tu equipo de desarrollo potenciado por agentes IA. Creamos las apps, automatizaciones y sistemas que tu negocio necesita —{' '}
-              <span className="text-[var(--foreground)] font-semibold">mas rapido y mas economico</span> que una fabrica tradicional.
+              <span className="text-[var(--foreground)] font-semibold">3x mas features en menos tiempo</span> que una fabrica tradicional.
             </p>
 
             <p className="text-sm text-[var(--muted)] mb-8">
@@ -184,8 +184,8 @@ export function FactoryHero() {
             <div className="text-sm text-[var(--muted)] mt-1">Mas rapido que desarrollo tradicional</div>
           </div>
           <div>
-            <div className="text-3xl md:text-4xl font-bold text-[#2dd4bf]">70%</div>
-            <div className="text-sm text-[var(--muted)] mt-1">Ahorro vs fabrica tradicional</div>
+            <div className="text-3xl md:text-4xl font-bold text-[#2dd4bf]">3x</div>
+            <div className="text-sm text-[var(--muted)] mt-1">Mas features por sprint</div>
           </div>
           <div>
             <div className="text-3xl md:text-4xl font-bold text-[var(--foreground)]">1-4</div>

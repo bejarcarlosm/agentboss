@@ -11,7 +11,7 @@ export function FactoryFooter() {
               Agent<span className="text-[#2dd4bf]">Boss</span>
             </h3>
             <p className="text-sm text-[var(--muted)] leading-relaxed max-w-sm">
-              Fabrica de software potenciada por agentes IA. Construimos tu proyecto mas rapido y mas economico que una fabrica tradicional.
+              Fabrica de software potenciada por agentes IA. 3x mas features en menos tiempo que una fabrica tradicional.
             </p>
           </div>
 
