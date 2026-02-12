@@ -119,6 +119,30 @@ export function AgentShowcase({ locale }: { locale: string }) {
             </Link>
           ))}
         </div>
+
+        {/* Remaining classified agents */}
+        <div className="mt-10 pt-8 border-t border-[var(--border)]">
+          <p className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] text-center mb-4">
+            {locale === 'es' ? '26 agentes en entrenamiento' : '26 agents in training'}
+          </p>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 max-w-3xl mx-auto">
+            {[
+              'Frontend Dev', 'Mobile Builder', 'Rapid Prototyper', 'Test Writer',
+              'Feedback Synthesizer', 'Sprint Prioritizer', 'Trend Researcher',
+              'App Store Optimizer', 'Instagram Curator', 'Reddit Community',
+              'TikTok Strategist', 'Twitter Engager', 'Brand Guardian',
+              'UX Researcher', 'Visual Storyteller', 'Fun Injector',
+              'Experiment Tracker', 'Project Launcher', 'Studio Producer',
+              'Finance Tracker', 'Infra Maintainer', 'Legal Checker',
+              'API Tester', 'Performance Benchmarker', 'Tool Evaluator',
+              'Workflow Optimizer',
+            ].map(name => (
+              <span key={name} className="text-[10px] text-[var(--muted)] opacity-50">
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
