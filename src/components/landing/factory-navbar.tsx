@@ -24,7 +24,7 @@ export function FactoryNavbar() {
     ? { services: 'Servicios', process: 'Proceso', team: 'Equipo', pipeline: 'Pipeline' }
     : { services: 'Services', process: 'Process', team: 'Team', pipeline: 'Pipeline' }
 
-  const ctaText = locale === 'es' ? 'Discovery gratis' : 'Free Discovery'
+  const ctaText = locale === 'es' ? 'Diagnóstico gratis' : 'Free Discovery'
 
   return (
     <nav className="border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-sm sticky top-0 z-50">

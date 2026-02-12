@@ -3,12 +3,12 @@
 import { useLocale } from 'next-intl';
 
 const COMPARISONS_ES = [
-  { label: 'Discovery', traditional: '2-4 semanas', agentboss: '1-2 dias' },
-  { label: 'Tiempo a MVP', traditional: '8-16 semanas', agentboss: '1-4 semanas' },
-  { label: 'Features por sprint', traditional: '3-5 features', agentboss: '10-15 features' },
+  { label: 'Diagnóstico', traditional: '2-4 semanas', agentboss: '1-2 días' },
+  { label: 'Tiempo a MVP (producto mínimo)', traditional: '8-16 semanas', agentboss: '1-4 semanas' },
+  { label: 'Funcionalidades por ciclo', traditional: '3-5', agentboss: '10-15' },
   { label: 'Disponibilidad', traditional: 'Horario oficina', agentboss: '24/7' },
-  { label: 'Costo discovery', traditional: 'Cobrado', agentboss: 'Gratis' },
-  { label: 'Iteraciones', traditional: 'Limitadas por contrato', agentboss: 'Ilimitadas en discovery' },
+  { label: 'Costo diagnóstico', traditional: 'Cobrado', agentboss: 'Gratis' },
+  { label: 'Iteraciones', traditional: 'Limitadas por contrato', agentboss: 'Ilimitadas en diagnóstico' },
 ];
 
 const COMPARISONS_EN = [
@@ -24,7 +24,7 @@ export function ValueProps() {
   const locale = useLocale();
   const COMPARISONS = locale === 'es' ? COMPARISONS_ES : COMPARISONS_EN;
   const t = locale === 'es'
-    ? { heading: 'Fabrica tradicional vs', subheading: 'Mismo presupuesto. 3x mas features entregados.', traditional: 'Fabrica Tradicional' }
+    ? { heading: 'Fábrica tradicional vs', subheading: 'Mismo presupuesto. 3x más funcionalidades entregadas.', traditional: 'Fábrica Tradicional' }
     : { heading: 'Traditional factory vs', subheading: 'Same budget. 3x more features delivered.', traditional: 'Traditional Factory' };
 
   return (

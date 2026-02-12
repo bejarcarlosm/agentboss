@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Font rendering - sharper text */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 /* Default theme (fallback) */
 :root {
   --background: #0a0a0a;

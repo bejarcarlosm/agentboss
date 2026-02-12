@@ -6,7 +6,7 @@ import { useLocale } from 'next-intl';
 export function CtaSection() {
   const locale = useLocale();
   const t = locale === 'es'
-    ? { heading: 'Listo para construir?', description: 'Empieza con un discovery gratuito. Habla con Atlas, nuestro Product Owner IA, y en minutos tendras un primer brief de tu proyecto.', subtext: 'Sin compromiso · Sin tarjeta de credito · Resultado inmediato', ctaPrimary: 'Iniciar discovery gratis', ctaSecondary: 'Contactar' }
+    ? { heading: '¿Listo para construir?', description: 'Empieza con un diagnóstico gratuito. Habla con Atlas, nuestro Product Owner IA, y en minutos tendrás un primer resumen de tu proyecto.', subtext: 'Sin compromiso · Sin tarjeta de crédito · Resultado inmediato', ctaPrimary: 'Iniciar diagnóstico gratis', ctaSecondary: 'Contactar' }
     : { heading: 'Ready to build?', description: 'Start with a free discovery. Talk to Atlas, our AI Product Owner, and in minutes you\'ll have a first brief of your project.', subtext: 'No commitment · No credit card · Instant results', ctaPrimary: 'Start free discovery', ctaSecondary: 'Contact us' };
 
   return (

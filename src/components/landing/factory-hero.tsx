@@ -67,17 +67,17 @@ export function FactoryHero() {
   const locale = useLocale();
 
   const t = locale === 'es' ? {
-    badge: 'Fabrica de Software potenciada por IA',
+    badge: 'Fábrica de Software potenciada por IA',
     headline: 'Construimos tu software',
     headlineHighlight: 'en semanas, no meses',
     description: 'Tu equipo de desarrollo potenciado por agentes IA. Creamos las apps, automatizaciones y sistemas que tu negocio necesita —',
-    descriptionHighlight: '3x mas features en menos tiempo',
-    descriptionEnd: 'que una fabrica tradicional.',
-    subtext: 'Discovery gratuito · Sin compromiso · Precio fijo por MVP',
-    ctaPrimary: 'Iniciar discovery gratis',
-    ctaSecondary: 'Como funciona',
-    speedLabel: 'Mas rapido que desarrollo tradicional',
-    featuresLabel: 'Mas features por sprint',
+    descriptionHighlight: '3x más funcionalidades en menos tiempo',
+    descriptionEnd: 'que una fábrica tradicional.',
+    subtext: 'Diagnóstico gratuito · Sin compromiso · Precio fijo por MVP',
+    ctaPrimary: 'Iniciar diagnóstico gratis',
+    ctaSecondary: '¿Cómo funciona?',
+    speedLabel: 'Más rápido que desarrollo tradicional',
+    featuresLabel: 'Más funcionalidades por ciclo',
     mvpLabel: 'Semanas para tu MVP',
     agentsLabel: 'Agentes IA especializados',
   } : {

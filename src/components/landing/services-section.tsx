@@ -4,11 +4,11 @@ import { useLocale } from 'next-intl';
 
 const SERVICES_ES = [
   { icon: '🌐', title: 'Desarrollo Web', description: 'Aplicaciones web modernas con Next.js, React y TypeScript. Dashboards, plataformas SaaS, portales de clientes.' },
-  { icon: '🧠', title: 'Agentes IA a Medida', description: 'Construimos agentes IA para tus procesos: Lia califica leads, Alex hace llamadas en frio, Julia es recepcionista y Dapti se adapta a lo que necesites.' },
-  { icon: '🤖', title: 'Automatizaciones IA', description: 'Chatbots, extraccion de documentos, flujos automatizados. Integramos IA donde mas impacto genera.' },
+  { icon: '🧠', title: 'Agentes IA a Medida', description: 'Construimos agentes IA para tus procesos: Lia califica leads (prospectos), Alex hace llamadas en frío, Julia es recepcionista y Dapti se adapta a lo que necesites.' },
+  { icon: '🤖', title: 'Automatizaciones IA', description: 'Chatbots, extracción de documentos, flujos automatizados. Integramos IA donde más impacto genera.' },
   { icon: '🎨', title: 'Diseño UX/UI', description: 'Interfaces intuitivas y prototipos interactivos. Validamos ideas antes de construir para no desperdiciar recursos.' },
-  { icon: '⚡', title: 'MVPs Rapidos', description: 'De la idea al producto funcional en semanas. Lanza rapido, valida con usuarios reales e itera.' },
-  { icon: '🔧', title: 'Consultoria Tech', description: 'Auditoria de codigo, arquitectura de sistemas y optimizacion de procesos. Tu CTO o Director de IA bajo demanda, con traspaso completo de la fabrica de software a tu equipo de IT.' },
+  { icon: '⚡', title: 'MVPs Rápidos', description: 'De la idea al producto funcional en semanas. Lanza rápido, valida con usuarios reales e itera.' },
+  { icon: '🔧', title: 'Consultoría Tech', description: 'Auditoría de código, arquitectura de sistemas y optimización de procesos. Tu CTO o Director de IA bajo demanda, con traspaso completo de la fábrica de software a tu equipo de IT.' },
 ];
 
 const SERVICES_EN = [
@@ -24,7 +24,7 @@ export function ServicesSection() {
   const locale = useLocale();
   const SERVICES = locale === 'es' ? SERVICES_ES : SERVICES_EN;
   const t = locale === 'es'
-    ? { heading: 'Soluciones para tu negocio', subheading: 'Todo lo que necesitas para digitalizar y escalar, con la velocidad de una fabrica potenciada por IA.' }
+    ? { heading: 'Soluciones para tu negocio', subheading: 'Todo lo que necesitas para digitalizar y escalar, con la velocidad de una fábrica potenciada por IA.' }
     : { heading: 'Solutions for your business', subheading: 'Everything you need to digitize and scale, with the speed of an AI-powered factory.' };
 
   return (
