@@ -340,7 +340,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
             <button
               onClick={handleSendText}
               disabled={!textInput.trim() || rateLimitReached || !isActive || state === 'processing' || state === 'speaking'}
-              className="p-2 rounded-lg text-white disabled:opacity-30 transition-all hover:scale-105 flex-shrink-0"
+              className="p-2 rounded-lg text-[var(--text-on-accent)] disabled:opacity-30 transition-all hover:scale-105 flex-shrink-0"
               style={{ background: agent.color }}
             >
               <ArrowUp className="w-4 h-4" />

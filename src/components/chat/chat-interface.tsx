@@ -18,7 +18,7 @@ function TypingIndicator({ color }: { color: string }) {
   return (
     <div className="flex gap-3 message-in">
       <div className="w-8 h-8 rounded-full flex-shrink-0" />
-      <div className="flex items-center gap-1 px-4 py-3 bg-[#1a1a1a] border border-[var(--border)] rounded-2xl">
+      <div className="flex items-center gap-1 px-4 py-3 bg-[var(--surface-elevated)] border border-[var(--border)] rounded-2xl">
         {[0, 1, 2].map((i) => (
           <span
             key={i}

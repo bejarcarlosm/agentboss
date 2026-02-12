@@ -100,7 +100,7 @@ export default async function DossierPage({ params }: Props) {
                       {value}%
                     </span>
                   </div>
-                  <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all duration-1000"
                       style={{ width: `${value}%`, background: agent.color }}

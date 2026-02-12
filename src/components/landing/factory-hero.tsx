@@ -35,8 +35,8 @@ function Planet({ href, color, name, role, avatar, dotSize = 'w-2 h-2', textSize
 
   return (
     <Link href={href} className="group/planet relative flex items-center gap-1.5 hover:scale-110 transition-transform">
-      {/* Avatar - shown on hover OR when spotlight is active */}
-      <div className="absolute -top-[9rem] left-1/2 -translate-x-1/2 pointer-events-none">
+      {/* Avatar + link - shown on hover OR when spotlight is active */}
+      <div className="absolute -top-[10rem] left-1/2 -translate-x-1/2 pointer-events-none flex flex-col items-center">
         <div
           className={`w-24 h-36 rounded-[50%] overflow-hidden border-2 transition-all duration-300 shadow-lg !pointer-events-auto cursor-pointer flex-shrink-0 ${
             isSpotlight
@@ -53,6 +53,16 @@ function Planet({ href, color, name, role, avatar, dotSize = 'w-2 h-2', textSize
             className="w-full h-full object-cover"
           />
         </div>
+        <span
+          className={`mt-1 text-[8px] font-mono tracking-wider whitespace-nowrap transition-all duration-300 ${
+            isSpotlight
+              ? 'opacity-60'
+              : 'opacity-0 group-hover/planet:opacity-60'
+          }`}
+          style={{ color }}
+        >
+          agentboss.cl/dossier/{href.split('/dossier/')[1]}
+        </span>
       </div>
       <span className={`${dotSize} rounded-full flex-shrink-0`} style={{ background: color, boxShadow: `0 0 8px ${color}99` }} />
       <span className={`px-1.5 py-0.5 rounded-full border ${textSize} font-semibold whitespace-nowrap ${isOuter ? 'opacity-80' : ''}`} style={{ background: `${color}10`, borderColor: `${color}20`, color: color }}>
