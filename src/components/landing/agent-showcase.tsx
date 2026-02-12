@@ -123,7 +123,7 @@ export function AgentShowcase({ locale }: { locale: string }) {
         {/* Remaining classified agents */}
         <div className="mt-10 pt-8 border-t border-[var(--border)]">
           <p className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] text-center mb-4">
-            {locale === 'es' ? '26 agentes en entrenamiento' : '26 agents in training'}
+            {locale === 'es' ? 'El resto del equipo tras bambalinas' : 'The rest of the team behind the scenes'}
           </p>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 max-w-3xl mx-auto">
             {[
