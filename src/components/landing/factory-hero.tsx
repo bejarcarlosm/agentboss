@@ -188,9 +188,12 @@ export function FactoryHero() {
             </div>
 
             {/* Central Orb */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] md:w-[140px] md:h-[140px] rounded-full orb-hero-glow">
+            <Link
+              href={`/${locale}/chat/product-owner`}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] md:w-[140px] md:h-[140px] rounded-full orb-hero-glow cursor-pointer hover:scale-110 transition-transform"
+            >
               <LazyOrb agentState={null} colors={['#2dd4bf', '#0f766e']} delay={1500} />
-            </div>
+            </Link>
           </div>
         </div>
 
