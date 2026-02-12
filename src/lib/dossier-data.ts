@@ -384,8 +384,8 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'Security', color: '#ef4444' },
     ],
     stats: { speed: 95, precision: 92, creativity: 70, autonomy: 90 },
-    quote: 'El mejor codigo es el que no necesita comentarios.',
-    quote_en: 'The best code is code that needs no comments.',
+    quote: 'Codigo sin comentarios es un codebase sin memoria.',
+    quote_en: 'Code without comments is a codebase without memory.',
   },
   {
     slug: 'nova',
