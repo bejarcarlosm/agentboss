@@ -1,4 +1,5 @@
 import { Rajdhani } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -15,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html suppressHydrationWarning>
-      <body className={`${rajdhani.variable} font-sans antialiased`}>
+      <body className={`${GeistSans.variable} ${rajdhani.variable} antialiased`}>
         <ThemeProvider>
           {children}
         </ThemeProvider>
