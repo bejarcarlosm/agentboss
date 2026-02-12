@@ -4,19 +4,19 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLocale } from 'next-intl';
-import { DynamicOrb } from '@/components/ui/dynamic-orb';
+import { LazyOrb } from '@/components/ui/lazy-orb';
 
 const PLANETS_DATA = [
-  { id: 'pluto', color: '#22c55e', name: 'Pluto', role_es: 'QA', role_en: 'QA', avatar: '/agents/pluto.jpg', cssClass: 'planet-pluto', delay: undefined, dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
-  { id: 'mars', color: '#ef4444', name: 'Mars', role_es: 'Growth', role_en: 'Growth', avatar: '/agents/mars.jpg', cssClass: 'planet-mars', delay: '-8s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
-  { id: 'flux', color: '#06b6d4', name: 'Flux', role_es: 'Dev', role_en: 'Dev', avatar: '/agents/flux.jpg', cssClass: 'planet-flux', delay: '-5s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
-  { id: 'orion', color: '#f97316', name: 'Orion', role_es: 'Infra', role_en: 'Infra', avatar: '/agents/orion.jpg', cssClass: 'planet-orion', delay: '-14s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
-  { id: 'venus', color: '#a855f7', name: 'Venus', role_es: 'UX', role_en: 'UX', avatar: '/agents/venus.jpg', cssClass: 'planet-venus', delay: '-10s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
-  { id: 'nova', color: '#3b82f6', name: 'Nova', role_es: 'IA', role_en: 'AI', avatar: '/agents/nova.jpg', cssClass: 'planet-nova', delay: '-20s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
-  { id: 'atlas', color: '#2dd4bf', name: 'Atlas', role_es: 'PO', role_en: 'PO', avatar: '/agents/atlas.jpg', cssClass: 'planet-atlas', delay: '-26.67s', dotSize: 'w-2.5 h-2.5', textSize: 'text-[14px]', orbit: 'inner' },
-  { id: 'luna', color: '#10b981', name: 'Luna', role_es: 'Soporte', role_en: 'Support', avatar: '/agents/luna.jpg', cssClass: 'planet-luna', delay: '-16s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[12px]', orbit: 'outer' },
-  { id: 'sia', color: '#ec4899', name: 'Sia', role_es: 'Contenido', role_en: 'Content', avatar: '/agents/sia.jpg', cssClass: 'planet-sia', delay: '-30s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[12px]', orbit: 'outer' },
-  { id: 'saturn', color: '#8b5cf6', name: 'Saturn', role_es: 'Analytics', role_en: 'Analytics', avatar: '/agents/saturn.jpg', cssClass: 'planet-saturn', delay: '-40s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[12px]', orbit: 'outer' },
+  { id: 'pluto', color: '#22c55e', name: 'Pluto', role_es: 'QA', role_en: 'QA', avatar: '/agents/pluto.webp', cssClass: 'planet-pluto', delay: undefined, dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'mars', color: '#ef4444', name: 'Mars', role_es: 'Growth', role_en: 'Growth', avatar: '/agents/mars.webp', cssClass: 'planet-mars', delay: '-8s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'flux', color: '#06b6d4', name: 'Flux', role_es: 'Dev', role_en: 'Dev', avatar: '/agents/flux.webp', cssClass: 'planet-flux', delay: '-5s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'orion', color: '#f97316', name: 'Orion', role_es: 'Infra', role_en: 'Infra', avatar: '/agents/orion.webp', cssClass: 'planet-orion', delay: '-14s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'venus', color: '#a855f7', name: 'Venus', role_es: 'UX', role_en: 'UX', avatar: '/agents/venus.webp', cssClass: 'planet-venus', delay: '-10s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'nova', color: '#3b82f6', name: 'Nova', role_es: 'IA', role_en: 'AI', avatar: '/agents/nova.webp', cssClass: 'planet-nova', delay: '-20s', dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'atlas', color: '#2dd4bf', name: 'Atlas', role_es: 'PO', role_en: 'PO', avatar: '/agents/atlas.webp', cssClass: 'planet-atlas', delay: '-26.67s', dotSize: 'w-2.5 h-2.5', textSize: 'text-[14px]', orbit: 'inner' },
+  { id: 'luna', color: '#10b981', name: 'Luna', role_es: 'Soporte', role_en: 'Support', avatar: '/agents/luna.webp', cssClass: 'planet-luna', delay: '-16s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[12px]', orbit: 'outer' },
+  { id: 'sia', color: '#ec4899', name: 'Sia', role_es: 'Contenido', role_en: 'Content', avatar: '/agents/sia.webp', cssClass: 'planet-sia', delay: '-30s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[12px]', orbit: 'outer' },
+  { id: 'saturn', color: '#8b5cf6', name: 'Saturn', role_es: 'Analytics', role_en: 'Analytics', avatar: '/agents/saturn.webp', cssClass: 'planet-saturn', delay: '-40s', dotSize: 'w-1.5 h-1.5', textSize: 'text-[12px]', orbit: 'outer' },
 ] as const;
 
 interface PlanetProps {
@@ -189,7 +189,7 @@ export function FactoryHero() {
 
             {/* Central Orb */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] md:w-[140px] md:h-[140px] rounded-full orb-hero-glow">
-              <DynamicOrb agentState={null} colors={['#2dd4bf', '#0f766e']} />
+              <LazyOrb agentState={null} colors={['#2dd4bf', '#0f766e']} delay={1500} />
             </div>
           </div>
         </div>

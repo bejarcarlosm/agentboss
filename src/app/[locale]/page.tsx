@@ -7,17 +7,19 @@ import { ValueProps } from '@/components/landing/value-props'
 import { CtaSection } from '@/components/landing/cta-section'
 import { FactoryFooter } from '@/components/landing/factory-footer'
 
-export default function Home() {
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+
   return (
     <div className="min-h-screen bg-[var(--background)]">
       <FactoryNavbar />
       <FactoryHero />
-      <ServicesSection />
-      <AgentShowcase />
-      <ProcessSection />
-      <ValueProps />
-      <CtaSection />
-      <FactoryFooter />
+      <ServicesSection locale={locale} />
+      <AgentShowcase locale={locale} />
+      <ProcessSection locale={locale} />
+      <ValueProps locale={locale} />
+      <CtaSection locale={locale} />
+      <FactoryFooter locale={locale} />
     </div>
   )
 }

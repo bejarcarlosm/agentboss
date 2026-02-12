@@ -1,10 +1,6 @@
-'use client';
-
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
 
-export function CtaSection() {
-  const locale = useLocale();
+export function CtaSection({ locale }: { locale: string }) {
   const t = locale === 'es'
     ? { heading: '¿Listo para construir?', description: 'Empieza con un diagnóstico gratuito. Habla con Atlas, nuestro Product Owner IA, y en minutos tendrás un primer resumen de tu proyecto.', subtext: 'Sin compromiso · Sin tarjeta de crédito · Resultado inmediato', ctaPrimary: 'Iniciar diagnóstico gratis', ctaSecondary: 'Contactar' }
     : { heading: 'Ready to build?', description: 'Start with a free discovery. Talk to Atlas, our AI Product Owner, and in minutes you\'ll have a first brief of your project.', subtext: 'No commitment · No credit card · Instant results', ctaPrimary: 'Start free discovery', ctaSecondary: 'Contact us' };

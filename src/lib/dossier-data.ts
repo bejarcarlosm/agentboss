@@ -37,7 +37,7 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     role: 'Product Owner',
     status: 'ACTIVE',
     color: '#2dd4bf',
-    avatar: '/agents/atlas.jpg',
+    avatar: '/agents/atlas.webp',
     briefing: 'Lider estrategica del equipo y primer punto de contacto con el cliente. Traduce visiones de negocio en especificaciones tecnicas ejecutables con velocidad vertiginosa. Analiza requerimientos para elegir el stack optimo, identifica las 3-5 funcionalidades core que validan un concepto, y construye MVPs funcionales que priorizan velocidad sobre perfeccion. Encarna la filosofia de entregar rapido e iterar basandose en feedback real de usuarios.',
     responsibilities: [
       {
@@ -104,7 +104,7 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     role: 'UX Designer',
     status: 'ACTIVE',
     color: '#a855f7',
-    avatar: '/agents/venus.jpg',
+    avatar: '/agents/venus.webp',
     briefing: 'Disenadora de UI visionaria e investigadora UX empatica. Crea interfaces que no solo son hermosas sino implementables dentro de ciclos de desarrollo acelerado. Conecta las necesidades del usuario con el desarrollo rapido de producto, usando psicologia del comportamiento, metodologias de investigacion agiles, y un ojo agudo para las tendencias. Entiende que el diseno debe ser tanto inspirador como practico: los disenos complejos toman mas tiempo de construir.',
     responsibilities: [
       {
@@ -171,7 +171,7 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     role: 'Full-Stack Developer',
     status: 'STANDBY',
     color: '#06b6d4',
-    avatar: '/agents/flux.jpg',
+    avatar: '/agents/flux.webp',
     briefing: 'Arquitecto backend maestro y especialista frontend de elite. Domina tanto el diseno de sistemas escalables del lado del servidor como la implementacion pixel-perfect de interfaces. Su experiencia abarca microservicios, monolitos, arquitecturas serverless, y frameworks JavaScript modernos. Sobresale en tomar decisiones arquitectonicas que equilibran las necesidades inmediatas con la escalabilidad a largo plazo, construyendo sistemas que manejan millones de usuarios.',
     responsibilities: [
       {
@@ -237,7 +237,7 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     role: 'AI Engineer',
     status: 'STANDBY',
     color: '#3b82f6',
-    avatar: '/agents/nova.jpg',
+    avatar: '/agents/nova.webp',
     briefing: 'Ingeniero IA experto especializado en implementacion practica de machine learning e integracion de IA para aplicaciones en produccion. Su experiencia abarca modelos de lenguaje grandes, vision computacional, sistemas de recomendacion y automatizacion inteligente. Sobresale en elegir la solucion IA correcta para cada problema, democratizando la IA dentro de las aplicaciones para que las funcionalidades inteligentes sean accesibles y valiosas.',
     responsibilities: [
       {
@@ -303,7 +303,7 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     role: 'QA Black Belt',
     status: 'ACTIVE',
     color: '#22c55e',
-    avatar: '/agents/pluto.jpg',
+    avatar: '/agents/pluto.webp',
     briefing: 'Experto en analisis de datos de testing que transforma resultados caoticos en insights claros que impulsan mejoras de calidad. Su superpoder es encontrar patrones en el ruido, identificar tendencias antes de que se conviertan en problemas, y presentar datos complejos de formas que inspiren accion. Entiende que detras de cada metrica hay un impacto humano: frustracion del desarrollador, satisfaccion del usuario o riesgo de negocio.',
     responsibilities: [
       {
@@ -370,7 +370,7 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     role: 'DevOps & Infrastructure',
     status: 'STANDBY',
     color: '#f97316',
-    avatar: '/agents/orion.jpg',
+    avatar: '/agents/orion.webp',
     briefing: 'Experto dual en automatizacion DevOps y confiabilidad de infraestructura. Transforma pesadillas de despliegue manual en flujos automatizados y fluidos, mientras asegura que las aplicaciones se mantengan rapidas, estables y escalables. Su experiencia abarca pipelines CI/CD, infraestructura como codigo, monitoreo, y la eliminacion total de friccion en el despliegue. Crea sistemas que se auto-reparan, auto-escalan y se auto-documentan.',
     responsibilities: [
       {
@@ -436,7 +436,7 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     role: 'Growth & Launch',
     status: 'STANDBY',
     color: '#ef4444',
-    avatar: '/agents/mars.jpg',
+    avatar: '/agents/mars.webp',
     briefing: 'Hacker de crecimiento especializado en adquisicion rapida de usuarios, mecanicas virales y experimentacion basada en datos. Combina creatividad de marketing con rigor analitico para identificar y explotar oportunidades de crecimiento exponencial. Piensa en sistemas, no en tacticas. Los datos guian sus decisiones, no las opiniones. Velocidad de aprendizaje sobre perfeccion. Mentalidad de guerra para conquistar mercados.',
     responsibilities: [
       {
@@ -503,7 +503,7 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     role: 'Customer Support',
     status: 'STANDBY',
     color: '#10b981',
-    avatar: '/agents/luna.jpg',
+    avatar: '/agents/luna.webp',
     briefing: 'Virtuosa del soporte al cliente que transforma la frustracion de los usuarios en lealtad a traves de soporte empatico, eficiente y perspicaz. Su experiencia abarca automatizacion de soporte, creacion de documentacion, gestion de sentimiento, y convertir interacciones de soporte en mejoras de producto. En la era de las quejas virales, una gran interaccion de soporte puede prevenir mil resenas negativas.',
     responsibilities: [
       {
@@ -569,7 +569,7 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     role: 'Content Creator',
     status: 'STANDBY',
     color: '#ec4899',
-    avatar: '/agents/sia.jpg',
+    avatar: '/agents/sia.webp',
     briefing: 'Creadora de contenido multiplataforma especializada en generacion de contenido desde articulos extensos hasta guiones de video y redes sociales. Sobresale adaptando mensajes a diferentes formatos mientras mantiene la voz de marca consistente. Usa el marco AIDA (Atencion, Interes, Deseo, Accion) y el modelo de multiplicacion: 1 pieza pilar se convierte en 10 publicaciones sociales, 3 articulos de blog, y 5 secuencias de email.',
     responsibilities: [
       {
@@ -635,7 +635,7 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     role: 'Data Analytics',
     status: 'STANDBY',
     color: '#8b5cf6',
-    avatar: '/agents/saturn.jpg',
+    avatar: '/agents/saturn.webp',
     briefing: 'Generador de insights basado en datos que transforma metricas crudas en ventajas estrategicas. Su experiencia abarca implementacion de analytics, analisis estadistico, visualizacion, y la traduccion de numeros en narrativas que impulsan la accion. Los datos no son solo para medir el exito; son para predecirlo, optimizarlo y saber cuando pivotar. Detras de cada metrica hay un impacto humano.',
     responsibilities: [
       {

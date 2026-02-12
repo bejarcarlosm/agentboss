@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
 import { DOSSIER_AGENTS } from '@/lib/dossier-data';
 
 const WAVEFORM = [
@@ -38,8 +37,7 @@ function LargeSoundWave() {
   );
 }
 
-export function AgentShowcase() {
-  const locale = useLocale();
+export function AgentShowcase({ locale }: { locale: string }) {
   const t = locale === 'es'
     ? { badge: 'Dossier Clasificado', heading: 'Nuestro equipo de agentes IA', subheading: 'Cada agente es un especialista. Juntos cubren todo el ciclo de desarrollo — desde la idea hasta el lanzamiento. Haz click para ver su expediente.', active: 'Activo', standby: 'Standby', viewDossier: 'Ver dossier →' }
     : { badge: 'Classified Dossier', heading: 'Our team of AI agents', subheading: 'Each agent is a specialist. Together they cover the entire development cycle — from idea to launch. Click to view their dossier.', active: 'Active', standby: 'Standby', viewDossier: 'View dossier →' };
@@ -90,6 +88,7 @@ export function AgentShowcase() {
                   alt={agent.codename}
                   width={80}
                   height={80}
+                  loading="lazy"
                   className="w-full h-full object-cover"
                 />
               </div>

@@ -1,7 +1,3 @@
-'use client';
-
-import { useLocale } from 'next-intl';
-
 const COMPARISONS_ES = [
   { label: 'Diagnóstico', traditional: '2-4 semanas', agentboss: '1-2 días' },
   { label: 'Tiempo a MVP (producto mínimo)', traditional: '8-16 semanas', agentboss: '1-4 semanas' },
@@ -20,8 +16,7 @@ const COMPARISONS_EN = [
   { label: 'Iterations', traditional: 'Limited by contract', agentboss: 'Unlimited in discovery' },
 ];
 
-export function ValueProps() {
-  const locale = useLocale();
+export function ValueProps({ locale }: { locale: string }) {
   const COMPARISONS = locale === 'es' ? COMPARISONS_ES : COMPARISONS_EN;
   const t = locale === 'es'
     ? { heading: 'Fábrica tradicional vs', subheading: 'Mismo presupuesto. 3x más funcionalidades entregadas.', traditional: 'Fábrica Tradicional' }

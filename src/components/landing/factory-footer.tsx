@@ -1,10 +1,6 @@
-'use client';
-
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
 
-export function FactoryFooter() {
-  const locale = useLocale();
+export function FactoryFooter({ locale }: { locale: string }) {
   const t = locale === 'es'
     ? { tagline: 'Fábrica de software potenciada por agentes IA. 3x más funcionalidades en menos tiempo que una fábrica tradicional.', factory: 'Fábrica', contact: 'Contacto', discovery: 'Diagnóstico gratis', copyright: 'Fábrica de Software · Santiago, Chile' }
     : { tagline: 'AI-powered software factory. 3x more features in less time than a traditional factory.', factory: 'Factory', contact: 'Contact', discovery: 'Free Discovery', copyright: 'Software Factory · Santiago, Chile' };

@@ -1,6 +1,4 @@
-'use client';
-
-import { useLocale } from 'next-intl';
+import Link from 'next/link';
 
 const SERVICES_ES = [
   { icon: '🌐', title: 'Desarrollo Web', description: 'Aplicaciones web modernas con Next.js, React y TypeScript. Dashboards, plataformas SaaS, portales de clientes.' },
@@ -20,8 +18,7 @@ const SERVICES_EN = [
   { icon: '🔧', title: 'Tech Consulting', description: 'Code audits, system architecture, and process optimization. Your CTO or AI Director on demand, with full software factory handoff to your IT team.' },
 ];
 
-export function ServicesSection() {
-  const locale = useLocale();
+export function ServicesSection({ locale }: { locale: string }) {
   const SERVICES = locale === 'es' ? SERVICES_ES : SERVICES_EN;
   const t = locale === 'es'
     ? { heading: 'Soluciones para tu negocio', subheading: 'Todo lo que necesitas para digitalizar y escalar, con la velocidad de una fábrica potenciada por IA.' }

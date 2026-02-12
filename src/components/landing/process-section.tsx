@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
 
 const STEPS_ES = [
   { number: '01', title: 'Diagnóstico con IA', description: 'Hablas con nuestros agentes Atlas (PO), Venus (UX) y Pluto (QA). Ellos entienden tu negocio, definen requerimientos y diseñan la solución. Sin reuniones interminables.', agents: ['Atlas', 'Venus', 'Pluto'], color: '#2dd4bf', duration: '1-2 días', badge: 'Gratis' },
@@ -19,8 +18,7 @@ const STEPS_EN = [
   { number: '05', title: 'Deploy & Support', description: 'We deploy to production, set up monitoring, and deliver everything documented. Post-launch support included.', agents: ['Uranus'], color: '#f97316', duration: '1 day', badge: null },
 ];
 
-export function ProcessSection() {
-  const locale = useLocale();
+export function ProcessSection({ locale }: { locale: string }) {
   const STEPS = locale === 'es' ? STEPS_ES : STEPS_EN;
   const t = locale === 'es'
     ? { heading: '¿Cómo construimos?', subheading: 'El mismo proceso profesional de una fábrica de software, pero acelerado por agentes IA en cada etapa.', ctaText: 'El paso 1 es gratis y sin compromiso. Habla con Atlas para empezar.', ctaButton: 'Empezar diagnóstico gratis' }
