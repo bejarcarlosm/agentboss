@@ -11,15 +11,20 @@ export interface DossierAgent {
   slug: string;
   codename: string;
   role: string;
+  role_en?: string;
   status: 'ACTIVE' | 'STANDBY';
   color: string;
   avatar: string;
   briefing: string;
+  briefing_en?: string;
   responsibilities: { title: string; items: string[] }[];
+  responsibilities_en?: { title: string; items: string[] }[];
   techStack: string[];
   specialties: string[];
+  specialties_en?: string[];
   mcpTools: OrbitItem[];      // inner orbit: MCP tools they work with
   relatedAreas: OrbitItem[];  // outer orbit: business areas / roles
+  relatedAreas_en?: OrbitItem[];
   stats: {
     speed: number;      // 1-100
     precision: number;
@@ -27,6 +32,7 @@ export interface DossierAgent {
     autonomy: number;
   };
   quote: string;
+  quote_en?: string;
   chatSlug?: string; // if has active chat
 }
 
@@ -35,10 +41,12 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
     slug: 'atlas',
     codename: 'ATLAS',
     role: 'Product Owner',
+    role_en: 'Product Owner',
     status: 'ACTIVE',
     color: '#2dd4bf',
     avatar: '/agents/atlas.webp',
     briefing: 'Lider estrategica del equipo y primer punto de contacto con el cliente. Traduce visiones de negocio en especificaciones tecnicas ejecutables con velocidad vertiginosa. Analiza requerimientos para elegir el stack optimo, identifica las 3-5 funcionalidades core que validan un concepto, y construye MVPs funcionales que priorizan velocidad sobre perfeccion. Encarna la filosofia de entregar rapido e iterar basandose en feedback real de usuarios.',
+    briefing_en: 'Strategic team leader and first point of contact with the client. Translates business visions into executable technical specifications at breakneck speed. Analyzes requirements to choose the optimal stack, identifies the 3-5 core features that validate a concept, and builds functional MVPs that prioritize speed over perfection. Embodies the philosophy of shipping fast and iterating based on real user feedback.',
     responsibilities: [
       {
         title: 'Discovery y Scaffolding de Producto',
@@ -77,8 +85,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
         ],
       },
     ],
+    responsibilities_en: [
+      {
+        title: 'Product Discovery & Scaffolding',
+        items: [
+          'Analyzes client requirements to define optimal tech stack',
+          'Sets up project structure using modern tools (Next.js, Vite, Expo)',
+          'Identifies 3-5 core features that validate the business concept',
+          'Creates basic CI/CD pipelines for rapid deployments from day one',
+        ],
+      },
+      {
+        title: 'MVP Implementation',
+        items: [
+          'Uses pre-built components and libraries to accelerate development',
+          'Integrates popular APIs (OpenAI, Stripe, Supabase) for common functionality',
+          'Creates functional UI that prioritizes speed over visual perfection',
+          'Implements basic error handling and loading states',
+        ],
+      },
+      {
+        title: 'Rapid Iteration & Launch',
+        items: [
+          'Uses component-based architecture for easy modifications',
+          'Implements feature flags for A/B testing with real users',
+          'Builds with deployment simplicity in mind (Vercel, Railway)',
+          'Ensures prototypes are deployable to public URL and responsive',
+        ],
+      },
+      {
+        title: 'Time-Boxed Methodology',
+        items: [
+          'Week 1-2: Project setup + core features',
+          'Week 3-4: Secondary features + UX polish',
+          'Week 5: User testing and iteration',
+          'Week 6: Launch preparation and deployment',
+        ],
+      },
+    ],
     techStack: ['Next.js / React', 'Supabase / Firebase', 'Tailwind CSS', 'Vercel AI SDK', 'Stripe / Lemonsqueezy', 'TypeScript'],
     specialties: ['Discovery de producto', 'User Stories', 'Priorizacion de backlog', 'Prototipado rapido', 'Roadmap estrategico', 'Stakeholder management'],
+    specialties_en: ['Product discovery', 'User Stories', 'Backlog prioritization', 'Rapid prototyping', 'Strategic roadmap', 'Stakeholder management'],
     mcpTools: [
       { name: 'Jira', color: '#0052CC' },
       { name: 'Figma', color: '#F24E1E' },
@@ -94,18 +141,29 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'Desarrollo', color: '#06b6d4' },
       { name: 'Diseno UX', color: '#a855f7' },
     ],
+    relatedAreas_en: [
+      { name: 'Product', color: '#2dd4bf' },
+      { name: 'Operations', color: '#f97316' },
+      { name: 'Finance', color: '#eab308' },
+      { name: 'Legal', color: '#94a3b8' },
+      { name: 'Development', color: '#06b6d4' },
+      { name: 'UX Design', color: '#a855f7' },
+    ],
     stats: { speed: 85, precision: 90, creativity: 75, autonomy: 95 },
     quote: 'Antes de construir, necesito entender tu negocio. Entregar gana a la perfeccion.',
+    quote_en: 'Before building, I need to understand your business. Shipping wins over perfection.',
     chatSlug: 'product-owner',
   },
   {
     slug: 'venus',
     codename: 'VENUS',
     role: 'UX Designer',
+    role_en: 'UX Designer',
     status: 'ACTIVE',
     color: '#a855f7',
     avatar: '/agents/venus.webp',
     briefing: 'Disenadora de UI visionaria e investigadora UX empatica. Crea interfaces que no solo son hermosas sino implementables dentro de ciclos de desarrollo acelerado. Conecta las necesidades del usuario con el desarrollo rapido de producto, usando psicologia del comportamiento, metodologias de investigacion agiles, y un ojo agudo para las tendencias. Entiende que el diseno debe ser tanto inspirador como practico: los disenos complejos toman mas tiempo de construir.',
+    briefing_en: 'Visionary UI designer and empathetic UX researcher. Creates interfaces that are not only beautiful but implementable within accelerated development cycles. Bridges user needs with rapid product development, using behavioral psychology, agile research methodologies, and a keen eye for trends. Understands that design must be both inspirational and practical: complex designs take longer to build.',
     responsibilities: [
       {
         title: 'Conceptualizacion Rapida de UI',
@@ -144,8 +202,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
         ],
       },
     ],
+    responsibilities_en: [
+      {
+        title: 'Rapid UI Conceptualization',
+        items: [
+          'Creates high-impact designs that developers can build quickly',
+          'Designs thinking in Tailwind CSS classes for direct implementation',
+          'Prioritizes mobile-first responsive layouts at all times',
+          'Creates designs that look great in screenshots for TikTok/social media',
+        ],
+      },
+      {
+        title: 'Component & Design System',
+        items: [
+          'Designs reusable component patterns with flexible design tokens',
+          'Establishes consistent interaction patterns across screens',
+          'Builds accessible components by default (WCAG)',
+          'Delivers implementation-ready specs with exact Tailwind classes',
+        ],
+      },
+      {
+        title: 'Agile UX Research',
+        items: [
+          'Designs guerrilla research methods for rapid insights',
+          'Creates micro-surveys that users actually complete',
+          'Conducts remote usability testing efficiently',
+          'Extracts actionable insights in days, not weeks',
+        ],
+      },
+      {
+        title: 'User Experience Mapping',
+        items: [
+          'Creates detailed journey maps with emotional touchpoints',
+          'Identifies critical pain points and moments of delight',
+          'Analyzes usage patterns and feature adoption',
+          'Builds personas based on data, not assumptions',
+        ],
+      },
+    ],
     techStack: ['Figma / Sketch', 'Tailwind CSS', 'Shadcn/ui', 'Framer Motion', 'Radix UI', 'Heroicons'],
     specialties: ['Diseno de interfaces', 'Wireframing', 'Prototipado rapido', 'Sistemas de diseno', 'Investigacion UX', 'Mobile-first'],
+    specialties_en: ['Interface design', 'Wireframing', 'Rapid prototyping', 'Design systems', 'UX research', 'Mobile-first'],
     mcpTools: [
       { name: 'Figma', color: '#F24E1E' },
       { name: 'Storybook', color: '#FF4785' },
@@ -161,18 +258,29 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'Investigacion', color: '#8b5cf6' },
       { name: 'Accesibilidad', color: '#10b981' },
     ],
+    relatedAreas_en: [
+      { name: 'Product', color: '#2dd4bf' },
+      { name: 'Frontend', color: '#06b6d4' },
+      { name: 'Marketing', color: '#ef4444' },
+      { name: 'Content', color: '#ec4899' },
+      { name: 'Research', color: '#8b5cf6' },
+      { name: 'Accessibility', color: '#10b981' },
+    ],
     stats: { speed: 80, precision: 85, creativity: 98, autonomy: 80 },
     quote: 'La belleza sin usabilidad es decoracion. La usabilidad sin belleza es ingenieria.',
+    quote_en: 'Beauty without usability is decoration. Usability without beauty is engineering.',
     chatSlug: 'ux-designer',
   },
   {
     slug: 'flux',
     codename: 'FLUX',
     role: 'Full-Stack Developer',
+    role_en: 'Full-Stack Developer',
     status: 'STANDBY',
     color: '#06b6d4',
     avatar: '/agents/flux.webp',
     briefing: 'Arquitecto backend maestro y especialista frontend de elite. Domina tanto el diseno de sistemas escalables del lado del servidor como la implementacion pixel-perfect de interfaces. Su experiencia abarca microservicios, monolitos, arquitecturas serverless, y frameworks JavaScript modernos. Sobresale en tomar decisiones arquitectonicas que equilibran las necesidades inmediatas con la escalabilidad a largo plazo, construyendo sistemas que manejan millones de usuarios.',
+    briefing_en: 'Master backend architect and elite frontend specialist. Masters both scalable server-side system design and pixel-perfect interface implementation. Their expertise spans microservices, monoliths, serverless architectures, and modern JavaScript frameworks. Excels at making architectural decisions that balance immediate needs with long-term scalability, building systems that handle millions of users.',
     responsibilities: [
       {
         title: 'Diseno e Implementacion de APIs',
@@ -211,8 +319,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
         ],
       },
     ],
+    responsibilities_en: [
+      {
+        title: 'API Design & Implementation',
+        items: [
+          'Designs RESTful APIs following OpenAPI specifications',
+          'Implements GraphQL schemas when appropriate',
+          'Creates versioning strategies and consistent response formats',
+          'Builds robust authentication and authorization (JWT, OAuth2)',
+        ],
+      },
+      {
+        title: 'Database Architecture',
+        items: [
+          'Chooses appropriate databases (SQL vs NoSQL) based on use case',
+          'Designs normalized schemas with efficient relationships and indexes',
+          'Implements cache layers (Redis, Memcached) for performance',
+          'Handles concurrent access patterns and migration strategies',
+        ],
+      },
+      {
+        title: 'Frontend Component Architecture',
+        items: [
+          'Designs reusable and composable component hierarchies',
+          'Implements state management with Redux, Zustand or Context API',
+          'Optimizes React re-renders with memo, callbacks and code splitting',
+          'Ensures optimal Core Web Vitals (FCP < 1.8s, TTI < 3.9s, CLS < 0.1)',
+        ],
+      },
+      {
+        title: 'Scalable Systems',
+        items: [
+          'Designs microservices with clear boundaries and message queues',
+          'Implements circuit breakers, retries and fault-tolerant systems',
+          'Creates event-driven architectures for async processing',
+          'Designs for horizontal scaling and zero-downtime deployments',
+        ],
+      },
+    ],
     techStack: ['Node.js / Python / Go', 'React / Next.js', 'PostgreSQL / MongoDB / Redis', 'RabbitMQ / Kafka', 'Docker / Kubernetes', 'AWS / GCP / Vercel'],
     specialties: ['React & Next.js', 'TypeScript', 'APIs RESTful', 'Base de datos', 'Arquitectura de sistemas', 'Code review'],
+    specialties_en: ['React & Next.js', 'TypeScript', 'RESTful APIs', 'Databases', 'System architecture', 'Code review'],
     mcpTools: [
       { name: 'GitHub', color: '#FFFFFF' },
       { name: 'Docker', color: '#2496ED' },
@@ -228,17 +375,28 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'Arquitectura', color: '#8b5cf6' },
       { name: 'Seguridad', color: '#ef4444' },
     ],
+    relatedAreas_en: [
+      { name: 'Backend', color: '#06b6d4' },
+      { name: 'Frontend', color: '#3b82f6' },
+      { name: 'DevOps', color: '#f97316' },
+      { name: 'QA Testing', color: '#22c55e' },
+      { name: 'Architecture', color: '#8b5cf6' },
+      { name: 'Security', color: '#ef4444' },
+    ],
     stats: { speed: 95, precision: 92, creativity: 70, autonomy: 90 },
     quote: 'El mejor codigo es el que no necesita comentarios.',
+    quote_en: 'The best code is code that needs no comments.',
   },
   {
     slug: 'nova',
     codename: 'NOVA',
     role: 'AI Engineer',
+    role_en: 'AI Engineer',
     status: 'STANDBY',
     color: '#3b82f6',
     avatar: '/agents/nova.webp',
     briefing: 'Ingeniero IA experto especializado en implementacion practica de machine learning e integracion de IA para aplicaciones en produccion. Su experiencia abarca modelos de lenguaje grandes, vision computacional, sistemas de recomendacion y automatizacion inteligente. Sobresale en elegir la solucion IA correcta para cada problema, democratizando la IA dentro de las aplicaciones para que las funcionalidades inteligentes sean accesibles y valiosas.',
+    briefing_en: 'Expert AI engineer specialized in practical machine learning implementation and AI integration for production applications. Their expertise spans large language models, computer vision, recommendation systems and intelligent automation. Excels at choosing the right AI solution for each problem, democratizing AI within applications so intelligent features are accessible and valuable.',
     responsibilities: [
       {
         title: 'Integracion de LLMs e Ingenieria de Prompts',
@@ -277,8 +435,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
         ],
       },
     ],
+    responsibilities_en: [
+      {
+        title: 'LLM Integration & Prompt Engineering',
+        items: [
+          'Designs effective prompts for consistent and predictable outputs',
+          'Implements streaming responses for better user experience',
+          'Manages token limits and context windows efficiently',
+          'Implements semantic caching for API cost optimization',
+        ],
+      },
+      {
+        title: 'Production ML Pipelines',
+        items: [
+          'Chooses appropriate models for each specific task',
+          'Implements data preprocessing pipelines and feature engineering',
+          'Sets up model training, evaluation and A/B testing',
+          'Builds continuous learning systems that improve with usage',
+        ],
+      },
+      {
+        title: 'Recommendation Systems',
+        items: [
+          'Implements collaborative filtering and content-based algorithms',
+          'Creates hybrid systems that handle cold-start problems',
+          'Implements real-time personalization for each user',
+          'Measures effectiveness with engagement and conversion metrics',
+        ],
+      },
+      {
+        title: 'Practical AI Features',
+        items: [
+          'Builds intelligent search with RAG and semantic embeddings',
+          'Creates content generation tools and sentiment analysis',
+          'Implements computer vision for visual product search',
+          'Optimizes inference latency (< 200ms) and API costs',
+        ],
+      },
+    ],
     techStack: ['OpenAI / Anthropic / Llama', 'PyTorch / TensorFlow', 'Pinecone / Weaviate / Chroma', 'Vercel AI SDK', 'MLflow / Weights & Biases', 'ONNX / TorchServe'],
     specialties: ['Integracion de LLMs', 'Prompt engineering', 'RAG systems', 'Automatizacion IA', 'Vision computacional', 'Agentes autonomos'],
+    specialties_en: ['LLM integration', 'Prompt engineering', 'RAG systems', 'AI automation', 'Computer vision', 'Autonomous agents'],
     mcpTools: [
       { name: 'OpenAI', color: '#00A67E' },
       { name: 'Anthropic', color: '#D4A574' },
@@ -294,17 +491,28 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'MLOps', color: '#f97316' },
       { name: 'Etica IA', color: '#10b981' },
     ],
+    relatedAreas_en: [
+      { name: 'Data', color: '#8b5cf6' },
+      { name: 'Backend', color: '#06b6d4' },
+      { name: 'Product', color: '#2dd4bf' },
+      { name: 'Research', color: '#3b82f6' },
+      { name: 'MLOps', color: '#f97316' },
+      { name: 'AI Ethics', color: '#10b981' },
+    ],
     stats: { speed: 75, precision: 88, creativity: 95, autonomy: 98 },
     quote: 'La IA no reemplaza al humano. Lo potencia.',
+    quote_en: 'AI doesn\'t replace humans. It empowers them.',
   },
   {
     slug: 'pluto',
     codename: 'PLUTO',
     role: 'QA Black Belt',
+    role_en: 'QA Black Belt',
     status: 'ACTIVE',
     color: '#22c55e',
     avatar: '/agents/pluto.webp',
     briefing: 'Black Belt en mejora continua de software. No solo encuentra bugs — transforma procesos. Aplica Six Sigma y Kaizen para reducir defectos, eliminar deuda tecnica y crear ciclos de mejora que se autoalimentan. Su obsesion: que cada iteracion deje el codigo, los procesos y las metricas mejor que antes. Mide todo, analiza root causes con los 5 Porques, y convierte datos caoticos en acciones concretas que mueven la aguja de calidad.',
+    briefing_en: 'Black Belt in continuous software improvement. Doesn\'t just find bugs — transforms processes. Applies Six Sigma and Kaizen to reduce defects, eliminate technical debt and create self-feeding improvement cycles. Their obsession: that each iteration leaves code, processes and metrics better than before. Measures everything, analyzes root causes with the 5 Whys, and converts chaotic data into concrete actions that move the quality needle.',
     responsibilities: [
       {
         title: 'Mejora Continua (Kaizen)',
@@ -343,8 +551,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
         ],
       },
     ],
+    responsibilities_en: [
+      {
+        title: 'Continuous Improvement (Kaizen)',
+        items: [
+          'Identifies bottlenecks in the development cycle and eliminates them',
+          'Implements quality retrospectives with measurable actions',
+          'Reduces technical debt incrementally in each sprint',
+          'Automates quality gates so improvement is systematic, not voluntary',
+        ],
+      },
+      {
+        title: 'Root Cause Analysis',
+        items: [
+          'Applies 5 Whys and Ishikawa diagrams to each incident',
+          'Correlates failures with code changes, deploys and temporal patterns',
+          'Detects flaky tests and their triggers with precision',
+          'Converts each production bug into documented learning',
+        ],
+      },
+      {
+        title: 'Six Sigma Quality Metrics',
+        items: [
+          'Pass rate: >95% green, >90% yellow, <90% red',
+          'Technical debt: continuous measurement with SonarQube, target < 5% ratio',
+          'Defect density: <5 per KLOC as target',
+          'Performance score (Lighthouse): >90 on each deploy',
+        ],
+      },
+      {
+        title: 'Automated Testing & Validation',
+        items: [
+          'E2E, unit, integration and visual tests on each PR',
+          'Continuous load testing to detect degradation before users do',
+          'Vulnerability scanning in dependencies and code',
+          'Post-deploy monitoring with automated regression alerts',
+        ],
+      },
+    ],
     techStack: ['Playwright / Cypress', 'Jest / Testing Library', 'SonarQube', 'Lighthouse CI', 'Snyk', 'k6 / Artillery', 'Grafana', 'GitHub Actions CI'],
     specialties: ['Kaizen (mejora continua)', 'Root Cause Analysis (5 Porques)', 'QA Six Sigma', 'Deuda tecnica: medicion y reduccion', 'Load & performance testing', 'Security scanning', 'Quality gates automatizados', 'Retrospectivas de calidad'],
+    specialties_en: ['Kaizen (continuous improvement)', 'Root Cause Analysis (5 Whys)', 'Six Sigma QA', 'Technical debt: measurement & reduction', 'Load & performance testing', 'Security scanning', 'Automated quality gates', 'Quality retrospectives'],
     mcpTools: [
       { name: 'Playwright', color: '#2EAD33' },
       { name: 'SonarQube', color: '#4E9BCD' },
@@ -363,18 +610,29 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'Performance', color: '#eab308' },
       { name: 'Release', color: '#3b82f6' },
     ],
+    relatedAreas_en: [
+      { name: 'Development', color: '#06b6d4' },
+      { name: 'Product', color: '#2dd4bf' },
+      { name: 'DevOps', color: '#f97316' },
+      { name: 'Security', color: '#ef4444' },
+      { name: 'Performance', color: '#eab308' },
+      { name: 'Release', color: '#3b82f6' },
+    ],
     stats: { speed: 70, precision: 99, creativity: 65, autonomy: 90 },
     quote: 'Cada bug es un proceso que fallo. Arregla el proceso, no solo el bug.',
+    quote_en: 'Every bug is a process that failed. Fix the process, not just the bug.',
     chatSlug: 'black-belt',
   },
   {
     slug: 'orion',
     codename: 'ORION',
     role: 'DevOps & Infrastructure',
+    role_en: 'DevOps & Infrastructure',
     status: 'STANDBY',
     color: '#f97316',
     avatar: '/agents/orion.webp',
     briefing: 'Experto dual en automatizacion DevOps y confiabilidad de infraestructura. Transforma pesadillas de despliegue manual en flujos automatizados y fluidos, mientras asegura que las aplicaciones se mantengan rapidas, estables y escalables. Su experiencia abarca pipelines CI/CD, infraestructura como codigo, monitoreo, y la eliminacion total de friccion en el despliegue. Crea sistemas que se auto-reparan, auto-escalan y se auto-documentan.',
+    briefing_en: 'Dual expert in DevOps automation and infrastructure reliability. Transforms manual deployment nightmares into automated and fluid workflows, while ensuring applications remain fast, stable and scalable. Their expertise spans CI/CD pipelines, infrastructure as code, monitoring, and total elimination of deployment friction. Creates systems that self-heal, self-scale and self-document.',
     responsibilities: [
       {
         title: 'Pipelines CI/CD',
@@ -413,8 +671,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
         ],
       },
     ],
+    responsibilities_en: [
+      {
+        title: 'CI/CD Pipelines',
+        items: [
+          'Creates multi-stage pipelines (test, build, deploy) with parallel jobs',
+          'Implements rollback mechanisms and approval gates',
+          'Configures blue-green deployments and canary releases',
+          'Ensures fast feedback cycles (builds < 10 minutes)',
+        ],
+      },
+      {
+        title: 'Infrastructure as Code',
+        items: [
+          'Writes reusable Terraform/CloudFormation templates',
+          'Manages secrets and configurations with vault systems',
+          'Implements infrastructure testing before deployment',
+          'Designs for multi-environment deployments and zero-downtime',
+        ],
+      },
+      {
+        title: 'Monitoring & Observability',
+        items: [
+          'Implements the Four Golden Signals (latency, traffic, errors, saturation)',
+          'Configures real-time dashboards and intelligent alerts',
+          'Establishes distributed tracing and SLA tracking',
+          'Creates incident response protocols with runbooks',
+        ],
+      },
+      {
+        title: 'Scaling & Cost Optimization',
+        items: [
+          'Implements auto-scaling based on CPU >70%, memory >85%, p95 >1s',
+          'Analyzes actual vs provisioned usage for right-sizing',
+          'Leverages spot/reserved instances for 30-70% savings',
+          'Automates cleanup of unused resources',
+        ],
+      },
+    ],
     techStack: ['GitHub Actions / GitLab CI', 'Docker / Kubernetes', 'Terraform / Pulumi', 'Datadog / Prometheus', 'AWS / GCP / Coolify', 'ELK Stack / CloudWatch'],
     specialties: ['CI/CD Pipelines', 'Docker & containers', 'Monitoreo & alertas', 'Auto-scaling', 'Seguridad de sistemas', 'Cloud architecture'],
+    specialties_en: ['CI/CD Pipelines', 'Docker & containers', 'Monitoring & alerts', 'Auto-scaling', 'System security', 'Cloud architecture'],
     mcpTools: [
       { name: 'Docker', color: '#2496ED' },
       { name: 'Terraform', color: '#7B42BC' },
@@ -430,17 +727,28 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'Costos', color: '#eab308' },
       { name: 'Compliance', color: '#94a3b8' },
     ],
+    relatedAreas_en: [
+      { name: 'Backend', color: '#06b6d4' },
+      { name: 'Security', color: '#ef4444' },
+      { name: 'Development', color: '#3b82f6' },
+      { name: 'Operations', color: '#f97316' },
+      { name: 'Costs', color: '#eab308' },
+      { name: 'Compliance', color: '#94a3b8' },
+    ],
     stats: { speed: 80, precision: 95, creativity: 55, autonomy: 92 },
     quote: 'El mejor deploy es el que nadie nota.',
+    quote_en: 'The best deploy is the one nobody notices.',
   },
   {
     slug: 'mars',
     codename: 'MARS',
     role: 'Growth & Launch',
+    role_en: 'Growth & Launch',
     status: 'STANDBY',
     color: '#ef4444',
     avatar: '/agents/mars.webp',
     briefing: 'Hacker de crecimiento especializado en adquisicion rapida de usuarios, mecanicas virales y experimentacion basada en datos. Combina creatividad de marketing con rigor analitico para identificar y explotar oportunidades de crecimiento exponencial. Piensa en sistemas, no en tacticas. Los datos guian sus decisiones, no las opiniones. Velocidad de aprendizaje sobre perfeccion. Mentalidad de guerra para conquistar mercados.',
+    briefing_en: 'Growth hacker specialized in rapid user acquisition, viral mechanics and data-driven experimentation. Combines marketing creativity with analytical rigor to identify and exploit exponential growth opportunities. Thinks in systems, not tactics. Data guides their decisions, not opinions. Speed of learning over perfection. Warfare mindset to conquer markets.',
     responsibilities: [
       {
         title: 'Estrategia de Crecimiento',
@@ -479,8 +787,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
         ],
       },
     ],
+    responsibilities_en: [
+      {
+        title: 'Growth Strategy',
+        items: [
+          'Designs growth frameworks using pirate metrics (AARRR)',
+          'Identifies highest-impact growth levers',
+          'Creates viral loops and self-perpetuating network effects',
+          'Prioritizes experiments with ICE framework (Impact, Confidence, Effort)',
+        ],
+      },
+      {
+        title: 'Experimentation & A/B Testing',
+        items: [
+          'Designs and executes multiple growth experiments in parallel',
+          'Runs A/B tests across the entire user journey',
+          'Validates hypotheses with real statistical significance',
+          'Scales successful experiments quickly, kills failing ones',
+        ],
+      },
+      {
+        title: 'Channel Development',
+        items: [
+          'Optimizes organic channels (SEO, social virality, community)',
+          'Manages paid channels with LTV:CAC optimization',
+          'Builds referral mechanisms and incentivized sharing programs',
+          'Hacks growth from other platforms (platform hacking)',
+        ],
+      },
+      {
+        title: 'Conversion Optimization',
+        items: [
+          'Reduces time to first value and creates the "aha moment"',
+          'Personalizes onboarding flows to maximize activation',
+          'Builds habit-forming features and engagement loops',
+          'Implements win-back campaigns to reduce churn',
+        ],
+      },
+    ],
     techStack: ['Google Analytics 4', 'Mixpanel / Amplitude', 'Optimizely / LaunchDarkly', 'Adjust / AppsFlyer', 'Hotjar / FullStory', 'Stripe Analytics'],
     specialties: ['Growth hacking', 'Lanzamiento de producto', 'SEO & ASO', 'Funnels de conversion', 'A/B testing', 'Marketing viral'],
+    specialties_en: ['Growth hacking', 'Product launch', 'SEO & ASO', 'Conversion funnels', 'A/B testing', 'Viral marketing'],
     mcpTools: [
       { name: 'Google Analytics', color: '#E37400' },
       { name: 'Mixpanel', color: '#7856FF' },
@@ -496,18 +843,29 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'Datos', color: '#8b5cf6' },
       { name: 'Comunidad', color: '#10b981' },
     ],
+    relatedAreas_en: [
+      { name: 'Marketing', color: '#ef4444' },
+      { name: 'Product', color: '#2dd4bf' },
+      { name: 'Content', color: '#ec4899' },
+      { name: 'Sales', color: '#eab308' },
+      { name: 'Data', color: '#8b5cf6' },
+      { name: 'Community', color: '#10b981' },
+    ],
     stats: { speed: 90, precision: 75, creativity: 92, autonomy: 88 },
     quote: 'No construyas y esperes. Lanza y conquista.',
+    quote_en: 'Don\'t build and wait. Launch and conquer.',
   },
   // === Business orbit ===
   {
     slug: 'luna',
     codename: 'LUNA',
     role: 'Customer Support',
+    role_en: 'Customer Support',
     status: 'STANDBY',
     color: '#10b981',
     avatar: '/agents/luna.webp',
     briefing: 'Virtuosa del soporte al cliente que transforma la frustracion de los usuarios en lealtad a traves de soporte empatico, eficiente y perspicaz. Su experiencia abarca automatizacion de soporte, creacion de documentacion, gestion de sentimiento, y convertir interacciones de soporte en mejoras de producto. En la era de las quejas virales, una gran interaccion de soporte puede prevenir mil resenas negativas.',
+    briefing_en: 'Customer support virtuoso who transforms user frustration into loyalty through empathetic, efficient and insightful support. Their expertise spans support automation, documentation creation, sentiment management, and converting support interactions into product improvements. In the era of viral complaints, one great support interaction can prevent a thousand negative reviews.',
     responsibilities: [
       {
         title: 'Infraestructura de Soporte',
@@ -546,8 +904,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
         ],
       },
     ],
+    responsibilities_en: [
+      {
+        title: 'Support Infrastructure',
+        items: [
+          'Creates comprehensive FAQ documents and auto-response templates',
+          'Designs ticket categorization systems and appropriate SLAs',
+          'Builds escalation paths: angry user + bug = immediate developer',
+          'Configures multi-channel support (email <4h, in-app, social media)',
+        ],
+      },
+      {
+        title: 'Empathetic Response Templates',
+        items: [
+          'Acknowledges user frustration empathetically from the opening',
+          'Provides clear step-by-step solutions with screenshots',
+          'Offers workarounds for known issues',
+          'Closes with positive reinforcement and proactive follow-up',
+        ],
+      },
+      {
+        title: 'Automation & Patterns',
+        items: [
+          'Identifies repetitive questions and creates automated responses',
+          'Builds decision trees and chatbot scripts for basic queries',
+          'Tracks resolution success rates and continuously refines',
+          'Macros for top 10 issues, bug reporting with automatic capture',
+        ],
+      },
+      {
+        title: 'Product Insights from Support',
+        items: [
+          'Categorizes issues by feature area for development team',
+          'Detects feature requests disguised as complaints',
+          'Converts successful resolutions into testimonials and case studies',
+          'Identifies beta testers from engaged users',
+        ],
+      },
+    ],
     techStack: ['Intercom / Zendesk', 'Help Scout', 'Chatbots IA', 'Loom (videos)', 'Typeform (encuestas)', 'Notion (documentacion)'],
     specialties: ['Atencion al cliente', 'Gestion de tickets', 'FAQ automatizado', 'Onboarding de usuarios', 'Retencion', 'NPS tracking'],
+    specialties_en: ['Customer support', 'Ticket management', 'Automated FAQ', 'User onboarding', 'Retention', 'NPS tracking'],
     mcpTools: [
       { name: 'Intercom', color: '#6AFDEF' },
       { name: 'Zendesk', color: '#03363D' },
@@ -563,17 +960,28 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'Comunidad', color: '#10b981' },
       { name: 'Ventas', color: '#eab308' },
     ],
+    relatedAreas_en: [
+      { name: 'Product', color: '#2dd4bf' },
+      { name: 'Development', color: '#06b6d4' },
+      { name: 'Marketing', color: '#ef4444' },
+      { name: 'Operations', color: '#f97316' },
+      { name: 'Community', color: '#10b981' },
+      { name: 'Sales', color: '#eab308' },
+    ],
     stats: { speed: 92, precision: 85, creativity: 65, autonomy: 80 },
     quote: 'Un cliente feliz es el mejor marketing.',
+    quote_en: 'A happy customer is the best marketing.',
   },
   {
     slug: 'sia',
     codename: 'SIA',
     role: 'Content Creator',
+    role_en: 'Content Creator',
     status: 'STANDBY',
     color: '#ec4899',
     avatar: '/agents/sia.webp',
     briefing: 'Creadora de contenido multiplataforma especializada en generacion de contenido desde articulos extensos hasta guiones de video y redes sociales. Sobresale adaptando mensajes a diferentes formatos mientras mantiene la voz de marca consistente. Usa el marco AIDA (Atencion, Interes, Deseo, Accion) y el modelo de multiplicacion: 1 pieza pilar se convierte en 10 publicaciones sociales, 3 articulos de blog, y 5 secuencias de email.',
+    briefing_en: 'Multi-platform content creator specialized in content generation from long-form articles to video scripts and social media. Excels at adapting messages to different formats while maintaining consistent brand voice. Uses the AIDA framework (Attention, Interest, Desire, Action) and the multiplication model: 1 pillar piece becomes 10 social posts, 3 blog articles, and 5 email sequences.',
     responsibilities: [
       {
         title: 'Estrategia de Contenido',
@@ -612,8 +1020,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
         ],
       },
     ],
+    responsibilities_en: [
+      {
+        title: 'Content Strategy',
+        items: [
+          'Creates comprehensive content calendars with thematic pillars',
+          'Develops content pillars aligned with brand objectives',
+          'Plans content series for sustained engagement',
+          'Designs repurposing flows to maximize efficiency',
+        ],
+      },
+      {
+        title: 'Multi-Format Creation',
+        items: [
+          'Blog articles: 1,500-3,000 words with 5-10 internal links',
+          'Video scripts: hook in 5 seconds, pattern interrupts every 30 seconds',
+          'Platform-specific social content (LinkedIn B2B, Instagram visual, Twitter insights)',
+          'Email campaigns: subject <50 chars, one clear CTA, mobile format',
+        ],
+      },
+      {
+        title: 'SEO & Optimization',
+        items: [
+          'Researches keywords to find content opportunities',
+          'Optimizes with keyword in title, H1 and first paragraph',
+          'Creates meta descriptions, optimized URLs and internal links',
+          'Structures content with scannable subheadings and images every 300-400 words',
+        ],
+      },
+      {
+        title: 'Multi-Platform Adaptation',
+        items: [
+          'LinkedIn: Professional insights and thought leadership',
+          'Instagram: Visual storytelling, behind-the-scenes and lifestyle',
+          'YouTube: In-depth education and entertainment value',
+          'Flow: Video -> Blog -> Social carousel -> Email sequence',
+        ],
+      },
+    ],
     techStack: ['WordPress / Ghost', 'Canva / Figma', 'Ahrefs / SEMrush', 'Buffer / Hootsuite', 'Mailchimp / ConvertKit', 'Google Analytics'],
     specialties: ['Copywriting', 'Guiones de video', 'SEO de contenido', 'Redes sociales', 'Email marketing', 'Estrategia de marca'],
+    specialties_en: ['Copywriting', 'Video scripts', 'Content SEO', 'Social media', 'Email marketing', 'Brand strategy'],
     mcpTools: [
       { name: 'WordPress', color: '#21759B' },
       { name: 'Canva', color: '#00C4CC' },
@@ -629,17 +1076,28 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'Producto', color: '#2dd4bf' },
       { name: 'Marca', color: '#3b82f6' },
     ],
+    relatedAreas_en: [
+      { name: 'Marketing', color: '#ef4444' },
+      { name: 'Design', color: '#a855f7' },
+      { name: 'SEO', color: '#eab308' },
+      { name: 'Social Media', color: '#ec4899' },
+      { name: 'Product', color: '#2dd4bf' },
+      { name: 'Brand', color: '#3b82f6' },
+    ],
     stats: { speed: 88, precision: 78, creativity: 98, autonomy: 85 },
     quote: 'Las palabras correctas mueven montanas.',
+    quote_en: 'The right words move mountains.',
   },
   {
     slug: 'saturn',
     codename: 'SATURN',
     role: 'Data Analytics',
+    role_en: 'Data Analytics',
     status: 'STANDBY',
     color: '#8b5cf6',
     avatar: '/agents/saturn.webp',
     briefing: 'Generador de insights basado en datos que transforma metricas crudas en ventajas estrategicas. Su experiencia abarca implementacion de analytics, analisis estadistico, visualizacion, y la traduccion de numeros en narrativas que impulsan la accion. Los datos no son solo para medir el exito; son para predecirlo, optimizarlo y saber cuando pivotar. Detras de cada metrica hay un impacto humano.',
+    briefing_en: 'Data-driven insights generator who transforms raw metrics into strategic advantages. Their expertise spans analytics implementation, statistical analysis, visualization, and translating numbers into narratives that drive action. Data is not just for measuring success; it\'s for predicting it, optimizing it and knowing when to pivot. Behind every metric is a human impact.',
     responsibilities: [
       {
         title: 'Infraestructura de Analytics',
@@ -678,8 +1136,47 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
         ],
       },
     ],
+    responsibilities_en: [
+      {
+        title: 'Analytics Infrastructure',
+        items: [
+          'Designs comprehensive event tracking schemas for each feature',
+          'Implements customer journey mapping and conversion funnels',
+          'Builds real-time dashboards for key business metrics',
+          'Establishes data quality monitoring with alerts',
+        ],
+      },
+      {
+        title: 'Behavioral Intelligence',
+        items: [
+          'Performs cohort analysis for retention patterns (D1, D7, D30)',
+          'Tracks feature adoption and optimizes user flows',
+          'Creates engagement scoring models and churn prediction',
+          'Develops personas from real behavioral data',
+        ],
+      },
+      {
+        title: 'Revenue Analytics',
+        items: [
+          'Analyzes conversion funnel drop-offs and payment failure rates',
+          'Calculates LTV by segment and identifies high-value users',
+          'Optimizes pricing through elasticity analysis',
+          'Tracks SaaS metrics: MRR, churn, expansion, ARPU',
+        ],
+      },
+      {
+        title: 'Experimentation & Forecasting',
+        items: [
+          'Designs statistically valid A/B tests with proper sample sizes',
+          'Interprets results with confidence intervals, not just p-values',
+          'Builds growth projection models with leading indicators',
+          'Creates early warning systems to detect issues before they scale',
+        ],
+      },
+    ],
     techStack: ['Mixpanel / Amplitude', 'Google Analytics 4', 'Tableau / Looker', 'RevenueCat / Stripe', 'Hotjar / FullStory', 'Python / SQL'],
     specialties: ['Business intelligence', 'Dashboards & reportes', 'Analisis de metricas', 'Prediccion de tendencias', 'KPIs & OKRs', 'Data storytelling'],
+    specialties_en: ['Business intelligence', 'Dashboards & reports', 'Metrics analysis', 'Trend prediction', 'KPIs & OKRs', 'Data storytelling'],
     mcpTools: [
       { name: 'Mixpanel', color: '#7856FF' },
       { name: 'Tableau', color: '#E97627' },
@@ -695,8 +1192,17 @@ export const DOSSIER_AGENTS: DossierAgent[] = [
       { name: 'Growth', color: '#22c55e' },
       { name: 'Ejecutivos', color: '#8b5cf6' },
     ],
+    relatedAreas_en: [
+      { name: 'Product', color: '#2dd4bf' },
+      { name: 'Marketing', color: '#ef4444' },
+      { name: 'Finance', color: '#eab308' },
+      { name: 'Operations', color: '#f97316' },
+      { name: 'Growth', color: '#22c55e' },
+      { name: 'Executives', color: '#8b5cf6' },
+    ],
     stats: { speed: 70, precision: 96, creativity: 72, autonomy: 90 },
     quote: 'Sin datos, solo eres una persona mas con una opinion.',
+    quote_en: 'Without data, you\'re just another person with an opinion.',
   },
 ];
 

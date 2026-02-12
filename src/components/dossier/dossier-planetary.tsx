@@ -5,11 +5,13 @@ import type { DossierAgent } from '@/lib/dossier-data';
 
 interface Props {
   agent: DossierAgent;
+  locale?: string;
 }
 
-export function DossierPlanetary({ agent }: Props) {
+export function DossierPlanetary({ agent, locale }: Props) {
   const mcpCount = agent.mcpTools.length;
-  const areaCount = agent.relatedAreas.length;
+  const areas = locale === 'en' && agent.relatedAreas_en ? agent.relatedAreas_en : agent.relatedAreas;
+  const areaCount = areas.length;
 
   return (
     <div className="dossier-orbits relative w-[300px] h-[300px] md:w-[420px] md:h-[420px] mx-auto">
@@ -65,7 +67,7 @@ export function DossierPlanetary({ agent }: Props) {
 
       {/* Outer orbit: Related areas */}
       <div className="absolute inset-0 flex items-center justify-center">
-        {agent.relatedAreas.map((area, i) => {
+        {areas.map((area, i) => {
           const delay = -(i * (40 / areaCount));
           return (
             <div

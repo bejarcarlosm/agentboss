@@ -5,7 +5,7 @@ import { DOSSIER_AGENTS, getDossierAgent } from '@/lib/dossier-data';
 import { DossierPlanetary } from '@/components/dossier/dossier-planetary';
 
 interface Props {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }
 
 export function generateStaticParams() {
@@ -13,9 +13,10 @@ export function generateStaticParams() {
 }
 
 export default async function DossierPage({ params }: Props) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const agent = getDossierAgent(slug);
   if (!agent) notFound();
+  const isEn = locale === 'en';
 
   // Find prev/next agents for navigation
   const idx = DOSSIER_AGENTS.findIndex(a => a.slug === slug);
@@ -30,8 +31,8 @@ export default async function DossierPage({ params }: Props) {
       {/* Top bar */}
       <div className="border-b border-[var(--border)] bg-[var(--overlay)] backdrop-blur-sm relative z-10">
         <div className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
-          <Link href="/#team" className="text-xs text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
-            ← Volver al equipo
+          <Link href={`/${locale}/#team`} className="text-xs text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
+            ← {isEn ? 'Back to team' : 'Volver al equipo'}
           </Link>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
@@ -79,7 +80,7 @@ export default async function DossierPage({ params }: Props) {
                       : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
                   }`}
                 >
-                  {agent.status === 'ACTIVE' ? 'Operativo' : 'En Espera'}
+                  {agent.status === 'ACTIVE' ? (isEn ? 'Operative' : 'Operativo') : (isEn ? 'Standby' : 'En Espera')}
                 </span>
               </div>
             </div>
@@ -90,7 +91,10 @@ export default async function DossierPage({ params }: Props) {
                 <div key={key}>
                   <div className="flex justify-between mb-1">
                     <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--muted)]">
-                      {key === 'speed' ? 'Velocidad' : key === 'precision' ? 'Precision' : key === 'creativity' ? 'Creatividad' : 'Autonomia'}
+                      {isEn
+                        ? (key === 'speed' ? 'Speed' : key === 'precision' ? 'Precision' : key === 'creativity' ? 'Creativity' : 'Autonomy')
+                        : (key === 'speed' ? 'Velocidad' : key === 'precision' ? 'Precision' : key === 'creativity' ? 'Creatividad' : 'Autonomia')
+                      }
                     </span>
                     <span className="text-[10px] font-mono" style={{ color: agent.color }}>
                       {value}%
@@ -110,7 +114,7 @@ export default async function DossierPage({ params }: Props) {
             {agent.techStack.length > 0 && (
               <div className="mt-8">
                 <h2 className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] mb-3">
-                  Stack Tecnologico
+                  {isEn ? 'Tech Stack' : 'Stack Tecnologico'}
                 </h2>
                 <div className="space-y-1.5">
                   {agent.techStack.map(tech => (
@@ -145,7 +149,7 @@ export default async function DossierPage({ params }: Props) {
             {/* Role */}
             <div className="flex items-center gap-3 mb-8">
               <span className="text-lg text-[var(--foreground)] font-semibold">
-                {agent.role}
+                {isEn && agent.role_en ? agent.role_en : agent.role}
               </span>
               <span className="h-px flex-1 bg-[var(--border)]" />
             </div>
@@ -156,24 +160,24 @@ export default async function DossierPage({ params }: Props) {
                 Briefing
               </h2>
               <p className="text-[var(--muted)] leading-relaxed text-sm border-l-2 pl-4" style={{ borderColor: agent.color }}>
-                {agent.briefing}
+                {isEn && agent.briefing_en ? agent.briefing_en : agent.briefing}
               </p>
             </div>
 
             {/* Quote */}
             <div className="mb-8 p-4 rounded-lg bg-[var(--surface)] border border-[var(--border)]">
               <p className="text-sm italic text-[var(--foreground)]">
-                &ldquo;{agent.quote}&rdquo;
+                &ldquo;{isEn && agent.quote_en ? agent.quote_en : agent.quote}&rdquo;
               </p>
             </div>
 
             {/* Specialties */}
             <div className="mb-10">
               <h2 className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] mb-3">
-                Especialidades
+                {isEn ? 'Specialties' : 'Especialidades'}
               </h2>
               <div className="flex flex-wrap gap-2">
-                {agent.specialties.map(s => (
+                {(isEn && agent.specialties_en ? agent.specialties_en : agent.specialties).map(s => (
                   <span
                     key={s}
                     className="px-3 py-1.5 rounded-md text-xs font-medium border"
@@ -192,10 +196,10 @@ export default async function DossierPage({ params }: Props) {
             {/* Constellation - MCP Tools & Related Areas */}
             <div className="mb-10">
               <h2 className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] mb-4 text-center">
-                Constelacion de trabajo
+                {isEn ? 'Work constellation' : 'Constelacion de trabajo'}
               </h2>
               <div className="flex justify-center">
-                <DossierPlanetary agent={agent} />
+                <DossierPlanetary agent={agent} locale={locale} />
               </div>
               <div className="flex justify-center gap-8 mt-6 text-[9px] font-mono uppercase tracking-wider text-[var(--muted)]">
                 <div className="flex items-center gap-1.5">
@@ -204,7 +208,7 @@ export default async function DossierPage({ params }: Props) {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full border border-dotted" style={{ borderColor: `${agent.color}25` }} />
-                  Areas relacionadas
+                  {isEn ? 'Related areas' : 'Areas relacionadas'}
                 </div>
               </div>
             </div>
@@ -213,10 +217,10 @@ export default async function DossierPage({ params }: Props) {
             {agent.responsibilities.length > 0 && (
               <div className="mb-10">
                 <h2 className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] mb-4">
-                  Responsabilidades
+                  {isEn ? 'Responsibilities' : 'Responsabilidades'}
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {agent.responsibilities.map((resp) => (
+                  {(isEn && agent.responsibilities_en ? agent.responsibilities_en : agent.responsibilities).map((resp) => (
                     <div
                       key={resp.title}
                       className="p-4 rounded-lg border border-[var(--border)] bg-[var(--surface)]"
@@ -244,25 +248,25 @@ export default async function DossierPage({ params }: Props) {
             {/* CTA */}
             {agent.chatSlug ? (
               <Link
-                href={`/chat/${agent.chatSlug}`}
+                href={`/${locale}/chat/${agent.chatSlug}`}
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-sm text-[var(--text-on-accent)] transition-all hover:-translate-y-0.5"
                 style={{ background: agent.color }}
               >
-                Hablar con {agent.codename}
+                {isEn ? `Talk to ${agent.codename}` : `Hablar con ${agent.codename}`}
                 <span>→</span>
               </Link>
             ) : (
               <div className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-sm border border-amber-500/30 text-amber-400 opacity-60 cursor-not-allowed">
-                Proximamente disponible
+                {isEn ? 'Coming soon' : 'Proximamente disponible'}
               </div>
             )}
           </div>
         </div>
 
         {/* Bottom nav */}
-        <div className="flex items-center justify-between mt-16 pt-8 border-t border-white/5">
+        <div className="flex items-center justify-between mt-16 pt-8 border-t border-[var(--border)]">
           {prev ? (
-            <Link href={`/dossier/${prev.slug}`} className="group flex items-center gap-2 text-sm text-[var(--muted)] hover:text-white transition-colors">
+            <Link href={`/${locale}/dossier/${prev.slug}`} className="group flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
               <span>←</span>
               <span className="font-bold" style={{ color: prev.color }}>{prev.codename}</span>
             </Link>
@@ -273,7 +277,7 @@ export default async function DossierPage({ params }: Props) {
             {DOSSIER_AGENTS.map(a => (
               <Link
                 key={a.slug}
-                href={`/dossier/${a.slug}`}
+                href={`/${locale}/dossier/${a.slug}`}
                 className="w-2.5 h-2.5 rounded-full transition-all"
                 style={{
                   background: a.slug === slug ? a.color : 'rgba(255,255,255,0.1)',
@@ -284,7 +288,7 @@ export default async function DossierPage({ params }: Props) {
           </div>
 
           {next ? (
-            <Link href={`/dossier/${next.slug}`} className="group flex items-center gap-2 text-sm text-[var(--muted)] hover:text-white transition-colors">
+            <Link href={`/${locale}/dossier/${next.slug}`} className="group flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--foreground)] transition-colors">
               <span className="font-bold" style={{ color: next.color }}>{next.codename}</span>
               <span>→</span>
             </Link>
