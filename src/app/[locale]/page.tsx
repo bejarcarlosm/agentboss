@@ -14,8 +14,8 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     <div className="min-h-screen bg-[var(--background)]">
       <FactoryNavbar />
       <FactoryHero />
-      <ServicesSection locale={locale} />
       <AgentShowcase locale={locale} />
+      <ServicesSection locale={locale} />
       <ProcessSection locale={locale} />
       <ValueProps locale={locale} />
       <CtaSection locale={locale} />
