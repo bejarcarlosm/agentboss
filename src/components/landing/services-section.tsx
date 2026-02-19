@@ -6,7 +6,7 @@ const SERVICES_ES = [
   { icon: '🤖', title: 'Automatizaciones IA', description: 'Chatbots, extracción de documentos, flujos automatizados. Integramos IA donde más impacto genera.' },
   { icon: '🎨', title: 'Diseño UX/UI', description: 'Interfaces intuitivas y prototipos interactivos. Validamos ideas antes de construir para no desperdiciar recursos.' },
   { icon: '⚡', title: 'MVPs Rápidos', description: 'De la idea al producto funcional en semanas. Lanza rápido, valida con usuarios reales e itera.' },
-  { icon: '🔧', title: 'Consultoría Tech', description: 'Auditoría de código, arquitectura de sistemas y optimización de procesos. Tu CTO o Director de IA bajo demanda, con traspaso completo de la fábrica de software a tu equipo de IT.' },
+  { icon: '🔧', title: 'Consultoría Tech', description: 'Auditoría de código, arquitectura de sistemas y optimización de procesos. Tu CTO o Director de IA bajo demanda, con traspaso completo de la fábrica de software a tu equipo de IT.', link: 'https://carlosbejar.cl', linkLabel: 'Carlos Bejar — Director de Implementación de IA' },
 ];
 
 const SERVICES_EN = [
@@ -15,7 +15,7 @@ const SERVICES_EN = [
   { icon: '🤖', title: 'AI Automations', description: 'Chatbots, document extraction, automated workflows. We integrate AI where it generates the most impact.' },
   { icon: '🎨', title: 'UX/UI Design', description: 'Intuitive interfaces and interactive prototypes. We validate ideas before building to avoid wasting resources.' },
   { icon: '⚡', title: 'Rapid MVPs', description: 'From idea to working product in weeks. Launch fast, validate with real users, and iterate.' },
-  { icon: '🔧', title: 'Tech Consulting', description: 'Code audits, system architecture, and process optimization. Your CTO or AI Director on demand, with full software factory handoff to your IT team.' },
+  { icon: '🔧', title: 'Tech Consulting', description: 'Code audits, system architecture, and process optimization. Your CTO or AI Director on demand, with full software factory handoff to your IT team.', link: 'https://carlosbejar.cl', linkLabel: 'Carlos Bejar — AI Implementation Director' },
 ];
 
 export function ServicesSection({ locale }: { locale: string }) {
@@ -31,21 +31,9 @@ export function ServicesSection({ locale }: { locale: string }) {
           <h2 className="text-3xl md:text-4xl font-bold mb-3">
             {t.heading}
           </h2>
-          <p className="text-[var(--muted)] max-w-xl mx-auto mb-4">
+          <p className="text-[var(--muted)] max-w-xl mx-auto">
             {t.subheading}
           </p>
-          <div className="flex items-center justify-center gap-2 text-sm">
-            <span className="text-[var(--muted)]">Led by</span>
-            <a
-              href="https://carlosbejar.cl"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--secondary)] hover:border-[#2dd4bf]/50 transition-all"
-            >
-              <span className="text-[#2dd4bf]">Carlos Bejar</span>
-              <span className="text-[var(--muted)]">— AI Adoption Director</span>
-            </a>
-          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -58,6 +46,16 @@ export function ServicesSection({ locale }: { locale: string }) {
               <span className="text-3xl block mb-4">{service.icon}</span>
               <h3 className="text-lg font-bold mb-2">{service.title}</h3>
               <p className="text-sm text-[var(--muted)] leading-relaxed">{service.description}</p>
+              {'link' in service && service.link && (
+                <a
+                  href={service.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 mt-3 px-3 py-1.5 rounded-full border border-[var(--border)] bg-[var(--background)] hover:border-[#2dd4bf]/50 transition-all text-sm"
+                >
+                  <span className="text-[#2dd4bf]">{service.linkLabel}</span>
+                </a>
+              )}
             </div>
           ))}
         </div>

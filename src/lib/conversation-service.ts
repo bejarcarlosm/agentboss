@@ -117,6 +117,49 @@ export async function createOrUpdateLead(
   return data.id;
 }
 
+export async function createLeadFromWhatsApp(
+  phone: string,
+  name: string | undefined,
+  agentSlug: string,
+  conversationId: string
+): Promise<string | null> {
+  // Check if lead with this phone already exists
+  const { data: existing } = await supabase
+    .from('leads')
+    .select('id')
+    .eq('phone', phone)
+    .limit(1)
+    .single();
+
+  if (existing) {
+    const updates: Record<string, string> = { updated_at: new Date().toISOString() };
+    if (name) updates.name = name;
+    await supabase.from('leads').update(updates).eq('id', existing.id);
+    await supabase.from('conversations').update({ lead_id: existing.id }).eq('id', conversationId);
+    return existing.id;
+  }
+
+  const { data, error } = await supabase
+    .from('leads')
+    .insert({
+      name: name || null,
+      email: null,
+      phone,
+      agent_slug: agentSlug,
+      source: 'whatsapp_gate',
+    })
+    .select('id')
+    .single();
+
+  if (error) {
+    console.error('Error creating lead from WhatsApp:', error);
+    return null;
+  }
+
+  await supabase.from('conversations').update({ lead_id: data.id }).eq('id', conversationId);
+  return data.id;
+}
+
 // Extract name and email from conversation messages
 const EMAIL_REGEX = /[\w.-]+@[\w.-]+\.\w{2,}/;
 const NAME_PATTERNS = [

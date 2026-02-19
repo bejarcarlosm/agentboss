@@ -7,7 +7,19 @@ import type { FactoryAgent } from '@/lib/factory-types';
 import { useVoiceChatStreaming } from '@/hooks/use-voice-chat-streaming';
 import { AudioWaveform } from '@/components/ui/audio-waveform';
 import { Mic, ArrowUp, Loader2, ArrowLeft, X } from 'lucide-react';
+import { WhatsAppGate } from '@/components/chat/whatsapp-gate';
 import { cn } from '@/lib/utils';
+
+const GATE_KEY = 'agentboss_gate_passed';
+
+function isGatePassed(): boolean {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem(GATE_KEY) === 'true';
+}
+
+function markGatePassed() {
+  localStorage.setItem(GATE_KEY, 'true');
+}
 
 const Orb = dynamic(
   () => import('@/components/ui/orb').then(mod => ({ default: mod.Orb })),
@@ -37,6 +49,9 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
   const [welcomeDismissed, setWelcomeDismissed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // WhatsApp gate state
+  const [gatePassed, setGatePassed] = useState(() => isGatePassed());
+
   const {
     state,
     messages,
@@ -56,6 +71,11 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     remainingMessages,
   } = useVoiceChatStreaming(isLiveMode);
 
+  const handleGateSubmit = () => {
+    setGatePassed(true);
+    markGatePassed();
+  };
+
   const agentNameMap: Record<string, string> = {
     'product-owner': 'Atlas',
     'ux-designer': 'Venus',
@@ -64,20 +84,23 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     'infrastructure': 'Uranus',
   };
 
+  const greeting = 'Hola!';
+
   const agentWelcome: Record<string, string> = {
-    'product-owner': `Hola! Soy Atlas, Product Owner de AgentBoss. Mi trabajo es entender tu negocio y traducir tus ideas en software funcional. Trabajo siempre bajo la supervision del lider de proyecto humano de AgentBoss — el toma las decisiones finales, yo ejecuto.\n\nToca el orbe o escribe para empezar a conversar. Te puedo ayudar con discovery de producto, user stories y planificacion de tu MVP.`,
-    'ux-designer': `Hola! Soy Venus, disenadora UX/UI de AgentBoss. Me encargo de que tu producto se vea y se sienta increible para tus usuarios. Todo lo que hago esta supervisado por el lider de proyecto humano de AgentBoss.\n\nToca el orbe o escribe para conversar. Te ayudo con wireframes, flujos de usuario y diseno de interfaces.`,
-    'black-belt': `Hola! Soy Pluto, Black Belt de QA en AgentBoss. Mi mision es asegurar que todo funcione perfecto antes de que llegue a tus usuarios. Siempre trabajo bajo la supervision del lider de proyecto humano de AgentBoss.\n\nToca el orbe o escribe para conversar. Puedo ayudarte con estrategia de testing, criterios de calidad y validacion de producto.`,
-    'developer': `Hola! Soy Earth, Developer de AgentBoss. Me encargo de construir el codigo que hace realidad las ideas. Trabajo bajo la supervision del lider de proyecto humano de AgentBoss.\n\nToca el orbe o escribe para conversar. Te ayudo con arquitectura, implementacion y decisiones tecnicas.`,
-    'infrastructure': `Hola! Soy Uranus, experto en infraestructura de AgentBoss. Me aseguro de que todo funcione en produccion de forma rapida y confiable. Siempre bajo la supervision del lider de proyecto humano de AgentBoss.\n\nToca el orbe o escribe para conversar. Te ayudo con deploy, hosting y escalabilidad.`,
+    'product-owner': `${greeting} Soy Atlas, Product Owner de AgentBoss. Mi trabajo es entender tu negocio y traducir tus ideas en software funcional. Trabajo bajo la supervision del lider de proyecto humano de AgentBoss.\n\nCuentame sobre tu negocio — que problema quieres resolver con tecnologia?`,
+    'ux-designer': `${greeting} Soy Venus, disenadora UX/UI de AgentBoss. Me encargo de que tu producto se vea y se sienta increible para tus usuarios.\n\nQue tipo de producto digital necesitas? Ya tienes algo o partimos de cero?`,
+    'black-belt': `${greeting} Soy Pluto, Black Belt de QA en AgentBoss. Mi mision es asegurar que todo funcione perfecto antes de que llegue a tus usuarios.\n\nTienes un producto existente que quieres mejorar o es una idea nueva?`,
+    'developer': `${greeting} Soy Earth, Developer de AgentBoss. Me encargo de construir el codigo que hace realidad las ideas.\n\nQue tipo de solucion tecnica estas buscando? App, plataforma web, automatizacion?`,
+    'infrastructure': `${greeting} Soy Uranus, experto en infraestructura de AgentBoss. Me aseguro de que todo funcione en produccion de forma rapida y confiable.\n\nYa tienes infraestructura montada o necesitas partir de cero?`,
   };
 
   useEffect(() => {
+    if (!gatePassed) return;
     const agentName = agentNameMap[agent.slug] || agent.name;
     connect(agentName.toLowerCase());
     return () => { disconnect(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [agent.slug]);
+  }, [agent.slug, gatePassed]);
 
   // Dismiss welcome on first interaction
   useEffect(() => {
@@ -123,6 +146,10 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     : state === 'connecting'
     ? `Conectando con ${agent.name}...`
     : 'Toca el microfono para hablar';
+
+  if (!gatePassed) {
+    return <WhatsAppGate agent={agent} onSubmit={handleGateSubmit} />;
+  }
 
   return (
     <div className="flex flex-col h-screen bg-[var(--background)]">
