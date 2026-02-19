@@ -3,12 +3,14 @@
 import { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 import type { FactoryAgent } from '@/lib/factory-types';
 import { useVoiceChatStreaming } from '@/hooks/use-voice-chat-streaming';
 import { AudioWaveform } from '@/components/ui/audio-waveform';
-import { Mic, ArrowUp, Loader2, ArrowLeft, X } from 'lucide-react';
+import { Mic, ArrowUp, Loader2, ArrowLeft, X, Sun, Moon, Keyboard } from 'lucide-react';
 import { WhatsAppGate } from '@/components/chat/whatsapp-gate';
 import { cn } from '@/lib/utils';
+import ReactMarkdown from 'react-markdown';
 
 const GATE_KEY = 'agentboss_gate_passed';
 
@@ -46,12 +48,16 @@ function linkifyText(text: string) {
 
 export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInterfaceProps) {
   const router = useRouter();
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [textInput, setTextInput] = useState('');
+  const [inputMode, setInputMode] = useState<'voice' | 'text' | 'both'>('both');
   const [welcomeDismissed, setWelcomeDismissed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => setMounted(true), []);
+
   // WhatsApp gate state — skipGate bypasses it (boss routes)
-  // Once bypassed, persist so all agents are unlocked
   const [gatePassed] = useState(() => {
     const passed = skipGate || isGatePassed();
     if (passed) markGatePassed();
@@ -85,14 +91,12 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
     'infrastructure': 'Uranus',
   };
 
-  const greeting = 'Hola!';
-
   const agentWelcome: Record<string, string> = {
-    'product-owner': `${greeting} Soy Atlas, Product Owner de AgentBoss. Mi trabajo es entender tu negocio y traducir tus ideas en software funcional. Trabajo bajo la supervision del lider de proyecto humano de AgentBoss.\n\nCuentame sobre tu negocio — que problema quieres resolver con tecnologia?`,
-    'ux-designer': `${greeting} Soy Venus, disenadora UX/UI de AgentBoss. Me encargo de que tu producto se vea y se sienta increible para tus usuarios.\n\nQue tipo de producto digital necesitas? Ya tienes algo o partimos de cero?`,
-    'black-belt': `${greeting} Soy Pluto, Black Belt de QA en AgentBoss. Mi mision es asegurar que todo funcione perfecto antes de que llegue a tus usuarios.\n\nTienes un producto existente que quieres mejorar o es una idea nueva?`,
-    'developer': `${greeting} Soy Earth, Developer de AgentBoss. Me encargo de construir el codigo que hace realidad las ideas.\n\nQue tipo de solucion tecnica estas buscando? App, plataforma web, automatizacion?`,
-    'infrastructure': `${greeting} Soy Uranus, experto en infraestructura de AgentBoss. Me aseguro de que todo funcione en produccion de forma rapida y confiable.\n\nYa tienes infraestructura montada o necesitas partir de cero?`,
+    'product-owner': `Hi! I'm Atlas, Product Owner at AgentBoss. My job is to understand your business and turn your ideas into working software. I work under the supervision of AgentBoss's human project leader.\n\nTell me about your business — what problem do you want to solve with technology?`,
+    'ux-designer': `Hi! I'm Venus, UX/UI Designer at AgentBoss. I make sure your product looks and feels amazing for your users.\n\nWhat kind of digital product do you need? Do you already have something or are we starting from scratch?`,
+    'black-belt': `Hi! I'm Pluto, QA Black Belt at AgentBoss. My mission is to make sure everything works perfectly before it reaches your users.\n\nDo you have an existing product you want to improve, or is it a new idea?`,
+    'developer': `Hi! I'm Earth, Developer at AgentBoss. I build the code that brings ideas to life.\n\nWhat kind of technical solution are you looking for? App, web platform, automation?`,
+    'infrastructure': `Hi! I'm Uranus, Infrastructure Expert at AgentBoss. I make sure everything runs fast and reliably in production.\n\nDo you already have infrastructure set up, or do we need to start from scratch?`,
   };
 
   useEffect(() => {
@@ -103,7 +107,11 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agent.slug, gatePassed]);
 
-  // Dismiss welcome on first interaction
+  // Stop recording if user switches to text mode
+  useEffect(() => {
+    if (isRecording && inputMode === 'text') stopRecording();
+  }, [inputMode, isRecording, stopRecording]);
+
   useEffect(() => {
     if (isRecording || messages.length > 0) setWelcomeDismissed(true);
   }, [isRecording, messages.length]);
@@ -131,22 +139,22 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
 
   const handleSendText = () => {
     if (textInput.trim() && !rateLimitReached) {
-      sendTextMessage(textInput);
+      sendTextMessage(textInput, inputMode);
       setTextInput('');
     }
   };
 
   const statusText = rateLimitReached
-    ? 'Limite de demo alcanzado'
+    ? 'Demo limit reached'
     : isRecording
-    ? 'Escuchando...'
+    ? 'Listening...'
     : state === 'processing'
-    ? `${agent.name} esta pensando...`
+    ? `${agent.name} is thinking...`
     : state === 'speaking'
-    ? `${agent.name} esta respondiendo...`
+    ? `${agent.name} is responding...`
     : state === 'connecting'
-    ? `Conectando con ${agent.name}...`
-    : 'Toca el microfono para hablar';
+    ? `Connecting to ${agent.name}...`
+    : 'Tap the mic or type your message';
 
   if (!gatePassed) {
     return <WhatsAppGate agent={agent} />;
@@ -169,6 +177,40 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
           <h1 className="font-bold text-lg">{agent.name}</h1>
           <p className="text-sm text-[var(--muted)]">{agent.role}</p>
         </div>
+
+        {/* Mode selector */}
+        <div className="flex items-center rounded-lg border border-[var(--border)] overflow-hidden">
+          {([
+            { mode: 'voice' as const, icon: <Mic className="w-3.5 h-3.5" />, title: 'Voice only' },
+            { mode: 'text' as const, icon: <Keyboard className="w-3.5 h-3.5" />, title: 'Text only' },
+            { mode: 'both' as const, icon: <><Mic className="w-3 h-3" /><Keyboard className="w-3 h-3" /></>, title: 'Voice + Text' },
+          ]).map(({ mode, icon, title }) => (
+            <button
+              key={mode}
+              onClick={() => setInputMode(mode)}
+              className={cn(
+                'flex items-center gap-0.5 px-2 py-1.5 transition-colors text-xs',
+                inputMode === mode ? 'text-white' : 'text-[var(--muted)] hover:text-[var(--foreground)]'
+              )}
+              style={inputMode === mode ? { background: agent.color } : undefined}
+              title={title}
+            >
+              {icon}
+            </button>
+          ))}
+        </div>
+
+        {/* Theme toggle */}
+        {mounted && (
+          <button
+            onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+            className="p-2 rounded-lg hover:bg-[var(--foreground)]/5 transition-colors"
+            title={resolvedTheme === 'dark' ? 'Light mode' : 'Dark mode'}
+          >
+            {resolvedTheme === 'dark' ? <Sun className="w-4 h-4 text-[var(--muted)]" /> : <Moon className="w-4 h-4 text-[var(--muted)]" />}
+          </button>
+        )}
+
         {!isLiveMode && (
           <div className="text-xs px-2.5 py-1 rounded-full border font-medium" style={{ borderColor: `${agent.color}40`, color: agent.color }}>
             {remainingMessages} msgs
@@ -190,13 +232,13 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
       {rateLimitReached && !error && (
         <div className="mx-4 mt-3 rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 text-center">
           <p className="text-amber-400 text-sm font-medium">
-            Has alcanzado el limite de la demo. Contactanos en hola@agentboss.cl para acceso completo.
+            Demo limit reached. Contact us at hola@agentboss.cl for full access.
           </p>
         </div>
       )}
       {demoTimeoutReached && (
         <div className="mx-4 mt-3 rounded-lg bg-amber-500/10 border border-amber-500/20 p-3 text-center">
-          <p className="text-amber-400 text-sm">Tiempo de grabacion agotado.</p>
+          <p className="text-amber-400 text-sm">Recording time limit reached.</p>
         </div>
       )}
 
@@ -211,7 +253,13 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
                   ? 'text-[var(--text-on-accent)]'
                   : 'bg-[var(--surface-elevated)] text-[var(--foreground)]'
               )} style={msg.role === 'user' ? { background: agent.color } : undefined}>
-                {linkifyText(msg.content)}
+                {msg.role === 'assistant' && inputMode === 'text' ? (
+                  <div className="prose prose-sm dark:prose-invert max-w-none [&_table]:text-xs [&_th]:px-2 [&_th]:py-1 [&_td]:px-2 [&_td]:py-1 [&_table]:border-collapse [&_th]:border [&_th]:border-[var(--border)] [&_td]:border [&_td]:border-[var(--border)] [&_th]:bg-[var(--surface)] [&_p]:my-1 [&_ul]:my-1 [&_ol]:my-1 [&_h3]:text-sm [&_h3]:mt-2 [&_h3]:mb-1">
+                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  </div>
+                ) : (
+                  linkifyText(msg.content)
+                )}
               </div>
             </div>
           ))}
@@ -219,48 +267,39 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
         </div>
       )}
 
-      {/* Orb + Waveform + Send button area */}
+      {/* Orb + Waveform area */}
       <div className="flex-1 flex flex-col items-center justify-center gap-4 overflow-y-auto px-4">
-        {/* Welcome - shown when no messages */}
+        {/* Welcome */}
         {!welcomeDismissed && messages.length === 0 && state !== 'connecting' && agentWelcome[agent.slug] && (
-          <div className="max-w-sm w-full rounded-xl p-4 bg-[var(--surface)] border border-[var(--border)]">
-            <div className="flex items-start gap-3">
-              <img
-                src={agent.avatar}
-                alt={agent.name}
-                className="w-8 h-8 rounded-full object-cover border flex-shrink-0"
-                style={{ borderColor: agent.color }}
-              />
-              <div>
-                <p className="text-xs font-semibold mb-1.5" style={{ color: agent.color }}>{agent.name}</p>
-                <p className="text-xs text-[var(--muted)] leading-relaxed whitespace-pre-line">{agentWelcome[agent.slug]}</p>
+          <div className="max-w-sm md:max-w-lg w-full space-y-3">
+            <div className="rounded-xl p-4 md:p-6 bg-[var(--surface)] border border-[var(--border)]">
+              <div className="flex items-start gap-3 md:gap-4">
+                <img
+                  src={agent.avatar}
+                  alt={agent.name}
+                  className="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover border flex-shrink-0"
+                  style={{ borderColor: agent.color }}
+                />
+                <div>
+                  <p className="text-xs md:text-sm font-semibold mb-1.5" style={{ color: agent.color }}>{agent.name}</p>
+                  <p className="text-xs md:text-sm text-[var(--muted)] leading-relaxed whitespace-pre-line">{agentWelcome[agent.slug]}</p>
+                </div>
               </div>
             </div>
           </div>
         )}
 
-        {state === 'connecting' ? (
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 className="h-8 w-8 animate-spin" style={{ color: agent.color }} />
-            <span className="text-sm text-[var(--muted)]">Conectando con {agent.name}...</span>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center gap-3">
-            {/* Send button - appears ABOVE the orb on silence */}
-            {isRecording && readyToSend && currentTranscript.trim() && (
-              <button
-                onClick={() => sendMessage()}
-                className="px-6 py-2.5 rounded-full text-[var(--text-on-accent)] text-sm font-semibold transition-all hover:scale-105 hover:brightness-110 flex items-center gap-2 animate-in fade-in zoom-in-95 duration-300"
-                style={{ background: agent.color, boxShadow: `0 0 20px ${agent.color}40` }}
-              >
-                <ArrowUp className="w-4 h-4" />
-                Enviar
-              </button>
-            )}
+        <div className="flex flex-col items-center gap-3">
+          {state === 'connecting' && (
+            <div className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" style={{ color: agent.color }} />
+              <span className="text-sm text-[var(--muted)]">Connecting...</span>
+            </div>
+          )}
 
-            {/* Orb - always visible, clickable to start recording */}
+          {/* Orb - hidden in text mode */}
+          {inputMode !== 'text' && (
             <div className="relative">
-              {/* Waveform ring around orb when recording */}
               {isRecording && analyser && (
                 <div className="absolute -inset-6 z-0">
                   <AudioWaveform analyser={analyser} color={agent.color} />
@@ -270,7 +309,8 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
               <div
                 className={cn(
                   'relative z-10 transition-transform duration-200',
-                  state === 'connected' && !rateLimitReached && 'cursor-pointer hover:scale-110 active:scale-95'
+                  state === 'connected' && !rateLimitReached && 'cursor-pointer hover:scale-110 active:scale-95',
+                  state === 'connecting' && 'opacity-50',
                 )}
                 onClick={() => {
                   if (state === 'connected' && !rateLimitReached) {
@@ -285,32 +325,32 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
                 />
               </div>
             </div>
-
-            {/* Real-time transcript below orb */}
-            {isRecording && currentTranscript && (
-              <div className="max-w-sm text-center animate-in fade-in duration-200">
-                <p className="text-sm text-[var(--foreground)] leading-relaxed">
-                  {currentTranscript}
-                  {!readyToSend && <span className="animate-pulse">|</span>}
-                </p>
-              </div>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Bottom controls */}
       <div className="mx-4 mb-4 space-y-2">
-        <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-2.5">
-          <div className="flex items-center gap-2">
-            {/* Mic button */}
+        {/* Status text */}
+        {(state === 'processing' || state === 'speaking' || isRecording) && (
+          <p className="text-xs text-[var(--muted)] text-center">
+            {statusText}
+          </p>
+        )}
+
+        {/* Unified input bar */}
+        <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] flex items-center gap-2 p-2.5">
+          {/* Mic button - hidden in text mode */}
+          {inputMode !== 'text' && (
             <button
               onClick={() => {
-                if (!isRecording && state === 'connected' && !rateLimitReached) {
+                if (isRecording) {
+                  stopRecording();
+                } else if (state === 'connected' && !rateLimitReached) {
                   startRecording();
                 }
               }}
-              disabled={isRecording || state === 'processing' || state === 'speaking' || rateLimitReached || !isActive}
+              disabled={state === 'processing' || state === 'speaking' || rateLimitReached || !isActive}
               className={cn(
                 'p-2.5 rounded-lg transition-all flex-shrink-0',
                 isRecording
@@ -326,55 +366,59 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
                   ? { background: agent.color }
                   : undefined
               }
+              title={isRecording ? 'Stop recording' : 'Record voice'}
             >
-              <Mic className="w-5 h-5" />
+              {isRecording ? <X className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
             </button>
+          )}
 
-            {/* Status text */}
-            <p className="flex-1 text-xs text-[var(--muted)] text-center">
-              {statusText}
-            </p>
+          {/* Text input - shows transcript in voice mode, editable in text/both */}
+          <input
+            type="text"
+            value={inputMode === 'voice' ? currentTranscript : (isRecording ? currentTranscript : textInput)}
+            onChange={(e) => { if (!isRecording && inputMode !== 'voice') setTextInput(e.target.value); }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !isRecording && inputMode !== 'voice') {
+                e.preventDefault();
+                handleSendText();
+              }
+            }}
+            placeholder={
+              inputMode === 'voice'
+                ? 'Tap the mic to speak...'
+                : inputMode === 'text'
+                ? 'Type your message...'
+                : isRecording
+                ? 'Listening...'
+                : 'Type or tap the mic...'
+            }
+            className="flex-1 bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted)] outline-none"
+            disabled={rateLimitReached || !isActive || state === 'processing' || state === 'speaking'}
+            readOnly={isRecording || inputMode === 'voice'}
+          />
 
-            {/* Cancel recording */}
-            {isRecording && (
-              <button
-                onClick={() => stopRecording()}
-                className="p-2.5 rounded-lg text-[var(--muted)] hover:text-[var(--foreground)] hover:bg-[var(--foreground)]/10 transition-all flex-shrink-0"
-                title="Cancelar grabacion"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+          {/* Send button */}
+          <button
+            onClick={() => {
+              if (isRecording && readyToSend && currentTranscript.trim()) {
+                sendMessage();
+              } else if (!isRecording && inputMode !== 'voice') {
+                handleSendText();
+              }
+            }}
+            disabled={
+              isRecording
+                ? !readyToSend || !currentTranscript.trim()
+                : inputMode === 'voice'
+                ? true
+                : !textInput.trim() || rateLimitReached || !isActive || state === 'processing' || state === 'speaking'
+            }
+            className="p-2 rounded-lg text-[var(--text-on-accent)] disabled:opacity-30 transition-all hover:scale-105 flex-shrink-0"
+            style={{ background: agent.color }}
+          >
+            <ArrowUp className="w-4 h-4" />
+          </button>
         </div>
-
-        {/* Text input */}
-        {!isRecording && (
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] flex items-center gap-2 p-2.5">
-            <input
-              type="text"
-              value={textInput}
-              onChange={(e) => setTextInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  handleSendText();
-                }
-              }}
-              placeholder="Escribe tu mensaje..."
-              className="flex-1 bg-transparent text-sm text-[var(--foreground)] placeholder:text-[var(--muted)] outline-none"
-              disabled={rateLimitReached || !isActive || state === 'processing' || state === 'speaking'}
-            />
-            <button
-              onClick={handleSendText}
-              disabled={!textInput.trim() || rateLimitReached || !isActive || state === 'processing' || state === 'speaking'}
-              className="p-2 rounded-lg text-[var(--text-on-accent)] disabled:opacity-30 transition-all hover:scale-105 flex-shrink-0"
-              style={{ background: agent.color }}
-            >
-              <ArrowUp className="w-4 h-4" />
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

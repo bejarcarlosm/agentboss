@@ -444,7 +444,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
     confirmSend();
   }, [confirmSend]);
 
-  const sendTextMessage = useCallback(async (text: string) => {
+  const sendTextMessage = useCallback(async (text: string, inputMode?: 'voice' | 'text' | 'both') => {
     if (!sessionIdRef.current) {
       setError('No session available');
       return;
@@ -478,6 +478,7 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
         body: JSON.stringify({
           sessionId: sessionIdRef.current,
           message: text,
+          ...(inputMode && { inputMode }),
         }),
       });
 
