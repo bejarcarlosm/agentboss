@@ -6,7 +6,7 @@ interface WhatsAppGateProps {
   agent: FactoryAgent;
 }
 
-const WA_NUMBER = '56932737570';
+const WA_NUMBER = '56989727375';
 
 export function WhatsAppGate({ agent }: WhatsAppGateProps) {
   const waMessage = encodeURIComponent('Agent');
