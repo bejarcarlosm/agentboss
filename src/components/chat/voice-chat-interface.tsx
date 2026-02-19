@@ -29,6 +29,7 @@ const Orb = dynamic(
 interface VoiceChatInterfaceProps {
   agent: FactoryAgent;
   isLiveMode: boolean;
+  skipGate?: boolean;
 }
 
 function linkifyText(text: string) {
@@ -43,14 +44,19 @@ function linkifyText(text: string) {
   );
 }
 
-export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProps) {
+export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInterfaceProps) {
   const router = useRouter();
   const [textInput, setTextInput] = useState('');
   const [welcomeDismissed, setWelcomeDismissed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // WhatsApp gate state
-  const [gatePassed, setGatePassed] = useState(() => isGatePassed());
+  // WhatsApp gate state — skipGate bypasses it (boss routes)
+  // Once bypassed, persist so all agents are unlocked
+  const [gatePassed] = useState(() => {
+    const passed = skipGate || isGatePassed();
+    if (passed) markGatePassed();
+    return passed;
+  });
 
   const {
     state,
@@ -70,11 +76,6 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     rateLimitReached,
     remainingMessages,
   } = useVoiceChatStreaming(isLiveMode);
-
-  const handleGateSubmit = () => {
-    setGatePassed(true);
-    markGatePassed();
-  };
 
   const agentNameMap: Record<string, string> = {
     'product-owner': 'Atlas',
@@ -148,7 +149,7 @@ export function VoiceChatInterface({ agent, isLiveMode }: VoiceChatInterfaceProp
     : 'Toca el microfono para hablar';
 
   if (!gatePassed) {
-    return <WhatsAppGate agent={agent} onSubmit={handleGateSubmit} />;
+    return <WhatsAppGate agent={agent} />;
   }
 
   return (

@@ -10,7 +10,11 @@ export default function ChatPage({ params }: { params: Promise<{ agentSlug: stri
   const { agentSlug } = use(params);
   const searchParams = useSearchParams();
   const mode = searchParams.get('mode');
-  const agent = getFactoryAgent(agentSlug);
+
+  // Routes ending in "boss" bypass the WhatsApp gate
+  const isBossRoute = agentSlug.endsWith('boss') && agentSlug !== 'boss';
+  const realSlug = isBossRoute ? agentSlug.slice(0, -4) : agentSlug;
+  const agent = getFactoryAgent(realSlug);
 
   if (!agent) {
     return (
@@ -18,7 +22,7 @@ export default function ChatPage({ params }: { params: Promise<{ agentSlug: stri
         <div className="text-center">
           <div className="text-5xl mb-4">🤖</div>
           <h1 className="text-xl font-bold mb-2">Agente no encontrado</h1>
-          <p className="text-[var(--muted)] mb-6">El agente &quot;{agentSlug}&quot; no existe en la fabrica.</p>
+          <p className="text-[var(--muted)] mb-6">El agente &quot;{realSlug}&quot; no existe en la fabrica.</p>
           <Link href="/" className="btn btn-primary">
             Volver a la fabrica
           </Link>
@@ -27,8 +31,6 @@ export default function ChatPage({ params }: { params: Promise<{ agentSlug: stri
     );
   }
 
-  // ?mode=live → Voice chat with AI (unlimited for Carlos)
-  // Default → Voice chat with AI (demo, 5 msg limit)
   const isLiveMode = mode === 'live';
-  return <VoiceChatInterface agent={agent} isLiveMode={isLiveMode} />;
+  return <VoiceChatInterface agent={agent} isLiveMode={isLiveMode} skipGate={isBossRoute} />;
 }
