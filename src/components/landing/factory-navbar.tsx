@@ -6,11 +6,13 @@ import { useLocale } from 'next-intl';
 import { Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { useDiagnosticModal } from './diagnostic-modal-provider';
 
 export function FactoryNavbar() {
   const { theme, setTheme } = useTheme();
   const locale = useLocale();
   const [mounted, setMounted] = useState(false);
+  const { openModal } = useDiagnosticModal();
 
   useEffect(() => {
     setMounted(true);
@@ -24,7 +26,7 @@ export function FactoryNavbar() {
     ? { services: 'Servicios', process: 'Proceso', team: 'Equipo', pipeline: 'Pipeline' }
     : { services: 'Services', process: 'Process', team: 'Team', pipeline: 'Pipeline' }
 
-  const ctaText = locale === 'es' ? 'Diagnóstico gratis' : 'Free Discovery'
+  const ctaText = locale === 'es' ? 'Solicitar Diagnostico' : 'Request Discovery'
 
   return (
     <nav className="border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-sm sticky top-0 z-50">
@@ -55,12 +57,12 @@ export function FactoryNavbar() {
             </button>
           )}
           <LanguageSwitcher />
-          <Link
-            href={`/${locale}/chat/product-owner`}
+          <button
+            onClick={openModal}
             className="btn text-sm px-4 py-2 bg-[#2dd4bf] text-[var(--text-on-accent)] font-bold hover:bg-[#5eead4] transition-all"
           >
             {ctaText}
-          </Link>
+          </button>
         </div>
       </div>
     </nav>

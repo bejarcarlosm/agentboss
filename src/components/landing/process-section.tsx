@@ -1,13 +1,13 @@
 'use client';
 
-import Link from 'next/link';
+import { useDiagnosticModal } from './diagnostic-modal-provider';
 
 const STEPS_ES = [
-  { number: '01', title: 'Diagnóstico con IA', description: 'Hablas con nuestros agentes Atlas (PO), Venus (UX) y Pluto (QA). Ellos entienden tu negocio, definen requerimientos y diseñan la solución. Sin reuniones interminables.', agents: ['Atlas', 'Venus', 'Pluto'], color: '#2dd4bf', duration: '1-2 días', badge: 'Gratis' },
-  { number: '02', title: 'Diseño y Prototipo', description: 'Creamos wireframes (bocetos) y prototipos interactivos para que valides la solución antes de escribir una línea de código. Iteramos hasta que estés conforme.', agents: ['Venus'], color: '#a855f7', duration: '2-3 días', badge: null },
-  { number: '03', title: 'Desarrollo Acelerado', description: 'Nuestro equipo construye tu software con la tecnología más moderna: Next.js, React, Supabase, TypeScript. Los agentes IA aceleran cada fase del desarrollo.', agents: ['Earth'], color: '#06b6d4', duration: '1-3 semanas', badge: null },
-  { number: '04', title: 'QA y Pruebas', description: 'Control de calidad automatizado y manual. Pruebas completas, revisión de código y rendimiento. Nada llega a producción sin pasar por Pluto.', agents: ['Pluto'], color: '#22c55e', duration: '2-3 días', badge: null },
-  { number: '05', title: 'Despliegue y Soporte', description: 'Desplegamos en producción, configuramos monitoreo y te entregamos todo documentado. Soporte post-lanzamiento incluido.', agents: ['Uranus'], color: '#f97316', duration: '1 día', badge: null },
+  { number: '01', title: 'Diagnostico con IA', description: 'Hablas con nuestros agentes Atlas (PO), Venus (UX) y Pluto (QA). Ellos entienden tu negocio, definen requerimientos y disenan la solucion. Sin reuniones interminables.', agents: ['Atlas', 'Venus', 'Pluto'], color: '#2dd4bf', duration: '1-2 dias', badge: 'Gratis' },
+  { number: '02', title: 'Diseno y Prototipo', description: 'Creamos wireframes (bocetos) y prototipos interactivos para que valides la solucion antes de escribir una linea de codigo. Iteramos hasta que estes conforme.', agents: ['Venus'], color: '#a855f7', duration: '2-3 dias', badge: null },
+  { number: '03', title: 'Desarrollo Acelerado', description: 'Nuestro equipo construye tu software con la tecnologia mas moderna: Next.js, React, Supabase, TypeScript. Los agentes IA aceleran cada fase del desarrollo.', agents: ['Earth'], color: '#06b6d4', duration: '1-3 semanas', badge: null },
+  { number: '04', title: 'QA y Pruebas', description: 'Control de calidad automatizado y manual. Pruebas completas, revision de codigo y rendimiento. Nada llega a produccion sin pasar por Pluto.', agents: ['Pluto'], color: '#22c55e', duration: '2-3 dias', badge: null },
+  { number: '05', title: 'Despliegue y Soporte', description: 'Desplegamos en produccion, configuramos monitoreo y te entregamos todo documentado. Soporte post-lanzamiento incluido.', agents: ['Uranus'], color: '#f97316', duration: '1 dia', badge: null },
 ];
 
 const STEPS_EN = [
@@ -20,9 +20,10 @@ const STEPS_EN = [
 
 export function ProcessSection({ locale }: { locale: string }) {
   const STEPS = locale === 'es' ? STEPS_ES : STEPS_EN;
+  const { openModal } = useDiagnosticModal();
   const t = locale === 'es'
-    ? { heading: '¿Cómo construimos?', subheading: 'El mismo proceso profesional de una fábrica de software, pero acelerado por agentes IA en cada etapa.', ctaText: 'El paso 1 es gratis y sin compromiso. Habla con Atlas para empezar.', ctaButton: 'Empezar diagnóstico gratis' }
-    : { heading: 'We build at', subheading: 'The same professional process of a software factory, but accelerated by AI agents at every stage.', ctaText: 'Step 1 is free and no commitment. Talk to Atlas to get started.', ctaButton: 'Start free discovery' };
+    ? { heading: 'Como construimos?', subheading: 'El mismo proceso profesional de una fabrica de software, pero acelerado por agentes IA en cada etapa.', ctaText: 'El paso 1 es gratis y sin compromiso. Habla con Atlas para empezar.', ctaButton: 'Solicitar Diagnostico' }
+    : { heading: 'We build at', subheading: 'The same professional process of a software factory, but accelerated by AI agents at every stage.', ctaText: 'Step 1 is free and no commitment. Talk to Atlas to get started.', ctaButton: 'Request Discovery' };
 
   return (
     <section id="process" className="border-b border-[var(--border)]">
@@ -90,12 +91,12 @@ export function ProcessSection({ locale }: { locale: string }) {
           <p className="text-sm text-[var(--muted)] mb-4">
             {t.ctaText}
           </p>
-          <Link
-            href={`/${locale}/chat/product-owner`}
+          <button
+            onClick={openModal}
             className="btn text-sm px-5 py-2.5 bg-[#2dd4bf] text-[#0a0a0a] font-bold hover:bg-[#5eead4] transition-all"
           >
             {t.ctaButton}
-          </Link>
+          </button>
         </div>
       </div>
     </section>

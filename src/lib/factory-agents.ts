@@ -21,9 +21,9 @@ export const FACTORY_AGENTS: FactoryAgent[] = [
         'greeting': {
           id: 'greeting',
           agentMessages: [
-            'Hola! Soy Atlas, el Product Owner de la fabrica. Mi trabajo es entender tu negocio y traducirlo en software que funcione. En que puedo ayudarte?',
-            'Bienvenido a la fabrica! Soy Atlas, tu Product Owner. Estoy aqui para entender que necesitas y convertirlo en un plan de accion. Que tienes en mente?',
-            'Hola! Atlas aqui, tu Product Owner. Antes de construir nada, necesito entender bien tu negocio. Cuéntame, como puedo ayudarte?',
+            'Hola! Soy Atlas, el Product Owner de la fabrica. Mi trabajo es entender tu negocio y traducirlo en software que funcione. En que puedo ayudarte?\n\n_Esta es una prueba de concepto. Puedes hacer hasta 7 preguntas para ver como funcionamos._',
+            'Bienvenido a la fabrica! Soy Atlas, tu Product Owner. Estoy aqui para entender que necesitas y convertirlo en un plan de accion. Que tienes en mente?\n\n_Esta es una prueba de concepto. Puedes hacer hasta 7 preguntas para ver como funcionamos._',
+            'Hola! Atlas aqui, tu Product Owner. Antes de construir nada, necesito entender bien tu negocio. Cuéntame, como puedo ayudarte?\n\n_Esta es una prueba de concepto. Puedes hacer hasta 7 preguntas para ver como funcionamos._',
           ],
           suggestedQuestions: [
             { label: 'Que haces exactamente?', nextNodeId: 'explain-role', type: 'node' },
@@ -267,9 +267,9 @@ export const FACTORY_AGENTS: FactoryAgent[] = [
         'greeting': {
           id: 'greeting',
           agentMessages: [
-            'Hola! Soy Venus, la disenadora UX/UI de la fabrica. Mi trabajo es que tu producto no solo funcione, sino que tus usuarios lo amen. En que puedo ayudarte?',
-            'Bienvenido! Soy Venus, encargada del diseño y la experiencia de usuario. Hablemos de como quieres que se vea y se sienta tu producto.',
-            'Hola! Venus aqui, tu disenadora. Antes de disenar, necesito entender a tus usuarios. Cuéntame sobre tu proyecto!',
+            'Hola! Soy Venus, la disenadora UX/UI de la fabrica. Mi trabajo es que tu producto no solo funcione, sino que tus usuarios lo amen. En que puedo ayudarte?\n\n_Esta es una prueba de concepto. Puedes hacer hasta 7 preguntas para ver como funcionamos._',
+            'Bienvenido! Soy Venus, encargada del diseño y la experiencia de usuario. Hablemos de como quieres que se vea y se sienta tu producto.\n\n_Esta es una prueba de concepto. Puedes hacer hasta 7 preguntas para ver como funcionamos._',
+            'Hola! Venus aqui, tu disenadora. Antes de disenar, necesito entender a tus usuarios. Cuéntame sobre tu proyecto!\n\n_Esta es una prueba de concepto. Puedes hacer hasta 7 preguntas para ver como funcionamos._',
           ],
           suggestedQuestions: [
             { label: 'Que haces exactamente?', nextNodeId: 'explain-role', type: 'node' },
@@ -473,9 +473,9 @@ export const FACTORY_AGENTS: FactoryAgent[] = [
         'greeting': {
           id: 'greeting',
           agentMessages: [
-            'Hola! Soy Pluto, el Black Belt de la fabrica. Me aseguro de que todo lo que construimos sea robusto, escalable y de la mas alta calidad. En que puedo asesorarte?',
-            'Bienvenido! Soy Pluto, experto en calidad y procesos. Mi rol es que tu proyecto no solo funcione hoy, sino que escale manana. Que necesitas?',
-            'Hola! Pluto aqui, tu consultor de calidad. Antes de construir, asegurémonos de que las bases sean solidas. Como puedo ayudarte?',
+            'Hola! Soy Pluto, el Black Belt de la fabrica. Me aseguro de que todo lo que construimos sea robusto, escalable y de la mas alta calidad. En que puedo asesorarte?\n\n_Esta es una prueba de concepto. Puedes hacer hasta 7 preguntas para ver como funcionamos._',
+            'Bienvenido! Soy Pluto, experto en calidad y procesos. Mi rol es que tu proyecto no solo funcione hoy, sino que escale manana. Que necesitas?\n\n_Esta es una prueba de concepto. Puedes hacer hasta 7 preguntas para ver como funcionamos._',
+            'Hola! Pluto aqui, tu consultor de calidad. Antes de construir, asegurémonos de que las bases sean solidas. Como puedo ayudarte?\n\n_Esta es una prueba de concepto. Puedes hacer hasta 7 preguntas para ver como funcionamos._',
           ],
           suggestedQuestions: [
             { label: 'Que haces exactamente?', nextNodeId: 'explain-role', type: 'node' },

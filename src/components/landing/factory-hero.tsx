@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLocale } from 'next-intl';
 import { LazyOrb } from '@/components/ui/lazy-orb';
+import { useDiagnosticModal } from './diagnostic-modal-provider';
 
 const PLANETS_DATA = [
   { id: 'pluto', color: '#22c55e', name: 'Pluto', role_es: 'QA', role_en: 'QA', avatar: '/agents/pluto.webp', cssClass: 'planet-pluto', delay: undefined, dotSize: 'w-2 h-2', textSize: 'text-[14px]', orbit: 'inner' },
@@ -75,19 +76,20 @@ function Planet({ href, color, name, role, avatar, dotSize = 'w-2 h-2', textSize
 export function FactoryHero() {
   const [spotlightIndex, setSpotlightIndex] = useState(0);
   const locale = useLocale();
+  const { openModal } = useDiagnosticModal();
 
   const t = locale === 'es' ? {
-    badge: 'Fábrica de Software potenciada por IA',
+    badge: 'Fabrica de Software potenciada por IA',
     headline: 'Construimos tu software',
     headlineHighlight: 'en semanas, no meses',
     description: 'Tu equipo de desarrollo potenciado por agentes IA. Creamos las apps, automatizaciones y sistemas que tu negocio necesita —',
-    descriptionHighlight: '3x más funcionalidades en menos tiempo',
-    descriptionEnd: 'que una fábrica tradicional.',
+    descriptionHighlight: '3x mas funcionalidades en menos tiempo',
+    descriptionEnd: 'que una fabrica tradicional.',
     subtext: '',
-    ctaPrimary: 'Iniciar diagnóstico gratis',
-    ctaSecondary: '¿Cómo funciona?',
-    speedLabel: 'Más rápido que desarrollo tradicional',
-    featuresLabel: 'Más funcionalidades por ciclo',
+    ctaPrimary: 'Solicitar Diagnostico',
+    ctaSecondary: 'Como funciona?',
+    speedLabel: 'Mas rapido que desarrollo tradicional',
+    featuresLabel: 'Mas funcionalidades por ciclo',
     mvpLabel: 'Semanas para tu MVP',
     agentsLabel: 'Agentes IA especializados',
   } : {
@@ -98,7 +100,7 @@ export function FactoryHero() {
     descriptionHighlight: '3x more features in less time',
     descriptionEnd: 'than a traditional factory.',
     subtext: '',
-    ctaPrimary: 'Start free discovery',
+    ctaPrimary: 'Request Discovery',
     ctaSecondary: 'How it works',
     speedLabel: 'Faster than traditional development',
     featuresLabel: 'More features per sprint',
@@ -149,12 +151,12 @@ export function FactoryHero() {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                href={`/${locale}/chat/product-owner`}
+              <button
+                onClick={openModal}
                 className="btn text-base px-6 py-3 bg-[#2dd4bf] text-[#0a0a0a] font-bold hover:bg-[#5eead4] transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(45,212,191,0.3)]"
               >
                 {t.ctaPrimary}
-              </Link>
+              </button>
               <a
                 href="#process"
                 className="btn btn-secondary text-base px-6 py-3"
@@ -198,12 +200,12 @@ export function FactoryHero() {
             </div>
 
             {/* Central Orb */}
-            <Link
-              href={`/${locale}/chat/product-owner`}
+            <button
+              onClick={openModal}
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] md:w-[140px] md:h-[140px] rounded-full orb-hero-glow cursor-pointer hover:scale-110 transition-transform"
             >
               <LazyOrb agentState={null} colors={['#2dd4bf', '#0f766e']} delay={1500} />
-            </Link>
+            </button>
           </div>
         </div>
 

@@ -1,9 +1,13 @@
+'use client';
+
 import Link from 'next/link';
+import { useDiagnosticModal } from './diagnostic-modal-provider';
 
 export function FactoryFooter({ locale }: { locale: string }) {
+  const { openModal } = useDiagnosticModal();
   const t = locale === 'es'
-    ? { tagline: 'Fábrica de software potenciada por agentes IA. 3x más funcionalidades en menos tiempo que una fábrica tradicional.', factory: 'Fábrica', contact: 'Contacto', discovery: 'Diagnóstico gratis', copyright: 'Fábrica de Software · Santiago, Chile' }
-    : { tagline: 'AI-powered software factory. 3x more features in less time than a traditional factory.', factory: 'Factory', contact: 'Contact', discovery: 'Free Discovery', copyright: 'Software Factory · Santiago, Chile' };
+    ? { tagline: 'Fabrica de software potenciada por agentes IA. 3x mas funcionalidades en menos tiempo que una fabrica tradicional.', factory: 'Fabrica', contact: 'Contacto', discovery: 'Solicitar Diagnostico', copyright: 'Fabrica de Software · Santiago, Chile' }
+    : { tagline: 'AI-powered software factory. 3x more features in less time than a traditional factory.', factory: 'Factory', contact: 'Contact', discovery: 'Request Discovery', copyright: 'Software Factory · Santiago, Chile' };
 
   return (
     <footer className="border-t border-[var(--border)]">
@@ -21,9 +25,9 @@ export function FactoryFooter({ locale }: { locale: string }) {
           <div>
             <h4 className="text-sm font-bold mb-3">{t.factory}</h4>
             <div className="space-y-2 text-sm text-[var(--muted)]">
-              <Link href={`/${locale}/chat/product-owner`} className="block hover:text-[#2dd4bf] transition-colors">
+              <button onClick={openModal} className="block hover:text-[#2dd4bf] transition-colors text-left">
                 {t.discovery}
-              </Link>
+              </button>
               <Link href={`/${locale}/pipeline`} className="block hover:text-[#2dd4bf] transition-colors">
                 Pipeline
               </Link>

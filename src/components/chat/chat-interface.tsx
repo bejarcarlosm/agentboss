@@ -9,6 +9,10 @@ import { ChatHeader } from './chat-header';
 import { ChatMessage } from './chat-message';
 import { SuggestedChips } from './suggested-chips';
 import { ChatInput } from './chat-input';
+import { DiagnosticFormModal } from '@/components/landing/diagnostic-form-modal';
+
+const MAX_INTERACTIONS = 7;
+const WHATSAPP_URL = 'https://wa.me/56912345678?text=Hola%2C%20quiero%20contratar%20el%20servicio%20de%20AgentBoss';
 
 interface ChatInterfaceProps {
   agent: FactoryAgent;
@@ -31,14 +35,50 @@ function TypingIndicator({ color }: { color: string }) {
   );
 }
 
+function ClosureMessage({ agentColor, onRequestDiagnostic }: { agentColor: string; onRequestDiagnostic: () => void }) {
+  return (
+    <div className="mx-4 my-6 p-5 rounded-2xl border-2 bg-[var(--secondary)]" style={{ borderColor: `${agentColor}40` }}>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: agentColor }} />
+        <span className="text-sm font-bold" style={{ color: agentColor }}>Prueba de concepto finalizada</span>
+      </div>
+      <p className="text-sm text-[var(--muted)] leading-relaxed mb-4">
+        Esta es una prueba de concepto que muestra como funcionaria la consultoria con nuestros agentes IA.
+        En un proyecto real, la conversacion continua hasta definir completamente tus requerimientos.
+        Quieres contratar el servicio?
+      </p>
+      <div className="flex flex-col sm:flex-row gap-2">
+        <button
+          onClick={onRequestDiagnostic}
+          className="btn text-sm px-4 py-2.5 bg-[#2dd4bf] text-[#0a0a0a] font-bold hover:bg-[#5eead4] transition-all"
+        >
+          Solicitar Diagnostico Completo
+        </button>
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-secondary text-sm px-4 py-2.5 text-center"
+        >
+          Contactar por WhatsApp
+        </a>
+      </div>
+    </div>
+  );
+}
+
 export function ChatInterface({ agent }: ChatInterfaceProps) {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [currentNode, setCurrentNode] = useState<ConversationNode | null>(null);
   const [isTyping, setIsTyping] = useState(false);
   const [showChips, setShowChips] = useState(false);
+  const [interactionCount, setInteractionCount] = useState(0);
+  const [showFormModal, setShowFormModal] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const conversationIdRef = useRef<string | null>(null);
+
+  const isLimitReached = interactionCount >= MAX_INTERACTIONS;
 
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) {
@@ -93,6 +133,8 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
   }, [messages, isTyping, showChips, scrollToBottom]);
 
   function handleChipSelect(question: SuggestedQuestion) {
+    if (isLimitReached) return;
+
     if (question.type === 'navigate' && question.navigateTo) {
       router.push(question.navigateTo);
       return;
@@ -106,9 +148,14 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
     };
     setMessages(prev => [...prev, userMsg]);
     setShowChips(false);
+    setInteractionCount(prev => prev + 1);
 
     if (conversationIdRef.current) {
       saveMessage(conversationIdRef.current, 'user', question.label);
+    }
+
+    if (interactionCount + 1 >= MAX_INTERACTIONS) {
+      return;
     }
 
     const nextNode = agent.conversationTree.nodes[question.nextNodeId];
@@ -118,6 +165,8 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
   }
 
   function handleFreeText(text: string) {
+    if (isLimitReached) return;
+
     const userMsg: ChatMessageType = {
       id: `msg-${Date.now()}`,
       role: 'user',
@@ -126,9 +175,14 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
     };
     setMessages(prev => [...prev, userMsg]);
     setShowChips(false);
+    setInteractionCount(prev => prev + 1);
 
     if (conversationIdRef.current) {
       saveMessage(conversationIdRef.current, 'user', text);
+    }
+
+    if (interactionCount + 1 >= MAX_INTERACTIONS) {
+      return;
     }
 
     setIsTyping(true);
@@ -158,8 +212,8 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
               agentAvatar={agent.avatar}
               agentColor={agent.color}
             />
-            {/* Show chips after the last agent message if we're not typing */}
-            {msg.role === 'agent' && i === messages.length - 1 && showChips && currentNode && (
+            {/* Show chips after the last agent message if we're not typing and limit not reached */}
+            {msg.role === 'agent' && i === messages.length - 1 && showChips && currentNode && !isLimitReached && (
               <SuggestedChips
                 questions={currentNode.suggestedQuestions}
                 onSelect={handleChipSelect}
@@ -170,13 +224,28 @@ export function ChatInterface({ agent }: ChatInterfaceProps) {
         ))}
 
         {isTyping && <TypingIndicator color={agent.color} />}
+
+        {isLimitReached && (
+          <ClosureMessage
+            agentColor={agent.color}
+            onRequestDiagnostic={() => setShowFormModal(true)}
+          />
+        )}
       </div>
 
       <ChatInput
         onSend={handleFreeText}
-        placeholder={`Escribe a ${agent.name}...`}
+        placeholder={isLimitReached
+          ? 'Limite de prueba alcanzado'
+          : `Escribe a ${agent.name}...`
+        }
         agentColor={agent.color}
-        disabled={isTyping}
+        disabled={isTyping || isLimitReached}
+      />
+
+      <DiagnosticFormModal
+        isOpen={showFormModal}
+        onClose={() => setShowFormModal(false)}
       />
     </div>
   );

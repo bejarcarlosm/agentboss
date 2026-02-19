@@ -1,9 +1,12 @@
-import Link from 'next/link';
+'use client';
+
+import { useDiagnosticModal } from './diagnostic-modal-provider';
 
 export function CtaSection({ locale }: { locale: string }) {
+  const { openModal } = useDiagnosticModal();
   const t = locale === 'es'
-    ? { heading: '¿Listo para construir?', description: 'Empieza con un diagnóstico gratuito. Habla con Atlas, nuestro Product Owner IA, y en minutos tendrás un primer resumen de tu proyecto.', subtext: 'Sin compromiso · Sin tarjeta de crédito · Resultado inmediato', ctaPrimary: 'Iniciar diagnóstico gratis', ctaSecondary: 'Contactar' }
-    : { heading: 'Ready to build?', description: 'Start with a free discovery. Talk to Atlas, our AI Product Owner, and in minutes you\'ll have a first brief of your project.', subtext: 'No commitment · No credit card · Instant results', ctaPrimary: 'Start free discovery', ctaSecondary: 'Contact us' };
+    ? { heading: 'Listo para construir?', description: 'Empieza con un diagnostico gratuito. Hablemos sobre tu proyecto y en minutos tendras un primer resumen.', subtext: 'Sin compromiso · Sin tarjeta de credito · Resultado inmediato', ctaPrimary: 'Solicitar Diagnostico', ctaSecondary: 'Contactar' }
+    : { heading: 'Ready to build?', description: 'Start with a free discovery. Let\'s talk about your project and in minutes you\'ll have a first brief.', subtext: 'No commitment · No credit card · Instant results', ctaPrimary: 'Request Discovery', ctaSecondary: 'Contact us' };
 
   return (
     <section className="border-b border-[var(--border)]">
@@ -20,12 +23,12 @@ export function CtaSection({ locale }: { locale: string }) {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href={`/${locale}/chat/product-owner`}
+            <button
+              onClick={openModal}
               className="btn text-base px-8 py-3.5 bg-[#2dd4bf] text-[#0a0a0a] font-bold hover:bg-[#5eead4] transition-all hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgba(45,212,191,0.3)]"
             >
               {t.ctaPrimary}
-            </Link>
+            </button>
             <a
               href="mailto:hola@agentboss.cl"
               className="btn btn-secondary text-base px-8 py-3.5"
