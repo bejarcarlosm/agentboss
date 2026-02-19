@@ -100,7 +100,11 @@ export function useVoiceChatStreaming(isLiveMode: boolean) {
 
   // Persist a message to Supabase and check for lead info
   const persistMessage = useCallback(async (role: 'user' | 'agent', content: string) => {
-    if (!conversationIdRef.current) return;
+    if (!conversationIdRef.current) {
+      console.warn('[Voice] persistMessage skipped — no conversationId', { role, content: content.slice(0, 50) });
+      return;
+    }
+    console.log('[Voice] Saving message to Supabase', { role, convId: conversationIdRef.current, content: content.slice(0, 50) });
     saveMessage(conversationIdRef.current, role, content);
 
     // Try to extract name/email from user messages
