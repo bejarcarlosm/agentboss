@@ -4,29 +4,31 @@ import { useDiagnosticModal } from './diagnostic-modal-provider';
 
 const CONTENT_ES = {
   badge: 'Caso Real',
-  heading: 'BKLog: Broker logístico transformado con IA',
-  intro: 'Un broker logístico en Chile procesaba documentos manualmente, perdía horas en tareas repetitivas y no podía escalar sin contratar más gente.',
+  heading: 'En AgentBoss no solo desarrollamos software — rediseñamos cómo opera tu negocio.',
+  intro: 'Cuando BKLog, un broker logístico, nos pidió un sistema de facturación, podríamos haber entregado un formulario y listo. Pero al entender su operación encontramos algo más profundo: un proceso roto que les costaba plata, tiempo y tranquilidad.',
   painPoints: [
-    { icon: '📄', title: 'Extracción manual de BLs', description: 'Cada Bill of Lading se revisaba a mano, copiando datos uno por uno al sistema. Errores frecuentes y horas perdidas.' },
-    { icon: '🔁', title: 'Procesos repetitivos sin automatizar', description: 'Seguimiento de embarques, notificaciones a clientes y coordinación con navieras: todo manual, todo lento.' },
-    { icon: '📈', title: 'Imposible escalar sin más personal', description: 'Cada nuevo cliente significaba más carga operativa. El crecimiento estaba limitado por la capacidad humana.' },
+    { icon: '💸', title: 'Plata invisible', description: 'Servicios completados que nunca se facturaron. No por negligencia — por volumen. Cuando manejas cientos de embarques al mes, es imposible rastrear de memoria qué cobraste y qué no. Ingreso ganado que nunca llegó a caja.' },
+    { icon: '⏰', title: 'Horas quemadas', description: 'Cada factura requería abrir planillas, buscar datos del BL, copiar cliente, monto, naviera, verificar que no estuviera duplicada. Trabajo manual repetitivo que consumía horas de personas que deberían estar cerrando negocios.' },
+    { icon: '😰', title: 'Estrés de auditoría', description: 'Fin de mes llegaba con la pregunta de siempre: "¿estamos al día?" Y nadie podía responder con certeza. La información vivía fragmentada entre planillas, correos y la memoria del equipo.' },
   ],
   solutionHeading: 'La solución',
-  solutionText: 'Implementamos un sistema de extracción automática de documentos con IA (Gemini Vision), integración directa con navieras vía API, y flujos automatizados que eliminaron el 80% del trabajo manual. El equipo ahora se enfoca en vender y atender clientes, no en copiar datos.',
+  solutionText: 'Un sistema que cruza automáticamente operaciones contra facturas emitidas, muestra los pendientes en tiempo real y genera la factura completa con un click. Cero olvidos, cero copiar-pegar, certeza total del estado de cobranza.',
+  closing: 'Eso es AgentBoss. No entregamos tecnología por entregarte tecnología. Entendemos tu operación, identificamos dónde duele, y construimos la solución que elimina el problema de raíz. Hoy en logística, mañana en tu industria.',
   cta: 'Solicita un diagnóstico',
 };
 
 const CONTENT_EN = {
   badge: 'Real Case',
-  heading: 'BKLog: Logistics broker transformed with AI',
-  intro: 'A logistics broker in Chile was processing documents manually, losing hours on repetitive tasks, and unable to scale without hiring more people.',
+  heading: 'At AgentBoss we don\'t just build software — we redesign how your business operates.',
+  intro: 'When BKLog, a logistics broker, asked us for a billing system, we could have delivered a form and called it done. But by understanding their operation we found something deeper: a broken process costing them money, time, and peace of mind.',
   painPoints: [
-    { icon: '📄', title: 'Manual BL extraction', description: 'Every Bill of Lading was reviewed by hand, copying data one by one into the system. Frequent errors and wasted hours.' },
-    { icon: '🔁', title: 'Repetitive processes without automation', description: 'Shipment tracking, client notifications, and carrier coordination: all manual, all slow.' },
-    { icon: '📈', title: 'Impossible to scale without more staff', description: 'Every new client meant more operational burden. Growth was limited by human capacity.' },
+    { icon: '💸', title: 'Invisible money', description: 'Completed services that were never invoiced. Not due to negligence — due to volume. When you handle hundreds of shipments per month, it\'s impossible to track from memory what you billed and what you didn\'t. Earned revenue that never reached the register.' },
+    { icon: '⏰', title: 'Burned hours', description: 'Every invoice required opening spreadsheets, looking up BL data, copying client, amount, carrier, verifying it wasn\'t duplicated. Repetitive manual work consuming hours from people who should be closing deals.' },
+    { icon: '😰', title: 'Audit stress', description: 'End of month arrived with the same question: "are we up to date?" And nobody could answer with certainty. Information lived fragmented across spreadsheets, emails, and the team\'s memory.' },
   ],
   solutionHeading: 'The solution',
-  solutionText: 'We implemented an AI-powered document extraction system (Gemini Vision), direct carrier API integration, and automated workflows that eliminated 80% of manual work. The team now focuses on selling and serving clients, not copying data.',
+  solutionText: 'A system that automatically cross-references operations against issued invoices, shows pending items in real time, and generates the complete invoice with one click. Zero oversights, zero copy-paste, total certainty of billing status.',
+  closing: 'That\'s AgentBoss. We don\'t deliver technology for the sake of it. We understand your operation, identify where it hurts, and build the solution that eliminates the problem at its root. Today in logistics, tomorrow in your industry.',
   cta: 'Request a diagnostic',
 };
 
@@ -69,7 +71,11 @@ export function CaseStudySection({ locale }: { locale: string }) {
           </p>
         </div>
 
-        <div className="text-center mt-8">
+        <p className="text-sm text-[var(--muted)] leading-relaxed text-center max-w-3xl mx-auto mt-8 italic">
+          {c.closing}
+        </p>
+
+        <div className="text-center mt-6">
           <button
             onClick={openModal}
             className="px-6 py-2.5 rounded-full bg-[#2dd4bf] text-black font-semibold text-sm hover:bg-[#2dd4bf]/90 transition-all hover:scale-105"
