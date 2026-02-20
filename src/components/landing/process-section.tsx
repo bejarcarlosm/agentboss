@@ -22,15 +22,15 @@ export function ProcessSection({ locale }: { locale: string }) {
   const STEPS = locale === 'es' ? STEPS_ES : STEPS_EN;
   const { openModal } = useDiagnosticModal();
   const t = locale === 'es'
-    ? { heading: 'Como construimos?', subheading: 'El mismo proceso profesional de una fabrica de software, pero acelerado por agentes IA en cada etapa.', ctaText: 'El paso 1 es gratis y sin compromiso. Habla con Atlas para empezar.', ctaButton: 'Solicitar Diagnostico' }
-    : { heading: 'We build at', subheading: 'The same professional process of a software factory, but accelerated by AI agents at every stage.', ctaText: 'Step 1 is free and no commitment. Talk to Atlas to get started.', ctaButton: 'Request Discovery' };
+    ? { heading: '¿Cómo construimos?', subheading: 'El mismo proceso profesional de una fabrica de software, pero acelerado por agentes IA en cada etapa.', ctaText: 'El paso 1 es gratis y sin compromiso. Habla con Atlas para empezar.', ctaButton: 'Solicitar Diagnostico' }
+    : { heading: 'How do we build?', subheading: 'The same professional process of a software factory, but accelerated by AI agents at every stage.', ctaText: 'Step 1 is free and no commitment. Talk to Atlas to get started.', ctaButton: 'Request Discovery' };
 
   return (
     <section id="process" className="border-b border-[var(--border)]">
       <div className="max-w-6xl mx-auto px-6 py-16 md:py-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            {t.heading} <span className="text-[#2dd4bf]">⚡ {locale === 'es' ? 'IA' : 'AI'}</span> {locale === 'es' ? '' : 'speed'}
+            {t.heading} <span className="text-[#2dd4bf]">⚡</span>
           </h2>
           <p className="text-[var(--muted)] max-w-xl mx-auto">
             {t.subheading}
