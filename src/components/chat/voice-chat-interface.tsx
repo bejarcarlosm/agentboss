@@ -57,12 +57,17 @@ export function VoiceChatInterface({ agent, isLiveMode, skipGate }: VoiceChatInt
 
   useEffect(() => setMounted(true), []);
 
-  // WhatsApp gate state — skipGate bypasses it (boss routes)
-  const [gatePassed] = useState(() => {
-    const passed = skipGate || isGatePassed();
-    if (passed) markGatePassed();
-    return passed;
-  });
+  // Gate state — check localStorage only after mount to avoid hydration mismatch
+  const [gatePassed, setGatePassed] = useState(!!skipGate);
+
+  useEffect(() => {
+    if (!skipGate && isGatePassed()) {
+      setGatePassed(true);
+    }
+    if (skipGate) {
+      markGatePassed();
+    }
+  }, [skipGate]);
 
   const {
     state,
