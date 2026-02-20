@@ -22,11 +22,20 @@ export const metadata: Metadata = {
     locale: 'es_CL',
     alternateLocale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'AgentBoss - Tu software en semanas, no meses',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'AgentBoss - Fábrica de Software potenciada por IA',
     description: 'Construimos tu software en semanas, no meses. Equipo de agentes IA especializados.',
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
