@@ -1,4 +1,6 @@
-import Link from 'next/link';
+'use client';
+
+import { useDiagnosticModal } from './diagnostic-modal-provider';
 
 const SERVICES_ES = [
   { icon: '🌐', title: 'Desarrollo Web', description: 'Aplicaciones web modernas con Next.js, React y TypeScript. Dashboards, plataformas SaaS, portales de clientes.' },
@@ -19,10 +21,11 @@ const SERVICES_EN = [
 ];
 
 export function ServicesSection({ locale }: { locale: string }) {
+  const { openModal } = useDiagnosticModal();
   const SERVICES = locale === 'es' ? SERVICES_ES : SERVICES_EN;
   const t = locale === 'es'
-    ? { heading: 'Soluciones para tu negocio', subheading: 'Todo lo que necesitas para digitalizar y escalar, con la velocidad de una fábrica potenciada por IA.' }
-    : { heading: 'Solutions for your business', subheading: 'Everything you need to digitize and scale, with the speed of an AI-powered factory.' };
+    ? { heading: 'Soluciones para tu negocio', subheading: 'Todo lo que necesitas para digitalizar y escalar, con la velocidad de una fábrica potenciada por IA.', cta: 'Solicita un diagnóstico' }
+    : { heading: 'Solutions for your business', subheading: 'Everything you need to digitize and scale, with the speed of an AI-powered factory.', cta: 'Request a diagnostic' };
 
   return (
     <section id="services" className="border-b border-[var(--border)]">
@@ -58,6 +61,15 @@ export function ServicesSection({ locale }: { locale: string }) {
               )}
             </div>
           ))}
+        </div>
+
+        <div className="text-center mt-10">
+          <button
+            onClick={openModal}
+            className="px-6 py-2.5 rounded-full bg-[#2dd4bf] text-black font-semibold text-sm hover:bg-[#2dd4bf]/90 transition-all hover:scale-105"
+          >
+            {t.cta}
+          </button>
         </div>
       </div>
     </section>

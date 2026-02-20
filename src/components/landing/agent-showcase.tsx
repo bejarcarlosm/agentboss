@@ -1,8 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { DOSSIER_AGENTS } from '@/lib/dossier-data';
+import { useDiagnosticModal } from './diagnostic-modal-provider';
+
+const FEATURED_SLUGS = ['atlas', 'venus', 'flux', 'pluto'];
 
 const WAVEFORM = [
   12, 28, 45, 70, 85, 95, 80, 60, 90, 75, 50, 30, 15, 8,
@@ -37,10 +41,68 @@ function LargeSoundWave() {
   );
 }
 
+function AgentCard({ agent, locale, t }: { agent: typeof DOSSIER_AGENTS[number]; locale: string; t: { active: string; standby: string; viewDossier: string } }) {
+  return (
+    <Link
+      href={`/${locale}/dossier/${agent.slug}`}
+      className="group relative flex flex-col items-center text-center p-4 rounded-xl border border-[var(--border)] bg-[var(--secondary)] transition-all hover:-translate-y-1 hover:border-transparent"
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.borderColor = agent.color;
+        (e.currentTarget as HTMLElement).style.boxShadow = `0 0 20px ${agent.color}15`;
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.borderColor = '';
+        (e.currentTarget as HTMLElement).style.boxShadow = '';
+      }}
+    >
+      <div
+        className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 mb-3 transition-shadow group-hover:shadow-lg"
+        style={{ borderColor: agent.color }}
+      >
+        <Image
+          src={agent.avatar}
+          alt={agent.codename}
+          width={80}
+          height={80}
+          loading="lazy"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      <span className="font-bold text-sm" style={{ color: agent.color }}>
+        {agent.codename}
+      </span>
+      <span className="text-[10px] text-[var(--muted)] mt-0.5">
+        {agent.role}
+      </span>
+
+      <div className="flex items-center gap-1 mt-2">
+        <span
+          className={`w-1.5 h-1.5 rounded-full ${agent.status === 'ACTIVE' ? 'animate-pulse' : ''}`}
+          style={{ background: agent.status === 'ACTIVE' ? agent.color : 'var(--muted)' }}
+        />
+        <span className="text-[9px] font-mono uppercase tracking-wider text-[var(--muted)]">
+          {agent.status === 'ACTIVE' ? t.active : t.standby}
+        </span>
+      </div>
+
+      <span className="absolute bottom-1 text-[8px] font-mono uppercase tracking-widest text-[var(--muted)] opacity-0 group-hover:opacity-100 transition-opacity">
+        {t.viewDossier}
+      </span>
+    </Link>
+  );
+}
+
 export function AgentShowcase({ locale }: { locale: string }) {
+  const [showAll, setShowAll] = useState(false);
+  const { openModal } = useDiagnosticModal();
+
   const t = locale === 'es'
-    ? { badge: 'Dossier Clasificado', heading: 'Nuestro equipo de agentes IA', subheading: 'Cada agente es un especialista. Juntos cubren todo el ciclo de desarrollo — desde la idea hasta el lanzamiento. Haz click para ver su expediente.', declassified: '10/36 agentes desclasificados', active: 'Activo', standby: 'Standby', viewDossier: 'Ver dossier →' }
-    : { badge: 'Classified Dossier', heading: 'Our team of AI agents', subheading: 'Each agent is a specialist. Together they cover the entire development cycle — from idea to launch. Click to view their dossier.', declassified: '10/36 agents declassified', active: 'Active', standby: 'Standby', viewDossier: 'View dossier →' };
+    ? { badge: 'Dossier Clasificado', heading: 'Nuestro equipo de agentes IA', subheading: 'Cada agente es un especialista. Juntos cubren todo el ciclo de desarrollo — desde la idea hasta el lanzamiento. Haz click para ver su expediente.', declassified: '10/36 agentes desclasificados', active: 'Activo', standby: 'Standby', viewDossier: 'Ver dossier →', showMore: 'Conoce al resto del equipo', showLess: 'Ocultar', cta: 'Solicita un diagn\u00f3stico' }
+    : { badge: 'Classified Dossier', heading: 'Our team of AI agents', subheading: 'Each agent is a specialist. Together they cover the entire development cycle — from idea to launch. Click to view their dossier.', declassified: '10/36 agents declassified', active: 'Active', standby: 'Standby', viewDossier: 'View dossier →', showMore: 'Meet the rest of the team', showLess: 'Hide', cta: 'Request a diagnostic' };
+
+  const featuredAgents = DOSSIER_AGENTS.filter(a => FEATURED_SLUGS.includes(a.slug));
+  const remainingAgents = DOSSIER_AGENTS.filter(a => !FEATURED_SLUGS.includes(a.slug));
 
   return (
     <section id="team" className="border-b border-[var(--border)]">
@@ -63,85 +125,36 @@ export function AgentShowcase({ locale }: { locale: string }) {
 
         <LargeSoundWave />
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
-          {DOSSIER_AGENTS.map((agent) => (
-            <Link
-              key={agent.slug}
-              href={`/${locale}/dossier/${agent.slug}`}
-              className="group relative flex flex-col items-center text-center p-4 rounded-xl border border-[var(--border)] bg-[var(--secondary)] transition-all hover:-translate-y-1 hover:border-transparent"
-              style={{
-                // @ts-expect-error css custom property
-                '--hover-color': agent.color,
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = agent.color;
-                (e.currentTarget as HTMLElement).style.boxShadow = `0 0 20px ${agent.color}15`;
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = '';
-                (e.currentTarget as HTMLElement).style.boxShadow = '';
-              }}
-            >
-              <div
-                className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 mb-3 transition-shadow group-hover:shadow-lg"
-                style={{ borderColor: agent.color }}
-              >
-                <Image
-                  src={agent.avatar}
-                  alt={agent.codename}
-                  width={80}
-                  height={80}
-                  loading="lazy"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <span className="font-bold text-sm" style={{ color: agent.color }}>
-                {agent.codename}
-              </span>
-              <span className="text-[10px] text-[var(--muted)] mt-0.5">
-                {agent.role}
-              </span>
-
-              <div className="flex items-center gap-1 mt-2">
-                <span
-                  className={`w-1.5 h-1.5 rounded-full ${agent.status === 'ACTIVE' ? 'animate-pulse' : ''}`}
-                  style={{ background: agent.status === 'ACTIVE' ? agent.color : 'var(--muted)' }}
-                />
-                <span className="text-[9px] font-mono uppercase tracking-wider text-[var(--muted)]">
-                  {agent.status === 'ACTIVE' ? t.active : t.standby}
-                </span>
-              </div>
-
-              <span className="absolute bottom-1 text-[8px] font-mono uppercase tracking-widest text-[var(--muted)] opacity-0 group-hover:opacity-100 transition-opacity">
-                {t.viewDossier}
-              </span>
-            </Link>
+        {/* Featured agents (4) */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {featuredAgents.map((agent) => (
+            <AgentCard key={agent.slug} agent={agent} locale={locale} t={t} />
           ))}
         </div>
 
-        {/* Remaining classified agents */}
-        <div className="mt-10 pt-8 border-t border-[var(--border)]">
-          <p className="text-[10px] font-mono uppercase tracking-widest text-[var(--muted)] text-center mb-4">
-            {locale === 'es' ? 'El resto del equipo tras bambalinas' : 'The rest of the team behind the scenes'}
-          </p>
-          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 max-w-3xl mx-auto">
-            {[
-              'Frontend Dev', 'Mobile Builder', 'Rapid Prototyper', 'Test Writer',
-              'Feedback Synthesizer', 'Sprint Prioritizer', 'Trend Researcher',
-              'App Store Optimizer', 'Instagram Curator', 'Reddit Community',
-              'TikTok Strategist', 'Twitter Engager', 'Brand Guardian',
-              'UX Researcher', 'Visual Storyteller', 'Fun Injector',
-              'Experiment Tracker', 'Project Launcher', 'Studio Producer',
-              'Finance Tracker', 'Infra Maintainer', 'Legal Checker',
-              'API Tester', 'Performance Benchmarker', 'Tool Evaluator',
-              'Workflow Optimizer',
-            ].map(name => (
-              <span key={name} className="text-[10px] text-[var(--muted)] opacity-50">
-                {name}
-              </span>
+        {/* Remaining agents (expandable) */}
+        {showAll && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mt-4">
+            {remainingAgents.map((agent) => (
+              <AgentCard key={agent.slug} agent={agent} locale={locale} t={t} />
             ))}
           </div>
+        )}
+
+        <div className="flex flex-col items-center gap-4 mt-8">
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="px-5 py-2 rounded-full border border-[var(--border)] bg-[var(--secondary)] hover:border-[#2dd4bf]/50 transition-all text-sm text-[var(--muted)] hover:text-[#2dd4bf]"
+          >
+            {showAll ? t.showLess : `${t.showMore} (+${remainingAgents.length})`}
+          </button>
+
+          <button
+            onClick={openModal}
+            className="px-6 py-2.5 rounded-full bg-[#2dd4bf] text-black font-semibold text-sm hover:bg-[#2dd4bf]/90 transition-all hover:scale-105"
+          >
+            {t.cta}
+          </button>
         </div>
       </div>
     </section>

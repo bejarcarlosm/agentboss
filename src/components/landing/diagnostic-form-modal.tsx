@@ -54,6 +54,13 @@ export function DiagnosticFormModal({ isOpen, onClose }: DiagnosticFormModalProp
     successMessage: 'Te contactaremos en menos de 24 horas por WhatsApp.',
     close: 'Cerrar',
     required: 'Este campo es obligatorio',
+    budgetQuestion: 'Los proyectos de software pueden comenzar a partir de 7.000 USD a 20.000 USD en el mercado. ¿Su empresa cuenta con la posibilidad de invertir el total o cuotas por el mismo?',
+    budgetOptions: [
+      'Si, mi empresa podria invertir esos valores.',
+      'Podria abonar cuotas para el desarrollo.',
+      'No puedo invertir en mi proyecto.',
+    ],
+    selectBudget: 'Selecciona una opcion',
   } : {
     title: 'Request Discovery',
     subtitle: 'Fill out the form and we\'ll contact you within 24 hours.',
@@ -73,6 +80,13 @@ export function DiagnosticFormModal({ isOpen, onClose }: DiagnosticFormModalProp
     successMessage: 'We\'ll contact you within 24 hours via WhatsApp.',
     close: 'Close',
     required: 'This field is required',
+    budgetQuestion: 'Software projects can start from $7,000 to $20,000 USD in the market. Does your company have the ability to invest the total or installments?',
+    budgetOptions: [
+      'Yes, my company could invest those amounts.',
+      'I could pay in installments.',
+      'I cannot invest in my project.',
+    ],
+    selectBudget: 'Select an option',
   };
 
   // Close on Escape
@@ -108,6 +122,7 @@ export function DiagnosticFormModal({ isOpen, onClose }: DiagnosticFormModalProp
       website: (formData.get('website') as string) || null,
       project_description: formData.get('project_description') as string,
       role_type: formData.get('role_type') as string,
+      budget_capacity: formData.get('budget_capacity') as string,
       source: 'diagnostic_form',
       agent_slug: 'product-owner',
     };
@@ -262,6 +277,25 @@ export function DiagnosticFormModal({ isOpen, onClose }: DiagnosticFormModalProp
                     <option value="" disabled>{t.selectRole}</option>
                     {roleOptions.map(role => (
                       <option key={role} value={role}>{role}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Budget capacity */}
+                <div>
+                  <label htmlFor="budget_capacity" className="block text-sm font-medium mb-1.5">
+                    {t.budgetQuestion} *
+                  </label>
+                  <select
+                    id="budget_capacity"
+                    name="budget_capacity"
+                    required
+                    defaultValue=""
+                    className="w-full px-3 py-2.5 rounded-lg border border-[var(--border)] bg-[var(--secondary)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[#2dd4bf]/50 focus:border-[#2dd4bf] transition-all"
+                  >
+                    <option value="" disabled>{t.selectBudget}</option>
+                    {t.budgetOptions.map(option => (
+                      <option key={option} value={option}>{option}</option>
                     ))}
                   </select>
                 </div>

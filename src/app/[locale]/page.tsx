@@ -6,6 +6,7 @@ import { AgentShowcase } from '@/components/landing/agent-showcase'
 import { ValueProps } from '@/components/landing/value-props'
 import { CtaSection } from '@/components/landing/cta-section'
 import { FactoryFooter } from '@/components/landing/factory-footer'
+import { CaseStudySection } from '@/components/landing/case-study-section'
 import { DiagnosticModalProvider } from '@/components/landing/diagnostic-modal-provider'
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
@@ -19,6 +20,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <AgentShowcase locale={locale} />
         <ServicesSection locale={locale} />
         <ProcessSection locale={locale} />
+        <CaseStudySection locale={locale} />
         <ValueProps locale={locale} />
         <CtaSection locale={locale} />
         <FactoryFooter locale={locale} />
