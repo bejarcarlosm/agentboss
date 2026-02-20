@@ -118,9 +118,6 @@ export function AgentShowcase({ locale }: { locale: string }) {
           <p className="text-[var(--muted)] max-w-xl mx-auto">
             {t.subheading}
           </p>
-          <p className="text-sm font-mono text-[#2dd4bf] mt-3 tracking-wider">
-            {t.declassified}
-          </p>
         </div>
 
         <LargeSoundWave />

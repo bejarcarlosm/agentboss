@@ -54,7 +54,7 @@ export function DiagnosticFormModal({ isOpen, onClose }: DiagnosticFormModalProp
     successMessage: 'Te contactaremos en menos de 24 horas por WhatsApp.',
     close: 'Cerrar',
     required: 'Este campo es obligatorio',
-    budgetQuestion: 'Los proyectos de software pueden comenzar a partir de 7.000 USD a 20.000 USD en el mercado. ¿Su empresa cuenta con la posibilidad de invertir el total o cuotas por el mismo?',
+    budgetQuestion: 'Los proyectos de software van desde 7.000 a 20.000 USD. ¿Su empresa puede invertir el monto total o prefiere pagos en cuotas?',
     budgetOptions: [
       'Si, mi empresa podria invertir esos valores.',
       'Podria abonar cuotas para el desarrollo.',
@@ -80,7 +80,7 @@ export function DiagnosticFormModal({ isOpen, onClose }: DiagnosticFormModalProp
     successMessage: 'We\'ll contact you within 24 hours via WhatsApp.',
     close: 'Close',
     required: 'This field is required',
-    budgetQuestion: 'Software projects can start from $7,000 to $20,000 USD in the market. Does your company have the ability to invest the total or installments?',
+    budgetQuestion: 'Software projects range from $7,000 to $20,000 USD. Can your company invest the full amount or do you prefer installments?',
     budgetOptions: [
       'Yes, my company could invest those amounts.',
       'I could pay in installments.',
@@ -133,6 +133,7 @@ export function DiagnosticFormModal({ isOpen, onClose }: DiagnosticFormModalProp
         .insert(leadData);
 
       if (dbError) throw dbError;
+      localStorage.setItem('agentboss_gate_passed', 'true');
       setSubmitted(true);
     } catch {
       setError(locale === 'es'

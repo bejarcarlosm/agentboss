@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { DOSSIER_AGENTS, getDossierAgent } from '@/lib/dossier-data';
 import { DossierPlanetary } from '@/components/dossier/dossier-planetary';
+import { DossierCta } from '@/components/dossier/dossier-cta';
 
 interface Props {
   params: Promise<{ slug: string; locale: string }>;
@@ -147,11 +148,16 @@ export default async function DossierPage({ params }: Props) {
             </h1>
 
             {/* Role */}
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-3 mb-4">
               <span className="text-lg text-[var(--foreground)] font-semibold">
                 {isEn && agent.role_en ? agent.role_en : agent.role}
               </span>
               <span className="h-px flex-1 bg-[var(--border)]" />
+            </div>
+
+            {/* CTA */}
+            <div className="mb-8">
+              <DossierCta agent={agent} locale={locale} />
             </div>
 
             {/* Briefing */}
@@ -245,21 +251,6 @@ export default async function DossierPage({ params }: Props) {
               </div>
             )}
 
-            {/* CTA */}
-            {agent.chatSlug ? (
-              <Link
-                href={`/${locale}/chat/${agent.chatSlug}`}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-sm text-[var(--text-on-accent)] transition-all hover:-translate-y-0.5"
-                style={{ background: agent.color }}
-              >
-                {isEn ? `Talk to ${agent.codename}` : `Hablar con ${agent.codename}`}
-                <span>→</span>
-              </Link>
-            ) : (
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-sm border border-amber-500/30 text-amber-400 opacity-60 cursor-not-allowed">
-                {isEn ? 'Coming soon' : 'Proximamente disponible'}
-              </div>
-            )}
           </div>
         </div>
 

@@ -3,21 +3,15 @@
 import { useDiagnosticModal } from './diagnostic-modal-provider';
 
 const SERVICES_ES = [
-  { icon: '🌐', title: 'Desarrollo Web', description: 'Aplicaciones web modernas con Next.js, React y TypeScript. Dashboards, plataformas SaaS, portales de clientes.' },
-  { icon: '🧠', title: 'Agentes IA a Medida', description: 'Construimos agentes IA para tus procesos: Lia califica leads (prospectos), Alex hace llamadas en frío, Julia es recepcionista y Dapti se adapta a lo que necesites.' },
-  { icon: '🤖', title: 'Automatizaciones IA', description: 'Chatbots, extracción de documentos, flujos automatizados. Integramos IA donde más impacto genera.' },
-  { icon: '🎨', title: 'Diseño UX/UI', description: 'Interfaces intuitivas y prototipos interactivos. Validamos ideas antes de construir para no desperdiciar recursos.' },
-  { icon: '⚡', title: 'MVPs Rápidos', description: 'De la idea al producto funcional en semanas. Lanza rápido, valida con usuarios reales e itera.' },
-  { icon: '🔧', title: 'Consultoría Tech', description: 'Auditoría de código, arquitectura de sistemas y optimización de procesos. Tu CTO o Director de IA bajo demanda, con traspaso completo de la fábrica de software a tu equipo de IT.', link: 'https://carlosbejar.cl', linkLabel: 'Carlos Bejar — Director de Implementación de IA' },
+  { icon: '🌐', title: 'Desarrollo Web & Apps', description: 'Aplicaciones web modernas con Next.js, React y TypeScript. Dashboards, plataformas SaaS, portales de clientes.' },
+  { icon: '🤖', title: 'Agentes IA y Automatizaciones', description: 'Construimos agentes IA para tus procesos: Lia califica leads, Alex hace llamadas en frío, Julia es recepcionista y Dapti se adapta a lo que necesites. Chatbots, extracción de documentos y flujos automatizados donde más impacto genera.' },
+  { icon: '🔧', title: 'Consultoría Tech (SaaS llave en mano)', description: 'Te entregamos la fábrica de software completa: auditoría, arquitectura, desarrollo y traspaso a tu equipo de IT. Tu CTO o Director de IA bajo demanda.', link: 'https://carlosbejar.cl', linkLabel: 'Carlos Bejar — Director de Implementación de IA' },
 ];
 
 const SERVICES_EN = [
-  { icon: '🌐', title: 'Web Development', description: 'Modern web applications with Next.js, React, and TypeScript. Dashboards, SaaS platforms, client portals.' },
-  { icon: '🧠', title: 'Custom AI Agents', description: 'We build AI agents for your processes: Lia qualifies leads, Alex makes outbound cold calls, Julia is a receptionist, and Dapti adapts to whatever you need.' },
-  { icon: '🤖', title: 'AI Automations', description: 'Chatbots, document extraction, automated workflows. We integrate AI where it generates the most impact.' },
-  { icon: '🎨', title: 'UX/UI Design', description: 'Intuitive interfaces and interactive prototypes. We validate ideas before building to avoid wasting resources.' },
-  { icon: '⚡', title: 'Rapid MVPs', description: 'From idea to working product in weeks. Launch fast, validate with real users, and iterate.' },
-  { icon: '🔧', title: 'Tech Consulting', description: 'Code audits, system architecture, and process optimization. Your CTO or AI Director on demand, with full software factory handoff to your IT team.', link: 'https://carlosbejar.cl', linkLabel: 'Carlos Bejar — AI Implementation Director' },
+  { icon: '🌐', title: 'Web & App Development', description: 'Modern web applications with Next.js, React, and TypeScript. Dashboards, SaaS platforms, client portals.' },
+  { icon: '🤖', title: 'AI Agents & Automations', description: 'We build AI agents for your processes: Lia qualifies leads, Alex makes outbound cold calls, Julia is a receptionist, and Dapti adapts to whatever you need. Chatbots, document extraction, and automated workflows where they generate the most impact.' },
+  { icon: '🔧', title: 'Tech Consulting (Turnkey SaaS)', description: 'We deliver the complete software factory: audit, architecture, development, and full handoff to your IT team. Your CTO or AI Director on demand.', link: 'https://carlosbejar.cl', linkLabel: 'Carlos Bejar — AI Implementation Director' },
 ];
 
 export function ServicesSection({ locale }: { locale: string }) {
