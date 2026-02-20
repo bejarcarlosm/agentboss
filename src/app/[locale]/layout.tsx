@@ -3,8 +3,35 @@ import { notFound } from 'next/navigation'
 import { IntlProviderWrapper } from '@/components/intl-provider'
 
 export const metadata: Metadata = {
-  title: 'AgentBoss - AI Software Factory',
-  description: 'The Tesla Factory for software: a system of intelligent commands to create production-ready applications with AI agents.',
+  title: 'AgentBoss - Fábrica de Software potenciada por IA',
+  description: 'Construimos tu software en semanas, no meses. Equipo de agentes IA especializados: desarrollo web, automatizaciones, agentes IA a medida y consultoría tech. Santiago, Chile.',
+  keywords: ['software factory', 'agentes IA', 'desarrollo web', 'automatización', 'MVP', 'SaaS', 'Chile', 'inteligencia artificial', 'Next.js', 'consultoría tech'],
+  authors: [{ name: 'AgentBoss', url: 'https://agentboss.cl' }],
+  metadataBase: new URL('https://agentboss.cl'),
+  alternates: {
+    languages: {
+      'es': '/es',
+      'en': '/en',
+    },
+  },
+  openGraph: {
+    title: 'AgentBoss - Fábrica de Software potenciada por IA',
+    description: 'Construimos tu software en semanas, no meses. 36 agentes IA especializados que cubren todo el ciclo de desarrollo.',
+    url: 'https://agentboss.cl',
+    siteName: 'AgentBoss',
+    locale: 'es_CL',
+    alternateLocale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AgentBoss - Fábrica de Software potenciada por IA',
+    description: 'Construimos tu software en semanas, no meses. Equipo de agentes IA especializados.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export function generateStaticParams() {
