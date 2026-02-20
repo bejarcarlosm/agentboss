@@ -10,9 +10,11 @@ const CONTENT_ES = {
     { icon: '💸', title: 'Plata invisible', description: 'Servicios completados que nunca se facturaron. No por negligencia — por volumen. Cuando manejas cientos de embarques al mes, es imposible rastrear de memoria qué cobraste y qué no. Ingreso ganado que nunca llegó a caja.' },
     { icon: '⏰', title: 'Horas quemadas', description: 'Cada factura requería abrir planillas, buscar datos del BL, copiar cliente, monto, naviera, verificar que no estuviera duplicada. Trabajo manual repetitivo que consumía horas de personas que deberían estar cerrando negocios.' },
     { icon: '😰', title: 'Estrés de auditoría', description: 'Fin de mes llegaba con la pregunta de siempre: "¿estamos al día?" Y nadie podía responder con certeza. La información vivía fragmentada entre planillas, correos y la memoria del equipo.' },
+    { icon: '📊', title: 'Sin control de presupuesto', description: 'No sabían cuánto les costaba realmente cada embarque. Gastos locales, tipo de cambio, comisiones — todo se calculaba a ojo. Algunos embarques generaban margen, otros pérdida, y nadie lo detectaba hasta que era tarde.' },
+    { icon: '🎯', title: 'Pricing a ciegas', description: 'Cotizaban por intuición, no por datos. Sin un cálculo de punto de equilibrio por operación, no podían saber cuál era el precio mínimo viable. Regalaban margen sin darse cuenta o perdían clientes por cobrar de más.' },
   ],
   solutionHeading: 'La solución',
-  solutionText: 'Un sistema que cruza automáticamente operaciones contra facturas emitidas, muestra los pendientes en tiempo real y genera la factura completa con un click. Cero olvidos, cero copiar-pegar, certeza total del estado de cobranza.',
+  solutionText: 'Un sistema que cruza automáticamente operaciones contra facturas emitidas, muestra los pendientes en tiempo real y genera la factura completa con un click. Además, calcula el costo real por embarque, el punto de equilibrio de cada operación y sugiere pricing dinámico basado en datos históricos. Cero olvidos, cero copiar-pegar, certeza total del estado de cobranza y de la rentabilidad.',
   closing: 'Eso es AgentBoss. No entregamos tecnología por entregarte tecnología. Entendemos tu operación, identificamos dónde duele, y construimos la solución que elimina el problema de raíz. Hoy en logística, mañana en tu industria.',
   cta: 'Solicita un diagnóstico',
 };
@@ -25,9 +27,11 @@ const CONTENT_EN = {
     { icon: '💸', title: 'Invisible money', description: 'Completed services that were never invoiced. Not due to negligence — due to volume. When you handle hundreds of shipments per month, it\'s impossible to track from memory what you billed and what you didn\'t. Earned revenue that never reached the register.' },
     { icon: '⏰', title: 'Burned hours', description: 'Every invoice required opening spreadsheets, looking up BL data, copying client, amount, carrier, verifying it wasn\'t duplicated. Repetitive manual work consuming hours from people who should be closing deals.' },
     { icon: '😰', title: 'Audit stress', description: 'End of month arrived with the same question: "are we up to date?" And nobody could answer with certainty. Information lived fragmented across spreadsheets, emails, and the team\'s memory.' },
+    { icon: '📊', title: 'No budget control', description: 'They didn\'t know how much each shipment actually cost them. Local expenses, exchange rates, commissions — all estimated by gut. Some shipments generated margin, others losses, and nobody noticed until it was too late.' },
+    { icon: '🎯', title: 'Blind pricing', description: 'They quoted by intuition, not by data. Without a break-even calculation per operation, they couldn\'t know the minimum viable price. They gave away margin unknowingly or lost clients by overcharging.' },
   ],
   solutionHeading: 'The solution',
-  solutionText: 'A system that automatically cross-references operations against issued invoices, shows pending items in real time, and generates the complete invoice with one click. Zero oversights, zero copy-paste, total certainty of billing status.',
+  solutionText: 'A system that automatically cross-references operations against issued invoices, shows pending items in real time, and generates the complete invoice with one click. It also calculates the real cost per shipment, the break-even point for each operation, and suggests dynamic pricing based on historical data. Zero oversights, zero copy-paste, total certainty of billing status and profitability.',
   closing: 'That\'s AgentBoss. We don\'t deliver technology for the sake of it. We understand your operation, identify where it hurts, and build the solution that eliminates the problem at its root. Today in logistics, tomorrow in your industry.',
   cta: 'Request a diagnostic',
 };
@@ -51,11 +55,11 @@ export function CaseStudySection({ locale }: { locale: string }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+        <div className="flex flex-wrap justify-center gap-5 mb-10">
           {c.painPoints.map((point) => (
             <div
               key={point.title}
-              className="p-6 rounded-2xl border border-red-500/15 bg-red-500/5"
+              className="p-6 rounded-2xl border border-red-500/15 bg-red-500/5 w-full md:w-[calc(33.333%-14px)]"
             >
               <span className="text-2xl block mb-3">{point.icon}</span>
               <h3 className="font-bold mb-2 text-red-400">{point.title}</h3>
