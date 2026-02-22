@@ -6,6 +6,7 @@ import { useLocale } from 'next-intl';
 import { Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { OrbLogo } from '@/components/ui/orb-logo';
 import { useDiagnosticModal } from './diagnostic-modal-provider';
 
 export function FactoryNavbar() {
@@ -31,7 +32,8 @@ export function FactoryNavbar() {
   return (
     <nav className="border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-        <Link href="/" className="text-lg font-bold">
+        <Link href="/" className="flex items-center gap-2 text-lg font-bold">
+          <OrbLogo size={32} />
           Agent<span className="text-[#2dd4bf]">Boss</span>
         </Link>
 
