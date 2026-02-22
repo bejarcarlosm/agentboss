@@ -8,6 +8,54 @@ const nextConfig: NextConfig = {
   experimental: {
     mcpServer: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'agente7.cl',
+          },
+        ],
+        destination: 'https://agentboss.cl/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.agente7.cl',
+          },
+        ],
+        destination: 'https://agentboss.cl/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'agente007.cl',
+          },
+        ],
+        destination: 'https://agentboss.cl/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.agente007.cl',
+          },
+        ],
+        destination: 'https://agentboss.cl/:path*',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default withNextIntl(nextConfig)
