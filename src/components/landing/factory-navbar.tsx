@@ -32,9 +32,9 @@ export function FactoryNavbar() {
   return (
     <nav className="border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 text-lg font-bold">
-          <OrbLogo size={32} />
-          Agent<span className="text-[#2dd4bf]">Boss</span>
+        <Link href="/" className="flex items-center gap-1.5 text-lg font-bold">
+          <OrbLogo size={28} />
+          <span>Agent<span className="text-[#2dd4bf]">Boss</span></span>
         </Link>
 
         <div className="hidden md:flex items-center gap-6 text-sm text-[var(--muted)]">
