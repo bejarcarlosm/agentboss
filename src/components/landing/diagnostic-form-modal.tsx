@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocale } from 'next-intl';
 import { X } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { submitLeadAction } from '@/app/actions/submit-lead';
 
 interface DiagnosticFormModalProps {
   isOpen: boolean;
@@ -133,6 +134,10 @@ export function DiagnosticFormModal({ isOpen, onClose }: DiagnosticFormModalProp
         .insert(leadData);
 
       if (dbError) throw dbError;
+
+      // Send email notification (fire and forget - don't block UI)
+      submitLeadAction(leadData).catch(console.error);
+
       localStorage.setItem('agentboss_gate_passed', 'true');
       setSubmitted(true);
     } catch {
