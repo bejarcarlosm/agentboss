@@ -16,8 +16,10 @@ jobs:
       - name: Ping Supabase
         run: |
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${SUPABASE_URL}/rest/v1/?apikey=${SUPABASE_ANON_KEY}")
-          if [ "$STATUS" = "200" ]; then
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            "${SUPABASE_URL}/rest/v1/leads?select=count&limit=1")
+          if [ "$STATUS" = "200" ] || [ "$STATUS" = "206" ]; then
             echo "Supabase is alive (HTTP $STATUS)"
           else
             echo "Ping failed (HTTP $STATUS)"
